@@ -1,0 +1,18 @@
+package com.ordenaris.internalControl
+
+import grails.testing.gorm.DomainUnitTest
+import spock.lang.Specification
+
+class DevSpec extends Specification implements DomainUnitTest<Dev> {
+
+    def setup() {
+    }
+
+    def cleanup() {
+    }
+
+    void "test something"() {
+        expect:"fix me"
+            true == false
+    }
+}
