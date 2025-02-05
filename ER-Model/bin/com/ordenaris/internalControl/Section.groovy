@@ -8,6 +8,7 @@ class Section {
     String name
     boolean status
     Integer type
+    
 
     static mapping = {
         status sqlType: "bit"

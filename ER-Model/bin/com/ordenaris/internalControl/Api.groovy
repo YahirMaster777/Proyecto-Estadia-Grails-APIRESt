@@ -11,6 +11,8 @@ class Api {
     Date lastUpdate
     String version
     String name
+    Servers server
+    Databases_apps database
     
     static hasMany=[apps:App]
     

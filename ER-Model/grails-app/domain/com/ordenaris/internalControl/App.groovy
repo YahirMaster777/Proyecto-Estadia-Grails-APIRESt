@@ -12,6 +12,7 @@ class App {
     String name
     String port
     String host
+    Servers server
     
     static hasMany= [apis:Api]
     static belongsTo = Api

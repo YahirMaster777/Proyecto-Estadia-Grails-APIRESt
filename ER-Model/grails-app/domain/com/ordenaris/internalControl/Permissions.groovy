@@ -11,6 +11,5 @@ class Permissions {
     
     static constraints = {
         name unique: true, blank: false
-
-    }3
+    }
 }

@@ -1,13 +1,11 @@
 package com.ordenaris.internalControl
 
-class SectionUser {
+class SectionProfile {
 
-    User user
-    Integer permission 
+    Profile profile
     Section section
 
     static mapping = {
-        table name: "section_user"
         version false
         permission sqlType: "int(11)"
     }
