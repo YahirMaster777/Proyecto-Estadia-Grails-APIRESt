@@ -71,16 +71,16 @@ hibernate:
 dataSource:
     pooled: true
     jmxExport: true
-    driverClassName: com.mysql.cj.jdbc.Driver
+    driverClassName: com.mysql.jdbc.Driver
     dialect: org.hibernate.dialect.MySQL5InnoDBDialect 
 
 environments:
     development:
         dataSource:
             username: root 
-            password: "141002" 
+            password: "1234" 
             dbCreate: create-drop
-            url: jdbc:mysql://localhost:3307/diagrama
+            url: jdbc:mysql://localhost:3306/diagrama
     test:
         dataSource:
             dbCreate: update
