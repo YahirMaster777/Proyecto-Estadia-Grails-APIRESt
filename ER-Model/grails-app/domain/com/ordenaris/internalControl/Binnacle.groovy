@@ -3,11 +3,11 @@ import java.util.UUID
 
 class Binnacle {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    
-    Date regisUpdate
+    Date dateCreated
+    Date lastUpdated
     String description
-    String user
-    String table
+    String userName
+    String tableName
     String extra
 
     static constraints = {
@@ -15,6 +15,7 @@ class Binnacle {
         extra blank:true, nullable:true
         table inList: ["App", "Servidor"]
     }
+    
     static mapping = {
         version false
     }
