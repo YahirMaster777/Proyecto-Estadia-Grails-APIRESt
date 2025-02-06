@@ -6,7 +6,6 @@ class Profile {
     Date lastUpdate
     Integer status = 1
     String name
-    Section sectionProfile
     static mapping = {
         version false
     }

@@ -2,7 +2,7 @@ package com.ordenaris.internalControl
 
 class CustomerApp {
     Customer customer
-    // App app
+    App app
     String description
     
     static constraints = {
