@@ -14,7 +14,6 @@ class App {
     Date lastUpdated
     String locationConfig
     String description
-    Server server
     
     static mapping ={
         version false
