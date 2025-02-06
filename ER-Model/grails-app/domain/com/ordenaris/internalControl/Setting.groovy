@@ -1,8 +1,11 @@
 package com.ordenaris.internalControl
 
 class Setting {
-    String key
-    String value
+    String confKey
+    String confvalue
+    Date dateCreated
+    Date lastUpdate
+    
     static constraints = {
     }
     static mapping = {
