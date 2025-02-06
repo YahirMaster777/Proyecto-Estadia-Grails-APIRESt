@@ -18,7 +18,7 @@ class Server {
     int status
     String company
     String criticaly
-    // App app
+    App app
     String development
 
     static constraints = {
