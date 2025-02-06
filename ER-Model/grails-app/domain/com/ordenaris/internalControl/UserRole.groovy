@@ -14,6 +14,7 @@ class UserRole implements Serializable {
 
 	User user
 	Role role
+	PermissionUser profile
 
 	@Override
 	boolean equals(other) {
