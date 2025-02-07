@@ -6,6 +6,7 @@ class CustomerApp {
     String description
     
     static constraints = {
+        description blank:true, nullable:true
     }
     static mapping = {
         version false

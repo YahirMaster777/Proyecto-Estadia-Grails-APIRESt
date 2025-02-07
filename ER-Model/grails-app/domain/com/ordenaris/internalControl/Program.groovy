@@ -13,14 +13,18 @@ class Program {
     String description 
     int status
     String port
-    String address
+    String locationConfig
     String type
     Date instalation
+    Date dateCreated
+    Date lastUpdated
+
     static constraints = {
         uuid unique: true
         type inList: ["programa", "servicio"]
         description blank:true, nullable:true
         instalation blank:true, nullable: true
+        lastUpdated blank:true, nullable: true
     }
     static mapping = {
         version false

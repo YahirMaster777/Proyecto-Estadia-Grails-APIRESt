@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 class Server {
-    static hasMany =[serverServer: ServerServer, backup:Backup]
+    static hasMany =[serverServer: ServerServer, backup:Backup, serverApp: ServerApp]
     ServerServer serverServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
@@ -17,18 +17,19 @@ class Server {
     String responsible
     int status
     String company
-    String criticaly
-    App app
+    int criticaly
     String development
+    Date dateCreated
+    Date lastUpdated
 
     static constraints = {
         uuid unique: true
         development inList: ["pruebas", "producción", "desarrollo"]
         type inList: ["virtual", "fisico", "dedicado"]
         company inList: ["Innovattia", "Pawerful", "Ordenaris"]
-        criticaly inList: ["baja", "media", "alta"]
         publicIp blank:true, nullable:true
         privateIp blank:true, nullable: true
+        lastUpdated blank:true, nullable: true
     }
     static mapping = {
         version false
