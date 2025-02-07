@@ -6,11 +6,14 @@ class Backup {
     String locationConfig
     String description
     int status
+    Date dateCreated
+    Date lastUpdated
     //en formato {local, nube o servidor}, ruta
-    String route
+    String url
 
     static constraints = {
         uuid unique: true
+        lastUpdated blank: true, nullable: true
     }
     static mapping = {
         version false

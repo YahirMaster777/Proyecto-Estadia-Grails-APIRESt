@@ -3,10 +3,9 @@ import java.util.UUID
 
 class Binnacle {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    Date dateCreated
-    Date lastUpdated
+    Date registration
     String description
-    String userName
+    User user
     String tableName
     String extra
 
