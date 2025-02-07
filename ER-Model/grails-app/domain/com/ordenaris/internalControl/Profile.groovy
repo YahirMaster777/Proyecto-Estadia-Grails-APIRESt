@@ -6,6 +6,9 @@ class Profile {
     Date lastUpdated
     Integer status = 1
     String name
+    Section section
+    Permission permission
+    
     static mapping = {
         version false
     }

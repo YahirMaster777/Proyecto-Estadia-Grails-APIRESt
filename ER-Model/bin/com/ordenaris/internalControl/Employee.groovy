@@ -9,9 +9,6 @@ class Employee {
     Date lastUpdated
     String phone
     String rfc
-    String company
-    String position
-    String area
     Date initialDate
     Integer idEmployee
     String nss
@@ -20,6 +17,8 @@ class Employee {
     String curp
     Integer status = 1
     Employee manage
+    Enterprise company
+    PositionEmployee position
     
     static mapping={
         version false
@@ -29,11 +28,10 @@ class Employee {
         company inList:['Innovattia','Ordenaris', 'Pawerful']
         lastName2  nullable:true
         uuid maxSize:32, unique:true
-        nss nullable: true
+        nss nullable: true, maxSize:11
         manage nullable:true
-        position nullable:true
-        rfc nullable:true
-        curp nullable:true
+        rfc nullable:true, maxSize:13
+        curp nullable:true, maxSize:18
         businessEmail nullable:true
     }
 }
