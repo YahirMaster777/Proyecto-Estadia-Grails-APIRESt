@@ -3,7 +3,7 @@ package com.ordenaris.internalControl
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ServerServerSpec extends Specification implements DomainUnitTest<ServerServer> {
+class ConexionServerSpec extends Specification implements DomainUnitTest<ConexionServer> {
 
     def setup() {
     }

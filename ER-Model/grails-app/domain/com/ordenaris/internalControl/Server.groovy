@@ -1,8 +1,8 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 class Server {
-    static hasMany =[serverServer: ServerServer, backup:Backup, serverApp: ServerApp]
-    ServerServer serverServer
+    static hasMany =[ConexionServer: ConexionServer, backup:Backup, serverApp: ServerApp]
+    ConexionServer ConexionServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
     String hostname
@@ -15,21 +15,23 @@ class Server {
     String locationConfig
     String type
     String responsible
-    int status
+    int status = 1
     String company
+    String macAddress
     int criticaly
     String development
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
-        uuid unique: true
-        development inList: ["pruebas", "producción", "desarrollo"]
-        type inList: ["virtual", "fisico", "dedicado"]
-        company inList: ["Innovattia", "Pawerful", "Ordenaris"]
-        publicIp blank:true, nullable:true
-        privateIp blank:true, nullable: true
+        uuid unique: true, maxSize: 32
+        development inList: ["pruebas", "producción", "desarrollo"], maxSize: 10
+        type inList: ["virtual", "fisico", "dedicado"], maxSize:10
+        company inList: ["Innovattia", "Pawerful", "Ordenaris"],maxSize: 10
+        publicIp blank:true, nullable:true,maxSize: 15
+        privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
+        macAddress unique:true,maxSize: 17
     }
     static mapping = {
         version false

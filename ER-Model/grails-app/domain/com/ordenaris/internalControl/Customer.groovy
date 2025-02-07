@@ -4,9 +4,9 @@ class Customer {
     static hasMany = [customerApp: CustomerApp]
     
     String name
-    int status
+    int status = 1
     static constraints = {
-        uuid unique: true
+        uuid unique: true,maxSize: 32
     }
     static mapping = {
         version false
