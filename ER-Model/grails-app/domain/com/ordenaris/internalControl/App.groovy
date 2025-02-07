@@ -1,6 +1,8 @@
 package com.ordenaris.internalControl
 
 class App {
+    static hasMany = [server:Server]
+    static belongsTo = Server
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String name 
     Integer status = 1
@@ -16,7 +18,6 @@ class App {
     Date dateSwitchOff
     String locationConfig
     String description
-    Server server
     
     static mapping ={
         version false
