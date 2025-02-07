@@ -25,10 +25,11 @@ class App {
     static constraints = {
         type inList:['Frontend','Backend','App','DB']
         dateSwitchOff nullable:true
-        domain nullable:true, maxSize:150
         criticality nullable:true,maxSize:11
         locationConfig nullable:true
         versionApp nullable:true
+        domain nullable:true, maxSize:150
+        criticality nullable:true,maxSize:11
         uuid maxSize:32, unique:true
         port blank:true, nullable:true,maxSize:15
         host blank:true, nullable:true,maxSize:20
@@ -37,6 +38,7 @@ class App {
         
     }
 }
+
 
 class ConnectionApp{
     App app
