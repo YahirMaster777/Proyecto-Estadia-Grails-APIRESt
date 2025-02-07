@@ -1,19 +1,17 @@
 package com.ordenaris.internalControl
 
-class ServerApp {
-    static belongsTo = [server: Server, app: App]
+class ConexionServer {
     Server server
     String description
-    String portApp
-    String portServ
-    String service
+    String portServ1
+    String portServ2
     int status = 1
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
-        portApp unique: true,maxSize: 5
-        portServ unique: true,maxSize: 5
+        portServ1 unique: true,maxSize: 5
+        portServ2 unique: true,maxSize: 5
         description blank:true, nullable:true
         lastUpdated blank: true, nullable: true
     }
