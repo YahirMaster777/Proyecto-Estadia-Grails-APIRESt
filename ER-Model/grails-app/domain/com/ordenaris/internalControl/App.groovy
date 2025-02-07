@@ -1,8 +1,8 @@
 package com.ordenaris.internalControl
 
 class App {
-    static hasMany = [server:Server]
-    static belongsTo = Server
+    static hasMany = [serverApp: ServerApp]
+    
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String name 
     Integer status = 1
