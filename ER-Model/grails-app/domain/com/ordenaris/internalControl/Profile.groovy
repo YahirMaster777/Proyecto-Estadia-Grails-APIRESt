@@ -16,5 +16,6 @@ class Profile {
     
     static constraints = {
         uuid unique:true, maxSize:32
+        name maxSize:40
     }
 }
