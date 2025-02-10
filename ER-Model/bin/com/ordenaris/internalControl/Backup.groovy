@@ -14,6 +14,7 @@ class Backup {
     static constraints = {
         uuid unique: true,maxSize:32
         lastUpdated blank: true, nullable: true
+        url nullable: false, blank: false, maxSize:45
     }
     static mapping = {
         version false

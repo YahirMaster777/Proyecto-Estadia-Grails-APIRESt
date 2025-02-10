@@ -16,6 +16,7 @@ class Binnacle {
         extra blank:true, nullable:true
         tableName maxSize: 20
         table inList: ["App", "Servidor"]
+        url nullable: false, blank: false, maxSize:45
     }
     
     static mapping = {
