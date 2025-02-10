@@ -5,7 +5,7 @@ class Server {
     ConnectionServer connectionServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
-    String hostname
+    String host
     String publicIp
     String privateIp
     String capacity
@@ -31,6 +31,7 @@ class Server {
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
         macAddress unique:true,maxSize: 17
+        host maxSize: 20
     }
     static mapping = {
         version false
