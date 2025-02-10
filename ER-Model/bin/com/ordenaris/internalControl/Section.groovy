@@ -6,6 +6,7 @@ class Section {
     Date lastUpdated
     String url
     String name
+    String description
     Integer status =1 
     Integer type
     

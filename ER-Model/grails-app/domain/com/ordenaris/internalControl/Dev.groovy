@@ -11,5 +11,6 @@ class Dev {
     }
     static constraints = {
         uuid unique:true, maxSize:32
+        incumbency maxSize:10
     }
 }

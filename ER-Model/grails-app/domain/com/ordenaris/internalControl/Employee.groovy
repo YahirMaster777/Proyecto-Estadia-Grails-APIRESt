@@ -26,12 +26,14 @@ class Employee {
 
     static constraints = {
         company inList:['Innovattia','Ordenaris', 'Pawerful']
-        lastName2  nullable:true
+        lastName2  nullable:true, blank:true
         uuid maxSize:32, unique:true
         nss nullable: true, maxSize:11
+        phone maxSize:15
         manage nullable:true
         rfc nullable:true, maxSize:13
         curp nullable:true, maxSize:18
-        businessEmail nullable:true
+        businessEmail nullable:true, email:true
+        personalEmail email:true
     }
 }
