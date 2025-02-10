@@ -12,5 +12,6 @@ class PositionEmployee {
     static constraints = {
         name maxSize:60
         description maxSize:150
+        area maxSize:30
     }
 }
