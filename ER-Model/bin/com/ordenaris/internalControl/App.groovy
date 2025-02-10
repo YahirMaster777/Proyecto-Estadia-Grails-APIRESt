@@ -35,6 +35,7 @@ class App {
         host blank:true, nullable:true,maxSize:20
         ipAdress maxSize:15
         description maxSize:150
+        name maxSize:40
     }
 }
 
