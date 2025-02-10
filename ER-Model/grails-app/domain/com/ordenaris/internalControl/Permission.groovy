@@ -12,5 +12,7 @@ class Permission {
     }
     static constraints = {
         name unique: true, blank: false
+        description maxSize:150
+        alias maxSize:50
     }
 }

@@ -7,12 +7,11 @@ class IntentRecovery {
     boolean used
     User user
     static mapping = {
-        table name: "intent_recovery"
         version false
         used sqlType: "bit(1)"
     }
     static constraints = {
         host blank:true, nullable:true,maxSize:15
-        uuid maxSize:255
+        uuid maxSize:32, unique:true
     }
 }

@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 class Server {
-    static hasMany =[sonnectionServer: ConnectionServer, backup:Backup, serverApp: ServerApp]
+    static hasMany =[connectionServer: ConnectionServer, backup:Backup, serverApp: ServerApp]
     ConnectionServer connectionServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
@@ -14,9 +14,9 @@ class Server {
     String cloudProvider
     String locationConfig
     String type
-    String responsible
+    Employee responsible
     int status = 1
-    String company
+    Enterprise company
     String macAddress
     int criticaly
     String development
@@ -27,7 +27,6 @@ class Server {
         uuid unique: true, maxSize: 32
         development inList: ["pruebas", "producción", "desarrollo"], maxSize: 10
         type inList: ["virtual", "fisico", "dedicado"], maxSize:10
-        company inList: ["Innovattia", "Pawerful", "Ordenaris"],maxSize: 10
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
