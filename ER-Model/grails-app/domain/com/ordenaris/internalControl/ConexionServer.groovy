@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class ConexionServer {
+class ConnectionServer {
     Server server
     String description
     String portServ1

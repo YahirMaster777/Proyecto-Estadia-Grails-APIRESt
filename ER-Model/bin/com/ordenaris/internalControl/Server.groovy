@@ -1,8 +1,8 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 class Server {
-    static hasMany =[ConexionServer: ConexionServer, backup:Backup, serverApp: ServerApp]
-    ConexionServer ConexionServer
+    static hasMany =[sonnectionServer: ConnectionServer, backup:Backup, serverApp: ServerApp]
+    ConnectionServer connectionServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
     String hostname
