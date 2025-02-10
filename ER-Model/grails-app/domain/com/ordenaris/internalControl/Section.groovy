@@ -19,6 +19,7 @@ class Section {
         url nullable: false, blank: false, maxSize:45
         name nullable: false, blank: false, maxSize:150
         status nullable: false
+        description nullable:false, maxSize:100
         type nullable: false, blank: false, maxSize: 11
     }
 }
