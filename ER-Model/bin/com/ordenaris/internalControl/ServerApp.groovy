@@ -16,6 +16,7 @@ class ServerApp {
         portServ unique: true,maxSize: 5
         description blank:true, nullable:true
         lastUpdated blank: true, nullable: true
+        service maxSize: 50
     }
     static mapping = {
         version false
