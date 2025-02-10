@@ -9,7 +9,7 @@ class Binnacle {
     String tableName
     String extra
     String url
-    int status
+    int status = 1
 
     static constraints = {
         uuid unique: true,maxSize: 32
