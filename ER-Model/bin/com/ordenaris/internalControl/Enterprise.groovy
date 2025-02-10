@@ -12,7 +12,9 @@ class Enterprise {
         version false
     }
     static constraints = {
+        name maxSize:40
         uuid maxSize:32, unique:true
-        type maxSize:50
+        type maxSize:20
+        description maxSize:150
     }
 }
