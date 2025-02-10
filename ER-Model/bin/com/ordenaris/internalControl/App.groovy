@@ -33,6 +33,8 @@ class App {
         uuid maxSize:32, unique:true
         port blank:true, nullable:true,maxSize:15
         host blank:true, nullable:true,maxSize:20
+        ipAdress maxSize:15
+        description maxSize:150
     }
 }
 
