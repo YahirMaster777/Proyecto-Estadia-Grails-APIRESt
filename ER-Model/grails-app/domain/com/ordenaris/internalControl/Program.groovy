@@ -26,6 +26,7 @@ class Program {
         description blank:true, nullable:true
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
+        software maxSize: 30
     }
     static mapping = {
         version false
