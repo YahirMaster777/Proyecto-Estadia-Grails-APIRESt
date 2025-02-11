@@ -32,6 +32,9 @@ class Server {
         lastUpdated blank:true, nullable: true
         macAddress unique:true,maxSize: 17
         host maxSize: 20
+        cloudProvider: 50
+        capacity: 50
+        memory: 50
     }
     static mapping = {
         version false

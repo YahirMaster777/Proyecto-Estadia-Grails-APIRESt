@@ -16,7 +16,7 @@ class App {
     Date dateCreated
     Date lastUpdated
     Date dateDeploy
-    Date dateSwitchOff
+    Date dateUndeploy
     String locationConfig
     String description
     
@@ -25,7 +25,8 @@ class App {
     }
     static constraints = {
         type inList:['Frontend','Backend','App','DB']
-        dateSwitchOff nullable:true
+        dateUndeploy nullable:true, blank:true
+        dateDeploy nullable:true,blank:true
         domain nullable:true, maxSize:150
         criticality nullable:true,maxSize:11
         locationConfig nullable:true
@@ -35,6 +36,7 @@ class App {
         host blank:true, nullable:true,maxSize:20
         ipAdress maxSize:15
         description maxSize:150
+        name maxSize:40
     }
 }
 
