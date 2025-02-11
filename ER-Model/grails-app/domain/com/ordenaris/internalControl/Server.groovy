@@ -14,9 +14,9 @@ class Servers {
     String cloudProvider
     String locationConfig
     String type
-    Employee responsible
+    Employees responsible
     int status = 1
-    Enterprise company
+    Enterprises company
     String macAddress
     int criticaly
     String development

@@ -8,18 +8,18 @@ import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
 @ToString(cache=true, includeNames=true, includePackage=false)
-class UserRole implements Serializable {
+class UsersRoles implements Serializable {
 
 	private static final long serialVersionUID = 1
 
-	User user
-	Role role
-	Section section
-	Permission permission
+	Users user
+	Roles role
+	Sections section
+	Permissions permission
 
 	@Override
 	boolean equals(other) {
-		if (other instanceof UserRole) {
+		if (other instanceof UsersRoles) {
 			other.userId == user?.id && other.roleId == role?.id
 		}
 	}
@@ -36,7 +36,7 @@ class UserRole implements Serializable {
 		hashCode
 	}
 
-	static UserRole get(long userId, long roleId) {
+	static UsersRoles get(long userId, long roleId) {
 		criteriaFor(userId, roleId).get()
 	}
 
@@ -45,37 +45,37 @@ class UserRole implements Serializable {
 	}
 
 	private static DetachedCriteria criteriaFor(long userId, long roleId) {
-		UserRole.where {
-			user == User.load(userId) &&
-			role == Role.load(roleId)
+		UsersRoles.where {
+			user == Users.load(userId) &&
+			role == Roles.load(roleId)
 		}
 	}
 
-	static UserRole create(User user, Role role, boolean flush = false) {
-		def instance = new UserRole(user: user, role: role)
+	static UsersRoles create(Users user, Roles role, boolean flush = false) {
+		def instance = new UsersRoles(user: user, role: role)
 		instance.save(flush: flush)
 		instance
 	}
 
-	static boolean remove(User u, Role r) {
+	static boolean remove(Users u, Roles r) {
 		if (u != null && r != null) {
-			UserRole.where { user == u && role == r }.deleteAll()
+			UsersRoles.where { user == u && role == r }.deleteAll()
 		}
 	}
 
-	static int removeAll(User u) {
-		u == null ? 0 : UserRole.where { user == u }.deleteAll() as int
+	static int removeAll(Users u) {
+		u == null ? 0 : UsersRoles.where { user == u }.deleteAll() as int
 	}
 
-	static int removeAll(Role r) {
-		r == null ? 0 : UserRole.where { role == r }.deleteAll() as int
+	static int removeAll(Roles r) {
+		r == null ? 0 : UsersRoles.where { role == r }.deleteAll() as int
 	}
 
 	static constraints = {
 	    user nullable: false
-		role nullable: false, validator: { Role r, UserRole ur ->
+		role nullable: false, validator: { Roles r, UsersRoles ur ->
 			if (ur.user?.id) {
-				if (UserRole.exists(ur.user.id, r.id)) {
+				if (UsersRoles.exists(ur.user.id, r.id)) {
 				    return ['userRole.exists']
 				}
 			}

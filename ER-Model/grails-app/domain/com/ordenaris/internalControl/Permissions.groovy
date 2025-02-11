@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class Permission {
+class Permissions {
       //puede ser : read, create, update, delete, readPagination, readAll
     String name
     String description

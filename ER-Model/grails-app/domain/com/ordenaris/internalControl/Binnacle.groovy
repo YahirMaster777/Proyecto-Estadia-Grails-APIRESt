@@ -5,7 +5,7 @@ class Binnacles {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Date dateCreated
     String description
-    User user
+    Users user
     String tableName
     String extra
     String url
@@ -15,8 +15,8 @@ class Binnacles {
         uuid unique: true,maxSize: 32
         extra blank:true, nullable:true
         tableName maxSize: 20
-        table inList: ["App", "Servidor"]
-        url nullable: false, blank: false, maxSize:45
+        url nullable: false, blank: false
+        table inList: ["Apps", "Servidor"]
     }
     
     static mapping = {
