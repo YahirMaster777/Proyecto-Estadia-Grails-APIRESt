@@ -32,11 +32,11 @@ class Employee {
         uuid maxSize:32, unique:true
         nss nullable: true, maxSize:11
         phone maxSize:15
-        manage nullable:true
-        rfc nullable:true, maxSize:13
-        curp nullable:true, maxSize:18
-        businessEmail nullable:true, email:true
-        personalEmail email:true
+        manage nullable:true,blank:true
+        rfc nullable:true, maxSize:13, blank:true, unique:true
+        curp nullable:true, maxSize:18, blank:true, unique:true
+        businessEmail nullable:true, email:true, maxSize:100, unique:true
+        personalEmail email:true, maxSize:100, unique:true
         name maxSize:40
     }
 }
