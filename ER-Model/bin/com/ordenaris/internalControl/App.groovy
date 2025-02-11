@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class App {
-    static hasMany = [serverApp: ServerApp]
+    static hasMany = [serverApp: ServersApps]
     
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String name 

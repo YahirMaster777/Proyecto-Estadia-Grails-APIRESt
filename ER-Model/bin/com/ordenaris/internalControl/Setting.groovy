@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class Setting {
+class Settings {
     String identifier
     String data
     

@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 
-class Binnacle {
+class Binnacles {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Date dateCreated
     String description

@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
-class Backup {
-    Server server
+class Backups {
+    Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String locationConfig
     String description

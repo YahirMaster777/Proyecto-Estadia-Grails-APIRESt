@@ -1,8 +1,8 @@
 package com.ordenaris.internalControl
 import java.util.UUID
-class Server {
-    static hasMany =[connectionServer: ConnectionServer, backup:Backup, serverApp: ServerApp]
-    ConnectionServer connectionServer
+class Servers {
+    static hasMany =[connectionServer: ConnectionsServers, backup:Backups, serverApp: ServersApps]
+    ConnectionsServers connectionServer
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
     String host
@@ -33,8 +33,8 @@ class Server {
         macAddress unique:true,maxSize: 17
         host maxSize: 20
         cloudProvider: 50
-        capacity: 50
-        memory: 50
+        capacity: 7
+        memory: 7
     }
     static mapping = {
         version false

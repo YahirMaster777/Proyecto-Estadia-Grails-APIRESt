@@ -3,7 +3,7 @@ package com.ordenaris.internalControl
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class BinnacleSpec extends Specification implements DomainUnitTest<Binnacle> {
+class BinnacleSpec extends Specification implements DomainUnitTest<Binnacles> {
 
     def setup() {
     }
