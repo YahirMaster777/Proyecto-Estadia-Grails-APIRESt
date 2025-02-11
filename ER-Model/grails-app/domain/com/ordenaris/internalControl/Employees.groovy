@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class Employee {
+class Employees {
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String name
     String lastName1
@@ -16,9 +16,9 @@ class Employee {
     String businessEmail
     String curp
     Integer status = 1
-    Employee manage
-    Enterprise company
-    PositionEmployee position
+    Employees manage
+    Enterprises company
+    PositionEmployees position
     
     static mapping={
         version false

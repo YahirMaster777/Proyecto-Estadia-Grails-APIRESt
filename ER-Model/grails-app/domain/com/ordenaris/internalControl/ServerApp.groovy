@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class ServerApp {
-    static belongsTo = [server: Server, app: App]
+    static belongsTo = [server: Server, app: Apps]
     Server server
     String description
     String portApp

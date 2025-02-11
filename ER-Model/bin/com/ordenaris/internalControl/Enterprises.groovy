@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class Enterprise {
+class Enterprises {
     String uuid = UUID.randomUUID().toString().replaceAll('//-','')
     String name
     String type

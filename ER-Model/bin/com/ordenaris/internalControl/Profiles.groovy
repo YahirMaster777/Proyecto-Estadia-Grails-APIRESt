@@ -1,13 +1,13 @@
 package com.ordenaris.internalControl
 
-class Profile {
+class Profiles {
     String uuid = UUID.randomUUID().toString().replaceAll('//-','')
     Date dateCreated
     Date lastUpdated
     Integer status = 1
     String name
-    Section section
-    Permission permission
+    Sections section
+    Permissions permission
     
     static mapping = {
         table 'permissionTemplate'

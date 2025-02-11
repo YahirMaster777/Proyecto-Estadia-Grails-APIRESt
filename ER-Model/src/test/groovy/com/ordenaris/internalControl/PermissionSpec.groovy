@@ -3,7 +3,7 @@ package com.ordenaris.internalControl
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class PermissionSpec extends Specification implements DomainUnitTest<Permission> {
+class PermissionSpec extends Specification implements DomainUnitTest<Permissions> {
 
     def setup() {
     }

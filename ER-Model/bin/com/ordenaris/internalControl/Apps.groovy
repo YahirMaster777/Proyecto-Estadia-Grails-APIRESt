@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class App {
+class Apps {
     static hasMany = [serverApp: ServerApp]
     
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
@@ -24,7 +24,7 @@ class App {
         version false
     }
     static constraints = {
-        type inList:['Frontend','Backend','App','DB']
+        type inList:['Frontend','Backend','Apps','DB']
         dateUndeploy nullable:true, blank:true
         dateDeploy nullable:true,blank:true
         domain nullable:true, maxSize:150
@@ -41,8 +41,8 @@ class App {
 }
 
 class ConnectionApp{
-    App app
-    App service
+    Apps app
+    Apps service
     String description
     String status
     String portApp
