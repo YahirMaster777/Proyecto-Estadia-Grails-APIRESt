@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 class Apps {
-    static hasMany = [serverApp: ServerApp]
+    static hasMany = [serverApp: ServersApps]
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String name
     Integer status = 1
@@ -10,7 +10,7 @@ class Apps {
     String ipAdress
     String domain
     String type
-    Integer criticality
+    String criticality
     Date dateCreated
     Date lastUpdated
     Date dateDeploy
@@ -25,7 +25,7 @@ class Apps {
         dateUndeploy nullable:true, blank:true
         dateDeploy nullable:true,blank:true
         domain nullable:true, maxSize:150
-        criticality nullable:true,maxSize:11
+        criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         locationConfig nullable:true
         versionApp nullable:true, maxSize:20
         uuid maxSize:32, unique:true
@@ -33,7 +33,7 @@ class Apps {
         host blank:true, nullable:true,maxSize:20
         ipAdress maxSize:15
         description maxSize:150
-        name maxSize:40
+        name maxSize:50
     }
 }
 class ConnectionApp{
