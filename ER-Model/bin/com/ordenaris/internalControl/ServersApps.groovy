@@ -1,14 +1,8 @@
 package com.ordenaris.internalControl
 
-<<<<<<< HEAD
 class ServersApps {
     static belongsTo = [server: Servers, app: Apps]
     Servers server
-=======
-class ServerApp {
-    static belongsTo = [server: Server, app: Apps]
-    Server server
->>>>>>> prueba
     String description
     String portApp
     String portServ
