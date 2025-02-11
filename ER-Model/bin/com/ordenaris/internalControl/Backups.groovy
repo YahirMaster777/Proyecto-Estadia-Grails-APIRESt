@@ -1,29 +1,22 @@
 package com.ordenaris.internalControl
 import java.util.UUID
-
-class Binnacles {
+class Backups {
+    Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    Date dateCreated
+    String locationConfig
     String description
-    Users user
-    String tableName
-    String extra
-    String url
     int status = 1
+    Date dateCreated
+    Date lastUpdated
+    //en formato {local, nube o servidor}, ruta
+    String url
 
     static constraints = {
-        uuid unique: true,maxSize: 32
-        extra blank:true, nullable:true
-        tableName maxSize: 20
-<<<<<<< HEAD
+        uuid unique: true,maxSize:32
+        lastUpdated blank: true, nullable: true
         url nullable: false, blank: false
-        table inList: ["Apps", "Servidor"]
         description maxSize:150, blank:true, nullable: true
-=======
-        table inList: ["Apps", "Servidor"]
->>>>>>> prueba
     }
-    
     static mapping = {
         version false
     }
