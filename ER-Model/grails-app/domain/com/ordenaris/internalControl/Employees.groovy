@@ -25,7 +25,6 @@ class Employees {
     }
 
     static constraints = {
-        company inList:['Innovattia','Ordenaris', 'Pawerful']
         initialDate nullable:true, blank:true
         lastName2  nullable:true, blank:true, maxSize:30
         lastName1 maxSize:30
@@ -37,6 +36,6 @@ class Employees {
         curp nullable:true, maxSize:18, blank:true, unique:true
         businessEmail nullable:true, email:true, maxSize:100, unique:true
         personalEmail email:true, maxSize:100, unique:true
-        name maxSize:40
+        name maxSize:50
     }
 }

@@ -28,7 +28,7 @@ class Apps {
         dateUndeploy nullable:true, blank:true
         dateDeploy nullable:true,blank:true
         domain nullable:true, maxSize:150
-        criticality nullable:true,maxSize:11
+        criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], nullable:true,maxSize:11 
         locationConfig nullable:true
         versionApp nullable:true, maxSize:20
         uuid maxSize:32, unique:true
@@ -36,7 +36,7 @@ class Apps {
         host blank:true, nullable:true,maxSize:20
         ipAdress maxSize:15
         description maxSize:150
-        name maxSize:40
+        name maxSize:50
     }
 }
 

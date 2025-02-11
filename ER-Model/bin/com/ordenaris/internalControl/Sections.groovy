@@ -16,8 +16,8 @@ class Sections {
     static constraints = {
         lastUpdated nullable:true, blank:true
         uuid nullable: false, blank: false, unique: true, maxSize:32
-        url nullable: false, blank: false, maxSize:45
-        name nullable: false, blank: false, maxSize:150
+        url nullable: false, blank: false
+        name nullable: false, blank: false, maxSize:50
         status nullable: false
         description nullable:false, maxSize:150
         type nullable: false, blank: false, maxSize: 11

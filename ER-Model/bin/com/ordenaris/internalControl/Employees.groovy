@@ -37,6 +37,6 @@ class Employees {
         curp nullable:true, maxSize:18, blank:true, unique:true
         businessEmail nullable:true, email:true, maxSize:100, unique:true
         personalEmail email:true, maxSize:100, unique:true
-        name maxSize:40
+        name maxSize:50
     }
 }

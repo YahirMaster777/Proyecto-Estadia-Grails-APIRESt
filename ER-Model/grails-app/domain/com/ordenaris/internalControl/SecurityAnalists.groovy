@@ -4,11 +4,12 @@ import java.util.UUID
 class SecurityAnalists {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     int incumbency
-    Employee responsible
+    Employees responsible
     Servers server
     Date assigned
     Date lastUpdated
     int status = 1
+    
     static constraints = {
         uuid unique:true
         
