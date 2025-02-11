@@ -14,7 +14,7 @@ class ServersApps {
     static constraints = {
         portApp unique: true,maxSize: 5
         portServ unique: true,maxSize: 5
-        description blank:true, nullable:true
+        description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
         service maxSize: 50
     }

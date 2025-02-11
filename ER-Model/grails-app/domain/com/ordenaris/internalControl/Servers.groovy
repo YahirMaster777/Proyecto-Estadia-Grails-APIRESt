@@ -14,7 +14,6 @@ class Servers {
     String cloudProvider
     String locationConfig
     String type
-    Employees responsible
     int status = 1
     Enterprises company
     String macAddress
@@ -32,8 +31,9 @@ class Servers {
         lastUpdated blank:true, nullable: true
         macAddress unique:true,maxSize: 17
         host maxSize: 20
-        cloudProvider: 50
+        cloudProvider: 20
         capacity: 7
+        storage: 7
         memory: 7
     }
     static mapping = {
