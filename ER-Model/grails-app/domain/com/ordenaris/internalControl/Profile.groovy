@@ -10,6 +10,7 @@ class Profile {
     Permission permission
     
     static mapping = {
+        table 'permissionTemplate'
         version false
     }
     

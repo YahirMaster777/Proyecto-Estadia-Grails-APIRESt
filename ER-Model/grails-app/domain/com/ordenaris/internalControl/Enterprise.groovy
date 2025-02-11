@@ -3,7 +3,7 @@ package com.ordenaris.internalControl
 class Enterprise {
     String uuid = UUID.randomUUID().toString().replaceAll('//-','')
     String name
-    String type //cliente o interna
+    String type
     String description
     Date dateCreated
     Date lastUpdated
@@ -14,7 +14,7 @@ class Enterprise {
     static constraints = {
         name maxSize:40
         uuid maxSize:32, unique:true
-        type maxSize:20
+        type maxSize:20, inList:['Cliente', 'Interna']
         description maxSize:150
     }
 }
