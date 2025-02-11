@@ -1,10 +1,8 @@
 package com.ordenaris.internalControl
-
 class Apps {
     static hasMany = [serverApp: ServerApp]
-    
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
-    String name 
+    String name
     Integer status = 1
     String versionApp
     String port
@@ -19,7 +17,6 @@ class Apps {
     Date dateUndeploy
     String locationConfig
     String description
-    
     static mapping ={
         version false
     }
@@ -39,21 +36,18 @@ class Apps {
         name maxSize:40
     }
 }
-
 class ConnectionApp{
     Apps app
     Apps service
     String description
-    String status =1 
+    String status =1
     String portApp
     String portService
     Date dateCreated
     Date lastUpdated
-    
     static mapping = {
         version false
     }
-    
     static constraints ={
         description maxSize:150, nullable:true, blank:true
         portApp maxSize:5, nullable:true, blank:true

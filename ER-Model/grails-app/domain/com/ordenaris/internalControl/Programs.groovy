@@ -1,10 +1,10 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 
-class Program {
+class Programs {
     // almacena los programas y los servicios
-    static hasMany = [server:Server]
-    Server server
+    static hasMany = [server:Servers]
+    Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
     String software
@@ -23,7 +23,7 @@ class Program {
         uuid unique: true, maxSize: 32
         port unique: true, maxSize: 5
         type inList: ["programa", "servicio"],maxSize: 10
-        description blank:true, nullable:true
+        description blank:true, nullable:true, maxSize:150
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
         software maxSize: 30

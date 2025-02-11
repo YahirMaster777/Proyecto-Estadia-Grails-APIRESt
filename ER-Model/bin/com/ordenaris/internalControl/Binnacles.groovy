@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 
-class Binnacle {
+class Binnacles {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Date dateCreated
     String description
@@ -15,7 +15,9 @@ class Binnacle {
         uuid unique: true,maxSize: 32
         extra blank:true, nullable:true
         tableName maxSize: 20
+        url nullable: false, blank: false
         table inList: ["Apps", "Servidor"]
+        description maxSize:150, blank:true, nullable: true
     }
     
     static mapping = {

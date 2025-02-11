@@ -1,9 +1,9 @@
-package com.ordenaris.internalControl
+package com.ordenarir.internalControl
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ConnectionServerSpec extends Specification implements DomainUnitTest<ConnectionsServers> {
+class SecurityAnalistsSpec extends Specification implements DomainUnitTest<SecurityAnalists> {
 
     def setup() {
     }

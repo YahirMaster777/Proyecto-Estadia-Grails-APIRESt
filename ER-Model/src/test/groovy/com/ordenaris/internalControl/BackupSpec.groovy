@@ -3,7 +3,7 @@ package com.ordenaris.internalControl
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class BackupSpec extends Specification implements DomainUnitTest<Backup> {
+class BackupSpec extends Specification implements DomainUnitTest<Backups> {
 
     def setup() {
     }

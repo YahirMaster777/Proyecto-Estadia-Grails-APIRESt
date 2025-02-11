@@ -12,7 +12,7 @@ class Enterprises {
         version false
     }
     static constraints = {
-        name maxSize:40
+        name maxSize:50
         uuid maxSize:32, unique:true
         type maxSize:20, inList:['Cliente', 'Interna']
         description maxSize:150

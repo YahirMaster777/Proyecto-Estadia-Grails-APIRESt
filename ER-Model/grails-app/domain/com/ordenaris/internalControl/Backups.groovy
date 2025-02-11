@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
-class Backup {
-    Server server
+class Backups {
+    Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String locationConfig
     String description
@@ -14,6 +14,8 @@ class Backup {
     static constraints = {
         uuid unique: true,maxSize:32
         lastUpdated blank: true, nullable: true
+        url nullable: false, blank: false
+        description maxSize:150, blank:true, nullable: true
     }
     static mapping = {
         version false
