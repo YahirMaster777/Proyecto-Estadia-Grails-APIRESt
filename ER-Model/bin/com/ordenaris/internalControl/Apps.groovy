@@ -32,7 +32,7 @@ class Apps {
         locationConfig nullable:true
         versionApp nullable:true, maxSize:20
         uuid maxSize:32, unique:true
-        port blank:true, nullable:true,maxSize:15
+        port blank:true, nullable:true,maxSize:5
         host blank:true, nullable:true,maxSize:20
         ipAdress maxSize:15
         description maxSize:150
@@ -44,7 +44,7 @@ class ConnectionApp{
     Apps app
     Apps service
     String description
-    String status
+    String status =1 
     String portApp
     String portService
     Date dateCreated
@@ -55,8 +55,7 @@ class ConnectionApp{
     }
     
     static constraints ={
-        description maxSize:100, nullable:true, blank:true
-        status maxSize:20
+        description maxSize:150, nullable:true, blank:true
         portApp maxSize:5, nullable:true, blank:true
         portService maxSize:5, nullable:true, blank:true
     }
