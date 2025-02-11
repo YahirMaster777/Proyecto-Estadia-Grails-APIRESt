@@ -1,9 +1,9 @@
 package com.ordenaris.internalControl
 
-class Dev {
+class Devs {
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
-    Employee dev
-    App proyect
+    Employees dev
+    Apps proyect
     Integer incumbency
     
     static mapping = {

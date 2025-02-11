@@ -1,9 +1,9 @@
 
 
 // Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.ordenaris.internalControl.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.ordenaris.internalControl.UserRole'
-grails.plugin.springsecurity.authority.className = 'com.ordenaris.internalControl.Role'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.ordenaris.internalControl.Users'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.ordenaris.internalControl.UsersRoles'
+grails.plugin.springsecurity.authority.className = 'com.ordenaris.internalControl.Roles'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/',               access: ['permitAll']],
 	[pattern: '/error',          access: ['permitAll']],

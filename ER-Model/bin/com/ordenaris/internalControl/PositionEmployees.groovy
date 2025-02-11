@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class PositionEmployee {
+class PositionEmployees {
     String name
     String description
     String area

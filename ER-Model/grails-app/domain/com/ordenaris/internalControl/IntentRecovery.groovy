@@ -5,7 +5,7 @@ class IntentRecovery {
     String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
     String host
     boolean used
-    User user
+    Users user
     static mapping = {
         version false
         used sqlType: "bit(1)"

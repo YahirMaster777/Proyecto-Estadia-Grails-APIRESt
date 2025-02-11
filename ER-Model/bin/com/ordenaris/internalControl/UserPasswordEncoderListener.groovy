@@ -14,19 +14,19 @@ class UserPasswordEncoderListener {
     @Autowired
     SpringSecurityService springSecurityService
 
-    @Listener(User)
+    @Listener(Users)
     void onPreInsertEvent(PreInsertEvent event) {
         encodePasswordForEvent(event)
     }
 
-    @Listener(User)
+    @Listener(Users)
     void onPreUpdateEvent(PreUpdateEvent event) {
         encodePasswordForEvent(event)
     }
 
     private void encodePasswordForEvent(AbstractPersistenceEvent event) {
-        if (event.entityObject instanceof User) {
-            User u = event.entityObject as User
+        if (event.entityObject instanceof Users) {
+            Users u = event.entityObject as Users
             if (u.password && ((event instanceof  PreInsertEvent) || (event instanceof PreUpdateEvent && u.isDirty('password')))) {
                 event.getEntityAccess().setProperty('password', encodePassword(u.password))
             }
