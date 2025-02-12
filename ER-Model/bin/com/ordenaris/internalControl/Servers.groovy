@@ -19,18 +19,20 @@ class Servers {
     String macAddress
     String criticality
     String development
+    String location
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
         uuid unique: true, maxSize: 32
-        development inList: ["pruebas", "producción", "desarrollo"], maxSize: 10
-        type inList: ["virtual", "fisico", "dedicado"], maxSize:10
+        development inList: ["Pruebas", "Producción", "Desarrollo"], maxSize: 10
+        type inList: ["Virtual", "Fisico", "Dedicado"], maxSize:10
         criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
         macAddress unique:true,maxSize: 17
+        location maxSize: 50
         company blank:true, nullable: true
         host maxSize: 20
         cloudProvider maxSize: 20
