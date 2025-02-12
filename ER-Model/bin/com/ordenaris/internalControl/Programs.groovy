@@ -22,7 +22,7 @@ class Programs {
     static constraints = {
         uuid unique: true, maxSize: 32
         port unique: true, maxSize: 5
-        type inList: ["programa", "servicio"],maxSize: 10
+        type inList: ["Programa", "Servicio"],maxSize: 10
         description blank:true, nullable:true, maxSize:150
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
