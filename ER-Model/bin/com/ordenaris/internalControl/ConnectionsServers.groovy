@@ -9,8 +9,9 @@ class ConnectionsServers {
     Date lastUpdated
 
     static constraints = {
+        server nullable: false
         portServ unique: true,maxSize: 5
-        description blank:true, nullable:true, maxSize: 150
+        description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
     }
     static mapping = {
