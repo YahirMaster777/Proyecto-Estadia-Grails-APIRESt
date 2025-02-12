@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class Employees {
-    String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String name
     String lastName1
     String lastName2

@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class PermissionsTemplate {
-    String uuid = UUID.randomUUID().toString().replaceAll('//-','')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-','')
     Date dateCreated
     Date lastUpdated
     Integer status = 1
