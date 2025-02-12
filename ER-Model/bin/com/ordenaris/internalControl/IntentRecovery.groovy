@@ -2,7 +2,7 @@ package com.ordenaris.internalControl
 
 class IntentRecovery {
     Date dateCreated
-    String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String host
     boolean used
     Users user

@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class Devs {
-    String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Employees dev
     Apps proyect
     Integer incumbency

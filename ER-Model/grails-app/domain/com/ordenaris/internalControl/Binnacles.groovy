@@ -16,7 +16,6 @@ class Binnacles {
         extra blank:true, nullable:true
         tableName maxSize: 20
         url nullable: false, blank: false
-        table inList: ["Apps", "Servidor"]
         description maxSize:150, blank:true, nullable: true
     }
     

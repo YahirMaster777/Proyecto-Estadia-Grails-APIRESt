@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 
 class Enterprises {
-    String uuid = UUID.randomUUID().toString().replaceAll('//-','')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-','')
     String name
     String type
     String description

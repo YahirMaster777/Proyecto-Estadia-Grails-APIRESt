@@ -2,7 +2,7 @@ package com.ordenaris.internalControl
 
 class Sections {
     Date dateCreated 
-    String uuid = UUID.randomUUID().toString().replaceAll('//-', '')
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Date lastUpdated
     String url
     String name
