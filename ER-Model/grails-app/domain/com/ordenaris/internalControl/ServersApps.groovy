@@ -1,7 +1,10 @@
 package com.ordenaris.internalControl
+import java.util.UUID
 
 class ServersApps {
     static belongsTo = [server: Servers, app: Apps]
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
+
     Servers server
     String description
     String portApp
@@ -12,6 +15,7 @@ class ServersApps {
     Date lastUpdated
 
     static constraints = {
+        uuid unique:true, maxSize:32
         portApp unique: true,maxSize: 5
         portServ unique: true,maxSize: 5
         description blank:true, nullable:true, maxSize:150

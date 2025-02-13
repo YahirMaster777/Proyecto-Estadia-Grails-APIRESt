@@ -11,7 +11,7 @@ class SecurityAnalists {
     int status = 1
     
     static constraints = {
-        uuid unique:true
+        uuid unique:true, maxSize:32
         
     }
     static maapping = {
