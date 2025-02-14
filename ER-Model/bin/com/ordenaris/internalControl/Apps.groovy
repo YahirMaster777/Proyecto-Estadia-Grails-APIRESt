@@ -28,11 +28,8 @@ class Apps {
         versionApp nullable:true, maxSize:20
         uuid maxSize:32, unique:true
         port blank:true, nullable:true,maxSize:5
-        host blank:true, nullable:true,maxSize:20
-        ipAdress maxSize:15
         description maxSize:150
         name maxSize:50
-        status inList:["Activo","Inactivo","Mantenimiento", "Pruebas","Deprecated"]
     }
 }
 
@@ -40,7 +37,6 @@ class ConnectionApp{
     Apps app
     Apps service
     String description
-    String status =1
     String portApp
     String portService
     Date dateCreated

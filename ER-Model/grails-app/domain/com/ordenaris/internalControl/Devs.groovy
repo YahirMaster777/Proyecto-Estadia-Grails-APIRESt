@@ -5,15 +5,15 @@ class Devs {
     Employees dev
     Apps proyect
     Integer incumbency
-    String status
+    String statusDev
     
     static mapping = {
         version false
-        status sqlType:"Enum('Activo','Inactivo')"
+        statusDev sqlType:"Enum('Activo','Inactivo', '')"
     }
     static constraints = {
         uuid unique:true, maxSize:32
         incumbency maxSize:10
-        status inList:["Activo","Inactivo"]
+        statusDev inList:["Activo","Inactivo"]
     }
 }

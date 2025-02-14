@@ -1,6 +1,8 @@
 package com.ordenaris.internalControl
 
 class PositionEmployees {
+    Date dateCreated
+    Date lastUpdated
     String name
     String description
     String area
