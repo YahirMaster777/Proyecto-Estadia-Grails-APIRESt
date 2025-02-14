@@ -1,13 +1,10 @@
 package com.ordenaris.internalControl
-
+import java.util.UUID
 class Backups {
     Servers server
-    Configs locationConfig
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String description
-    int status = 1
     Date dateCreated
-    Date lastUpdated
-    //en formato {local, nube o servidor}, ruta
     String type
     String url
     static mapping = {
@@ -15,9 +12,9 @@ class Backups {
         type sqlType:"Enum('Local','Nube','Servidor')"
     }
     static constraints = {
-        lastUpdated blank: true, nullable: true
+        uuid unique: true,maxSize:32
+        type inList:['Local','Nube','Servidor']
         url nullable: false, blank: false
         description maxSize:150, blank:true, nullable: true
-        type inList:['Local','Nube','Servidor']
     }
 }

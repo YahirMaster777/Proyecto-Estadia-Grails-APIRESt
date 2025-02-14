@@ -13,20 +13,25 @@ class Servers {
     String cloudProvider
     Configs locationConfig
     String type
-    int status = 1
     Enterprises company
     String macAddress
     String criticality
-    String development
+    String status
     String location
     Date dateCreated
     Date lastUpdated
 
+    static mapping = {
+        version false
+        status sqlType:"Enum('Pruebas','Producción','Desarrollo','Mantenimiento')"
+        type sqlType:"Enum('Virtual','Fisico','Dedicado')"
+        criticality sqlType:"Enum('Indiferente','Baja','Media','Alta','Critica')"
+    }
     static constraints = {
         uuid unique: true, maxSize: 32
-        development inList: ["Pruebas", "Producción", "Desarrollo"]
-        type inList: ["Virtual", "Fisico", "Dedicado"]
-        criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
+        status inList:['Pruebas','Producción','Desarrollo','Mantenimiento']
+        type inList:['Virtual','Fisico','Dedicado']
+        criticality inList:['Indiferente','Baja','Media','Alta','Critica'], blank: true, nullable:true
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
@@ -38,8 +43,5 @@ class Servers {
         processingCapacity maxSize: 7
         storage maxSize: 7
         memory maxSize: 7
-    }
-    static mapping = {
-        version false
     }
 }

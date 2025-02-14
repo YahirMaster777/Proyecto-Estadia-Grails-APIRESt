@@ -9,7 +9,7 @@ class Devs {
     
     static mapping = {
         version false
-        statusDev sqlType:"Enum('Activo','Inactivo', '')"
+        statusDev sqlType:"Enum('Activo','Inactivo')"
     }
     static constraints = {
         uuid unique:true, maxSize:32
