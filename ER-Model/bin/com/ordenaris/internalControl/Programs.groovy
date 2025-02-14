@@ -35,5 +35,11 @@ class Programs {
         lastUpdated blank:true, nullable: true
         software maxSize: 30
         version maxSize:10
+<<<<<<< HEAD
+=======
+    }
+    static mapping = {
+        version false
+>>>>>>> prueba
     }
 }
