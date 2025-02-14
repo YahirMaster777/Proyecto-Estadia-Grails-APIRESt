@@ -11,7 +11,7 @@ class Servers {
     String memory
     String storage
     String cloudProvider
-    String locationConfig
+    Config locationConfig
     String type
     int status = 1
     Enterprises company
