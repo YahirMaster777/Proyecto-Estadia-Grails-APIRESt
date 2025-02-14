@@ -77,9 +77,9 @@ environments:
     development:
         dataSource:
             username: root
-            password: ""
+            password: "141002"
             dbCreate: create-drop
-            url: jdbc:mysql://localhost:330/diagrama
+            url: jdbc:mysql://localhost:3307/diagrama
     test:
         dataSource:
             dbCreate: update

@@ -6,6 +6,7 @@ class IntentRecovery {
     String host
     boolean used
     Users user
+    
     static mapping = {
         version false
         used sqlType: "bit(1)"

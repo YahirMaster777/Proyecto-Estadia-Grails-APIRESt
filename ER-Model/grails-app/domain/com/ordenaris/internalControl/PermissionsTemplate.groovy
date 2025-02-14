@@ -4,10 +4,9 @@ class PermissionsTemplate {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-','')
     Date dateCreated
     Date lastUpdated
-    Integer status = 1
-    String name
     Sections section
     Permissions permission
+    Templates template
     
     static mapping = {
         version false
@@ -18,4 +17,22 @@ class PermissionsTemplate {
         uuid unique:true, maxSize:32
         name maxSize:50
     }
+}
+
+class Templates {
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-','')
+    Date dateCreated
+    Date lastUpdated
+    String name
+    String description
+    
+    static mapping = {
+        version false
+    }
+    static constraints = {
+        uuid unique:true, maxSize:32
+        name maxSize:50
+        description maxSize:150
+    }
+    
 }

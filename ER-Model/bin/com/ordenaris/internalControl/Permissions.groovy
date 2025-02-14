@@ -2,6 +2,7 @@ package com.ordenaris.internalControl
 
 class Permissions {
       //puede ser : read, create, update, delete, readPagination, readAll
+    Date dateCreated
     String name
     String description
     String alias
