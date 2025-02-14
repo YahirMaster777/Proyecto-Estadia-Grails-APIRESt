@@ -13,7 +13,7 @@ class Programs {
     String description 
     int status = 1
     String port
-    Config locationConfig
+    Configs locationConfig
     String type
     Date instalation
     Date dateCreated

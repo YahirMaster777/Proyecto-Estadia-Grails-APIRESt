@@ -7,11 +7,11 @@ class Servers {
     String host
     String publicIp
     String privateIp
-    String capacity
+    String processingCapacity
     String memory
     String storage
     String cloudProvider
-    Config locationConfig
+    Configs locationConfig
     String type
     int status = 1
     Enterprises company
@@ -35,7 +35,7 @@ class Servers {
         company blank:true, nullable: true
         host maxSize: 20
         cloudProvider maxSize: 20
-        capacity maxSize: 7
+        processingCapacity maxSize: 7
         storage maxSize: 7
         memory maxSize: 7
     }

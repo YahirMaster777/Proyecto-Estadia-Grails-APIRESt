@@ -9,26 +9,31 @@ class Programs {
 
     String software
     String version
-    String description   // se metete el balanceador
-    int status = 1 //1-acntivo ,2-innactivo, 3-, 4-, 5-, 6-, 7- 
+    // se metete el balanceador
+    String description   
+    String status 
     String port
-    Config locationConfig
+    Configs locationConfig
     String type
     Date instalation
     Date dateCreated
     Date lastUpdated
 
+    static mapping = {
+        version false
+        type sqlType:"Enum('Programa','Servicio')"
+        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+    }
+
     static constraints = {
         uuid unique: true, maxSize: 32
         port unique: true, maxSize: 5
-        type inList: ["Programa", "Servicio"]
+        type inList:['Programa','Servicio']
+        status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
         description blank:true, nullable:true, maxSize:150
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
         software maxSize: 30
         version maxSize:10
-    }
-    static mapping = {
-        version false
     }
 }
