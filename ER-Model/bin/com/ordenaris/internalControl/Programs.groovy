@@ -9,9 +9,8 @@ class Programs {
 
     String software
     String version
-    // se metete el balanceador
-    String description 
-    int status = 1
+    String description   // se metete el balanceador
+    int status = 1 //1-acntivo ,2-innactivo, 3-, 4-, 5-, 6-, 7- 
     String port
     Config locationConfig
     String type
@@ -27,6 +26,7 @@ class Programs {
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
         software maxSize: 30
+        version maxSize:10
     }
     static mapping = {
         version false
