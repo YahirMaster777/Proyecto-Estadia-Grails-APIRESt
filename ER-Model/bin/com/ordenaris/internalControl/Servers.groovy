@@ -12,7 +12,7 @@ class Servers {
     String memory
     String storage
     String cloudProvider
-    String locationConfig
+    Config locationConfig
     String type
     int status = 1
     Enterprises company
@@ -25,8 +25,8 @@ class Servers {
 
     static constraints = {
         uuid unique: true, maxSize: 32
-        development inList: ["Pruebas", "Producción", "Desarrollo"], maxSize: 10
-        type inList: ["Virtual", "Fisico", "Dedicado"], maxSize:10
+        development inList: ["Pruebas", "Producción", "Desarrollo"]
+        type inList: ["Virtual", "Fisico", "Dedicado"]
         criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
