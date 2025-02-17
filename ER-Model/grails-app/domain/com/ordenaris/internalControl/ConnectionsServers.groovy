@@ -1,23 +1,20 @@
 package com.ordenaris.internalControl
-import java.util.UUID
 
 class ConnectionsServers {
-    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    Servers server1
-    Servers server2
+    Servers server
+    Servers subServer
     String description
-    String portServ1
-    String portServ2
+    String portServer
+    String portSubServer
     int status = 1
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
-        uuid unique:true, maxSize:32
-        server1 nullable: false
-        server2 nullable: false
-        portServ1 unique: true,maxSize: 5
-        portServ2 unique: true,maxSize: 5
+        server nullable: false
+        subServer nullable: false
+        portServer unique: true,maxSize: 5
+        portSubServer unique: true,maxSize: 5
         description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
     }
