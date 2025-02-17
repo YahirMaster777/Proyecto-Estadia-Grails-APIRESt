@@ -106,3 +106,7 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+appName: "erModel"
+
+rootLogs: "C:/Users/ord-back08/Desktop>"
