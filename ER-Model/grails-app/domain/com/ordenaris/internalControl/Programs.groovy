@@ -6,7 +6,7 @@ class Programs {
     Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
-    String nombre
+    String name
     String version
     // se metete el balanceador
     String description    
