@@ -16,6 +16,7 @@ class TemplatePermissions {
     static constraints = {
         uuid unique:true, maxSize:32
         name maxSize:50
+        description maxSize:150
     }
 }
 
