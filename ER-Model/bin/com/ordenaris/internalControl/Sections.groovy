@@ -7,7 +7,7 @@ class Sections {
     String url
     String name
     String description
-    String status
+    String status = 'Activa'
     
     static mapping = {
         version false

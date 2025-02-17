@@ -5,7 +5,7 @@ class Devs {
     Employees dev
     Apps proyect
     Integer incumbency
-    String statusDev
+    String statusDev ='Activo'
     
     static mapping = {
         version false
