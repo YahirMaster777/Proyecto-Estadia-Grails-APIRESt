@@ -5,7 +5,7 @@ class ConnectionsServers {
     Servers subServer
     String portServer
     String portSubServer
-    String status
+    String status = 'Activo'
     Date dateCreated
     Date lastUpdated
 
@@ -15,11 +15,12 @@ class ConnectionsServers {
         portServer unique: true,maxSize: 5
         portSubServer unique: true,maxSize: 5
         lastUpdated blank: true, nullable: true
-        status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
+        status inList:['Activo','Inactivo','Desabilitado']
     }
+
     static mapping = {
         version false
-        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+        status sqlType:"Enum('Activo','Inactivo','Desabilitado')"
 
     }
 }
