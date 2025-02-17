@@ -3,7 +3,6 @@ package com.ordenaris.internalControl
 class ConnectionsServers {
     Servers server
     Servers subServer
-    String description
     String portServer
     String portSubServer
     String status = 'Activo'
@@ -15,7 +14,6 @@ class ConnectionsServers {
         subServer nullable: false
         portServer unique: true,maxSize: 5
         portSubServer unique: true,maxSize: 5
-        description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
         status inList:['Activo','Inactivo','Desabilitado']
     }
