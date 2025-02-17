@@ -14,10 +14,11 @@ class Users implements Serializable {
     String username
     String password
     String businessEmail
+    String tk
+    boolean tkExpired 
     boolean enabled = true
     boolean accountExpired
     boolean accountLocked
-    boolean passwordExpired
     Employees employee
 
     Set<Roles> getAuthorities() {
