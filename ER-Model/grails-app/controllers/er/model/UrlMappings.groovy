@@ -3,9 +3,15 @@ package er.model
 class UrlMappings {
 
     static mappings = {
-        group "/aplication", {
-            post "/create"(controller:'apps', action:'save')
+        group "/admin", {
+            group "/user", {
+                post "/create"(controller: 'user', action:'manage' )
+                group "/$username", {
+                    put "/update"(controller: 'user', action:'update')
+                }
+            }
         }
+        group "/public", {}
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
