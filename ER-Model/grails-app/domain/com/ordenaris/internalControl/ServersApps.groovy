@@ -12,10 +12,13 @@ class ServersApps {
     String status
     Date dateCreated
     Date lastUpdated
+    String environmentType
 
     static mapping = {
         version false
         status sqlType:"Enum('Activa','Inactiva','Matenimiento','Pruebas')"
+        environmentType sqlType:"Enum('Pruebas','Producción','Desarrollo')"
+
     }
     static constraints = {
         uuid unique:true, maxSize:32
@@ -23,6 +26,7 @@ class ServersApps {
         portServer unique: true,maxSize: 5
         description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
+        environmentType inList:['Pruebas','Producción','Desarrollo']
         status inList:['Activa','Inactiva','Matenimiento','Pruebas']
     }
 }
