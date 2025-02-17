@@ -6,7 +6,7 @@ class Programs {
     Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
-    String software
+    String name
     String version
     // se metete el balanceador
     String description    
@@ -28,7 +28,7 @@ class Programs {
         description blank:true, nullable:true, maxSize:150
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
-        software maxSize: 30
+        name maxSize: 50
         version maxSize: 10
     }
 }

@@ -5,6 +5,7 @@ class ServersApps {
     static belongsTo = [server: Servers, app: Apps]
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
+    Configs locationConfig
     Servers server
     String description
     String portApp
@@ -13,6 +14,7 @@ class ServersApps {
     Date dateCreated
     Date lastUpdated
     String environmentType
+    Date dateDeploy
 
     static mapping = {
         version false
