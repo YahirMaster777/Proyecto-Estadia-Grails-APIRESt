@@ -10,6 +10,7 @@ class Configs {
     Date dateCreated
     Date lastUpdated
     String type
+    String description
 
     static mapping = {
         version false
@@ -20,6 +21,7 @@ class Configs {
         uuid unique:true, maxSize:32
         lastUpdated nullable: true, blank:true
         name maxSize: 50
+        description maxSize:150, nullable:true, blank:true
         type inList: ['Programa','Servcio','Aplicación','Base de datos','Servidor','Respaldo']
     }
 }

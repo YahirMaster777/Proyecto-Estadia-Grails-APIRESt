@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class ConnectionsServices {
+class serviceConnections {
     Programs program
     Programs service
     String portProgram

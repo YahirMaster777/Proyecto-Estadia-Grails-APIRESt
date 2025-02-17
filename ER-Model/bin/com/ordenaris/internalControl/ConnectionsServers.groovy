@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class ConnectionsServers {
+class serverConnections {
     Servers server
     Servers subServer
     String portServer
