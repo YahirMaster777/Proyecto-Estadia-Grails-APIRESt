@@ -19,6 +19,5 @@ class SecurityAnalists {
         version false
         statusAnalist sqlType:"Enum('Activo','Inactivo')"
         incumbency sqlType:"Enum('Alta','Media','Baja')"
-
     }
 }

@@ -20,6 +20,7 @@ class Users implements Serializable {
     boolean accountExpired
     boolean accountLocked
     Employees employee
+    boolean passwordExpired
 
     Set<Roles> getAuthorities() {
         (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.role as Set<Roles>
@@ -29,6 +30,9 @@ class Users implements Serializable {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, maxSize:80
         businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
+        tk nullable: true, blank:true
+        tkExpired nullable: true, blank:true
+        employee nullable: true, blank:true
     }
 
     static mapping = {
