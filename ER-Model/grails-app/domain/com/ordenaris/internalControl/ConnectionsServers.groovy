@@ -3,10 +3,9 @@ package com.ordenaris.internalControl
 class ConnectionsServers {
     Servers server
     Servers subServer
-    String description
     String portServer
     String portSubServer
-    int status = 1
+    String status
     Date dateCreated
     Date lastUpdated
 
@@ -15,10 +14,12 @@ class ConnectionsServers {
         subServer nullable: false
         portServer unique: true,maxSize: 5
         portSubServer unique: true,maxSize: 5
-        description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
+        status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
     }
     static mapping = {
         version false
+        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+
     }
 }
