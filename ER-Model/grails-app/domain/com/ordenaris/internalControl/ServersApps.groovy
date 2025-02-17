@@ -13,6 +13,7 @@ class ServersApps {
     Date dateCreated
     Date lastUpdated
     String environmentType
+    Date dateDeploy
 
     static mapping = {
         version false
