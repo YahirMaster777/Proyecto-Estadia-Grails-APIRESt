@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 
-class PermissionsTemplate {
+class TemplatePermissions {
     Date dateCreated
     Date lastUpdated
     Sections section

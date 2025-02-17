@@ -31,7 +31,7 @@ class Apps {
     }
 }
 
-class ConnectionApps{
+class AppConnections{
     Apps app
     Apps service
     String description
