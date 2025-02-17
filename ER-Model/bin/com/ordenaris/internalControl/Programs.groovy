@@ -11,7 +11,6 @@ class Programs {
     // se metete el balanceador
     String description    
     String port
-    Configs locationConfig
     String type
     Date instalation
     Date dateCreated

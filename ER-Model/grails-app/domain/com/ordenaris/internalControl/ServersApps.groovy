@@ -5,6 +5,7 @@ class ServersApps {
     static belongsTo = [server: Servers, app: Apps]
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
+    Configs locationConfig
     Servers server
     String description
     String portApp

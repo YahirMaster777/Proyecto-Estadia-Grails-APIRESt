@@ -11,7 +11,6 @@ class Servers {
     String memory
     String storage
     String cloudProvider
-    Configs locationConfig
     String type
     Enterprises company
     String macAddress

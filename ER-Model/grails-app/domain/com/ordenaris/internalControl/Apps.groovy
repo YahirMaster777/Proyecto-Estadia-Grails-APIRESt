@@ -2,7 +2,6 @@ package com.ordenaris.internalControl
 class Apps {
     static hasMany = [serverApp: ServersApps]
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    Configs locationConfig
     String name
     String urlRepository
     String versionApp
