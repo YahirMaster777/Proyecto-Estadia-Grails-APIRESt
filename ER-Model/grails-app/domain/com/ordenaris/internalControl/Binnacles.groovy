@@ -6,16 +6,16 @@ class Binnacles {
     Users user
     String tableName
     String url
-    String status
+    String status = 'Buena ejecución'
 
     static mapping = {
         version false
-        status sqlType:"Enum('Bien','Mal','Suspendido')"
+        status sqlType:"Enum('Buena ejecución','Mala ejecución')"
     }
     static constraints = {
         tableName maxSize: 20
         url nullable: false, blank: false
         description maxSize:150, blank:true, nullable: true
-        status inList: ['Bien','Mal','Suspendido']
+        status inList: ['Buena ejecución','Mala ejecución']
     }
 }

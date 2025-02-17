@@ -3,7 +3,6 @@ import java.util.UUID
 
 class Programs {
     // almacena los programas y los servicios
-    static hasMany = [server:Servers]
     Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
@@ -34,6 +33,6 @@ class Programs {
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true
         software maxSize: 30
-        version maxSize:10
+        version maxSize: 10
     }
 }
