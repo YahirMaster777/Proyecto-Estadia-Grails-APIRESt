@@ -16,22 +16,22 @@ class Servers {
     Enterprises company
     String macAddress
     String criticality
-    String status
     String location
+    String status
     Date dateCreated
     Date lastUpdated
 
     static mapping = {
         version false
-        status sqlType:"Enum('Pruebas','Producción','Desarrollo','Mantenimiento')"
         type sqlType:"Enum('Virtual','Fisico','Dedicado')"
         criticality sqlType:"Enum('Indiferente','Baja','Media','Alta','Critica')"
+        status sqlType:"Enum('Activo','Inactivo','Mantenimiento')"
     }
     static constraints = {
         uuid unique: true, maxSize: 32
-        status inList:['Pruebas','Producción','Desarrollo','Mantenimiento']
         type inList:['Virtual','Fisico','Dedicado']
         criticality inList:['Indiferente','Baja','Media','Alta','Critica'], blank: true, nullable:true
+        status :['Activo','Inactivo','Mantenimiento']
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true

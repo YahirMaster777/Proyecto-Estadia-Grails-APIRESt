@@ -8,14 +8,14 @@ class SecurityAnalists {
     Servers server
     Date assigned
     Date lastUpdated
-    String status
+    String statusAnalist
     
     static constraints = {
         uuid unique:true, maxSize:32
-        status inList:['Activo','Inactivo']
+        statusAnalist inList:['Activo','Inactivo']
     }
-    static maapping = {
+    static mapping = {
         version false
-        status sqlType:"Enum('Activo','Inactivo')"
+        statusAnalist sqlType:"Enum('Activo','Inactivo')"
     }
 }

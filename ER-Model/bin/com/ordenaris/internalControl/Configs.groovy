@@ -4,7 +4,7 @@ import java.util.UUID
 class Configs {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
-    String host
+    String path
     Users responsible
     String name
     Date dateCreated

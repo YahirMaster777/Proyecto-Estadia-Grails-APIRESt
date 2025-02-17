@@ -1,25 +1,25 @@
 package com.ordenaris.internalControl
 
-class ConnectionsServers {
-    Servers server
-    Servers subServer
-    String portServer
-    String portSubServer
+class ConnectionsServices {
+    Programs program
+    Programs service
+    String portProgram
+    String portService
     String status
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
-        server nullable: false
-        subServer nullable: false
-        portServer unique: true,maxSize: 5
-        portSubServer unique: true,maxSize: 5
+        program nullable: false
+        service nullable: false
+        portProgram unique: true,maxSize: 5
+        portService unique: true,maxSize: 5
         lastUpdated blank: true, nullable: true
         status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
     }
+
     static mapping = {
         version false
         status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
-
-    }
+    }   
 }
