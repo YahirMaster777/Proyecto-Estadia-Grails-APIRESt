@@ -3,10 +3,9 @@ package com.ordenaris.internalControl
 class ConnectionsServices {
     Programs program
     Programs service
-    String description
     String portProgram
     String portService
-    int status = 1
+    String status
     Date dateCreated
     Date lastUpdated
 
@@ -15,11 +14,12 @@ class ConnectionsServices {
         service nullable: false
         portProgram unique: true,maxSize: 5
         portService unique: true,maxSize: 5
-        description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
+        status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
     }
 
-    static maapping = {
+    static mapping = {
         version false
-    }
+        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+    }   
 }
