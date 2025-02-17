@@ -12,7 +12,6 @@ class Apps {
     String criticality
     Date dateCreated
     Date lastUpdated
-    Date dateDeploy
     Date dateUndeploy
     String description
     static mapping ={
@@ -23,7 +22,6 @@ class Apps {
         urlRepository nullable:true, maxSize:150, blank:true
         type inList:['Frontend','Backend','Aplication','Data Base']
         dateUndeploy nullable:true, blank:true
-        dateDeploy nullable:true,blank:true
         domain nullable:true, maxSize:150
         criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         versionApp nullable:true, maxSize:20

@@ -5,7 +5,6 @@ class Configs {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
 
     String path
-    Users responsible
     String name
     Date dateCreated
     Date lastUpdated
