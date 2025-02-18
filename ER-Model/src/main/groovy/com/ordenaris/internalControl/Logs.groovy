@@ -144,7 +144,7 @@ public class Logs {
 
     def saveLogFile( logInfo ){
         try{
-            File file = new File("${grailsApplication.config.rootLogs}/core-bait.txt")
+            File file = new File("${grailsApplication.config.rootLogs}/InternalControl.txt")
             if( !file.exists() ) file.createNewFile()
             FileWriter writer = new FileWriter( file, true )
             writer.write( "${logInfo}\n" )
