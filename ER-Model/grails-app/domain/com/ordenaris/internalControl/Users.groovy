@@ -3,6 +3,7 @@ package com.ordenaris.internalControl
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
+import java.util.UUID
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
@@ -10,7 +11,7 @@ import grails.compiler.GrailsCompileStatic
 class Users implements Serializable {
 
     private static final long serialVersionUID = 1
-
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String username
     String password
     String businessEmail
@@ -27,6 +28,7 @@ class Users implements Serializable {
     }
 
     static constraints = {
+        uuid unique:true, maxSize:32
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, maxSize:80
         businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
@@ -37,5 +39,6 @@ class Users implements Serializable {
 
     static mapping = {
 	    password column: '`password`'
+        version false
     }
 }
