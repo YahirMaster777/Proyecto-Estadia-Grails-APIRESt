@@ -4,14 +4,26 @@ class UrlMappings {
 
     static mappings = {
         group "/control", {
-            group "/user", {
-                group"/employee"{
-                    
+            group "/create", {
+                post "/app"(controller:'apps', action: 'create')
+                post "/user"(controller:'users', action: 'create')
+            }
+            group "/$uuid", {
+                group "/update",{
+                    put "/user"(controller:'users', action: 'update')
+                }
+                group "/read", {
+                    get "/user"(controller:'users', action: 'read')
+                }
+                group "/delete", {
+                    put "/user"(controller:'users', action: 'delete')
                 }
             }
-            group"/applicaction",{
-            }
-            group"/server",{
+            group "/list", {
+                get "/user"(controller:'users', action: 'list')
+                group "/all", {
+                    get "/user"(controller:'users', action: 'all')
+                }
             }
             
         }
