@@ -3,7 +3,7 @@ package er.model
 class UrlMappings {
 
     static mappings = {
-        group "/control", {
+        group "/private", {
             group "/create", {
                 post "/app"(controller:'apps', action: 'create')
                 post "/user"(controller:'users', action: 'create')
@@ -18,12 +18,15 @@ class UrlMappings {
                 group "/delete", {
                     put "/user"(controller:'users', action: 'delete')
                 }
+                constraints {
+                    uuid(matches: '^[a-f0-9]{32}$')
+                }
             }
             group "/list", {
                 get "/user"(controller:'users', action: 'list')
-                group "/all", {
-                    get "/user"(controller:'users', action: 'all')
-                }
+            }
+            group "/all", {
+                get "/user"(controller:'users', action: 'all')
             }
             
         }

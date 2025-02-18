@@ -13,14 +13,26 @@ class BootStrap {
             def roleAdmin = new Roles(authority: 'ROLE_ADMIN').save(flush: true)// flush: true para que se guarde en la base de datos
             def roleRoot = new Roles(authority: 'ROLE_ROOT').save(flush: true)// flush: true para que se guarde en la base de datos
             def roleCustom = new Roles(authority: 'ROLE_CUSTOM').save(flush: true)// flush: true para que se guarde en la base de datos
-            def userRoot1 = new Users(username: 'yair.ordenaris@gmail.com', password: 'Yair141002')
-            def userRoot2= new Users(username: 'emilio.ordenaris@gmail.com', password: '1a2b3c4d')
-            if (!userRoot1.save(flush: true) || !userRoot2.save(flush: true)) {
+            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002')
+            def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d')
+            def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002')
+            def userAdmin2 =  new Users(username: 'emilioA', password: '1a2b3c4d')
+            def userCustom1 =  new Users(username: 'yairC', password: 'Yair141002')
+            def userCustom2 =  new Users(username: 'emilioC', password: '1a2b3c4d')
+            if (!userRoot1.save(flush: true) || !userRoot2.save(flush: true) || !userAdmin1.save(flush: true) || !userAdmin2.save(flush: true) || !userCustom1.save(flush: true) || !userCustom2.save(flush: true)) {
                 userRoot1.errors.allErrors.each { println it }
                 userRoot2.errors.allErrors.each { println it }
+                userAdmin1.errors.allErrors.each { println it }
+                userAdmin2.errors.allErrors.each { println it }
+                userCustom1.errors.allErrors.each { println it }
+                userCustom2.errors.allErrors.each { println it }
             } else {
                 new UsersRoles(user: userRoot1, role: roleRoot).save(flush: true)
                 new UsersRoles(user: userRoot2, role: roleRoot).save(flush: true)
+                new UsersRoles(user: userAdmin1, role: roleAdmin).save(flush: true)
+                new UsersRoles(user: userAdmin2, role: roleAdmin).save(flush: true)
+                new UsersRoles(user: userCustom1, role: roleCustom).save(flush: true)
+                new UsersRoles(user: userCustom2, role: roleCustom).save(flush: true)
             }
         }
         

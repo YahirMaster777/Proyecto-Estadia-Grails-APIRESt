@@ -17,16 +17,16 @@ class EmployeesController {
         
     }
     
-    def validDataExist = [
-            ['latitud': data.latitude],
-            ['longitud': data.length],
-            ['calle': data.street],
-            ['télefono': data.phone],
-            ['colonia': data.cologne],
-            ['locacion': data.location],
-            ['nombre': data.name]
-        ]
-        def isArrayExist = Utils.validArrayExist(validDataExist,"consultorio", "dato", logId)
-        if(isArrayExist.status != 200) return isArrayExist
+    // def validDataExist = [
+    //         ['latitud': data.latitude],
+    //         ['longitud': data.length],
+    //         ['calle': data.street],
+    //         ['télefono': data.phone],
+    //         ['colonia': data.cologne],
+    //         ['locacion': data.location],
+    //         ['nombre': data.name]
+    //     ]
+    //     def isArrayExist = Utils.validArrayExist(validDataExist,"consultorio", "dato", logId)
+    //     if(isArrayExist.status != 200) return isArrayExist
     
 }
