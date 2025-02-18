@@ -1,25 +1,22 @@
 package com.ordenaris.internalControl
-import java.util.UUID
 
 class Binnacles {
-    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Date dateCreated
     String description
     Users user
     String tableName
-    String extra
-    String url
-    int status = 1
+    String type
+    String status = 'Ok'
 
-    static constraints = {
-        uuid unique: true,maxSize: 32
-        extra blank:true, nullable:true
-        tableName maxSize: 20
-        url nullable: false, blank: false
-        description maxSize:150, blank:true, nullable: true
-    }
-    
     static mapping = {
         version false
+        status sqlType:"Enum('Ok','Error')"
+        type sqlType:"Enum('Actualización','Creación','Eliminación')"
+    }
+    static constraints = {
+        tableName maxSize: 20
+        description maxSize:150, blank:true, nullable: true
+        status inList: ['Ok','Error']
+        type inList:['Actualización','Creación','Eliminación']
     }
 }

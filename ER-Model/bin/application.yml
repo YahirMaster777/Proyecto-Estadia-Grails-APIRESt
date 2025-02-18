@@ -77,9 +77,9 @@ environments:
     development:
         dataSource:
             username: root
-            password: "141002"
+            password: ""
             dbCreate: create-drop
-            url: jdbc:mysql://localhost:3307/diagrama
+            url: jdbc:mysql://localhost:330/diagrama
     test:
         dataSource:
             dbCreate: update
@@ -106,3 +106,7 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+appName: "erModel"
+
+rootLogs: "C:/Users/ord-back08/Desktop>"

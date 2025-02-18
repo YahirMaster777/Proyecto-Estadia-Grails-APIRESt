@@ -3,21 +3,18 @@ import java.util.UUID
 class Backups {
     Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-    String locationConfig
     String description
-    int status = 1
     Date dateCreated
-    Date lastUpdated
-    //en formato {local, nube o servidor}, ruta
+    String type
     String url
-
-    static constraints = {
-        uuid unique: true,maxSize:32
-        lastUpdated blank: true, nullable: true
-        url nullable: false, blank: false
-        description maxSize:150, blank:true, nullable: true
-    }
     static mapping = {
         version false
+        type sqlType:"Enum('Local','Nube','Servidor')"
+    }
+    static constraints = {
+        uuid unique: true,maxSize:32
+        type inList:['Local','Nube','Servidor']
+        url nullable: false, blank: false
+        description maxSize:150, blank:true, nullable: true
     }
 }

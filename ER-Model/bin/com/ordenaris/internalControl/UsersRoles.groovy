@@ -80,6 +80,8 @@ class UsersRoles implements Serializable {
 				}
 			}
 		}
+		section nullable: true, blank:true
+		permission nullable: true, blank:true
 	}
 
 	static mapping = {

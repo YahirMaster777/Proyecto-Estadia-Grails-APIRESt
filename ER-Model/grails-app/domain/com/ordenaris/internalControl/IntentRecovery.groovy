@@ -4,11 +4,12 @@ class IntentRecovery {
     Date dateCreated
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String host
-    boolean used
+    String used
     Users user
+    
     static mapping = {
         version false
-        used sqlType: "bit(1)"
+        used sqlType:"Enum('Activo', 'Inactivo')"
     }
     static constraints = {
         host blank:true, nullable:true,maxSize:15
