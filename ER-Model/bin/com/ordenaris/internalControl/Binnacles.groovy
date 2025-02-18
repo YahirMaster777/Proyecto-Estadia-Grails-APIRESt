@@ -15,7 +15,6 @@ class Binnacles {
     }
     static constraints = {
         tableName maxSize: 20
-        url nullable: false, blank: false
         description maxSize:150, blank:true, nullable: true
         status inList: ['Ok','Error']
         type inList:['Actualización','Creación','Eliminación']

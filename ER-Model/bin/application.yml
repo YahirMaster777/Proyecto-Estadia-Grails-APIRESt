@@ -77,9 +77,9 @@ environments:
     development:
         dataSource:
             username: root
-            password: ""
-            dbCreate: create-drop
-            url: jdbc:mysql://localhost:330/diagrama
+            password: "141002"
+            dbCreate: update
+            url: jdbc:mysql://localhost:3307/diagrama
     test:
         dataSource:
             dbCreate: update
@@ -109,4 +109,4 @@ environments:
 
 appName: "erModel"
 
-rootLogs: "C:/Users/ord-back08/Desktop>"
+rootLogs: "C:/Users/ord-back7/Desktop/Logs"
