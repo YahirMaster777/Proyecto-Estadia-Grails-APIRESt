@@ -78,7 +78,7 @@ environments:
         dataSource:
             username: root
             password: "141002"
-            dbCreate: create-drop
+            dbCreate: update
             url: jdbc:mysql://localhost:3307/diagrama
     test:
         dataSource:
@@ -106,3 +106,11 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+appName: "erModel"
+
+<<<<<<< HEAD
+rootLogs: "C:/Users/ord-back7/Desktop/Logs"
+=======
+rootLogs: "C:/Users/ord-back08/Documents/proyectosGrails"
+>>>>>>> e0f24a8235d9276f70101371451a4bf978a5e436

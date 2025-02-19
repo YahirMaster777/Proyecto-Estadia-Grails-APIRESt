@@ -77,9 +77,9 @@ environments:
     development:
         dataSource:
             username: root
-            password: ""
+            password: "141002"
             dbCreate: update
-            url: jdbc:mysql://localhost:330/diagrama
+            url: jdbc:mysql://localhost:3307/diagrama
     test:
         dataSource:
             dbCreate: update
@@ -109,4 +109,8 @@ environments:
 
 appName: "erModel"
 
+<<<<<<< HEAD
+rootLogs: "C:/Users/ord-back7/Desktop/Logs"
+=======
 rootLogs: "C:/Users/ord-back08/Documents/proyectosGrails"
+>>>>>>> e0f24a8235d9276f70101371451a4bf978a5e436
