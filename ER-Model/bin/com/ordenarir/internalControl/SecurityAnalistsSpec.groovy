@@ -1,4 +1,4 @@
-package com.ordenarir.internalControl
+package com.ordenaris.internalControl
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
