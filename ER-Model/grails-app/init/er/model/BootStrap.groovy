@@ -16,7 +16,7 @@ class BootStrap {
             def roleAdmin = new Roles(authority: 'ROLE_ADMIN').save(flush: true)// flush: true para que se guarde en la base de datos
             def roleRoot = new Roles(authority: 'ROLE_ROOT').save(flush: true)// flush: true para que se guarde en la base de datos
             def roleCustom = new Roles(authority: 'ROLE_CUSTOM').save(flush: true)// flush: true para que se guarde en la base de datos
-            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002')
+            def userRoot1 = new Users(username: 'yair', password: 'Yair141002')
             def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d')
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002')
             def userAdmin2 =  new Users(username: 'emilioA', password: '1a2b3c4d')

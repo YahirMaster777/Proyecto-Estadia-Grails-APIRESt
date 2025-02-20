@@ -11,7 +11,6 @@ import grails.compiler.GrailsCompileStatic
 class UsersRoles implements Serializable {
 
 	private static final long serialVersionUID = 1
-
 	Users user
 	Roles role
 	Sections section
@@ -49,7 +48,7 @@ class UsersRoles implements Serializable {
 			user == Users.load(userId) &&
 			role == Roles.load(roleId)
 		}
-	}
+	}   
 
 	static UsersRoles create(Users user, Roles role, boolean flush = false) {
 		def instance = new UsersRoles(user: user, role: role)
@@ -72,16 +71,10 @@ class UsersRoles implements Serializable {
 	}
 
 	static constraints = {
-	    user nullable: false
-		role nullable: false, validator: { Roles r, UsersRoles ur ->
-			if (ur.user?.id) {
-				if (UsersRoles.exists(ur.user.id, r.id)) {
-				    return ['userRole.exists']
-				}
-			}
-		}
-		section nullable: true, blank:true
-		permission nullable: true, blank:true
+	    user nullable: false, unique:false
+		role nullable: false, unique:false
+		section nullable: true, blank:true, unique:false
+		permission nullable: true, blank:true, unique:false
 	}
 
 	static mapping = {
