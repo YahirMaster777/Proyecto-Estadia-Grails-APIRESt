@@ -26,9 +26,16 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+<<<<<<< HEAD
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
+=======
+    [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
+    [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
+    // [pattern: '/**', filters: 'JOINED_FILTERS']
+>>>>>>> 38cd9f8 (Correcciones de usuario y apps)
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
@@ -47,3 +54,15 @@ grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username' // Par
 grails.plugin.springsecurity.rest.login.passwordPropertyName='password' // Parametro para el inicio de sesión.
 grails.plugin.springsecurity.rest.login.endpointUrl='/api/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
+
+grails.plugin.springsecurity.useSecurityEventListener = true // Activar eventos
+
+grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
+    Users.withTransaction {
+        def user = Users.findById(appCtx.springSecurityService.principal.id)
+        if(!user.isAttached())
+            user.attach()
+        user.lastLoginTime = new Date() // actualizar la fecha de inicio de sesion
+        user.save(flush: true, failOnError: true)
+    }
+}

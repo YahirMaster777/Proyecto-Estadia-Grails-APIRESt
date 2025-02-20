@@ -78,7 +78,7 @@ environments:
         dataSource:
             username: root
             password: "141002"
-            dbCreate: update
+            dbCreate: create-drop
             url: jdbc:mysql://localhost:3307/diagrama
     test:
         dataSource:
@@ -106,6 +106,21 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+plugin:
+        springsecurity:
+            controllerAnnotations:
+                chainMap:
+                    '/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'
+                    '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
+            rest:
+                logout:
+                    endpointUrl: '/api/logout'
+                # ja é default
+                token:
+                    validation: 
+                        useBearerToken: false
+                        headerName: 'X-Auth-Token'
 
 appName: "erModel"
 

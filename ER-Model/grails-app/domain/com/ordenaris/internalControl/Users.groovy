@@ -7,7 +7,7 @@ import java.util.UUID
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
-@ToString(includes='username', includeNames=true, includePackage=false)
+@ToString(includes='username', includeNames=true, includePackage=true)
 class Users implements Serializable {
 
     private static final long serialVersionUID = 1
@@ -20,12 +20,24 @@ class Users implements Serializable {
     boolean accountLocked
     Employees employee
     boolean passwordExpired
+<<<<<<< HEAD
     String flag
     Date dateLocked
+=======
+    Date lastLoginTime
+    Date currentLoginDate
+>>>>>>> 38cd9f8 (Correcciones de usuario y apps)
 
     Set<Roles> getAuthorities() {
         (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.role as Set<Roles>
     }
+    
+    Set<Permissions> getPermissions(){
+        (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.permission as Set<Permissions>
+    }
+    
+    
+    
 
     static constraints = {
         uuid unique:true, maxSize:32
