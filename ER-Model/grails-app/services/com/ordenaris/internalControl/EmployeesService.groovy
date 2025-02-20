@@ -10,19 +10,35 @@ class EmployeesService {
             try{
                 new Logs("Registrar Empleado", "Procesando Solicitud", logId, "INFO", true, [data:data.name])
                 Utils.logger(logId,"Registrar Empleado","Procesando Solicitud")
+                
+                def position = PositionEmployees.findById(data.position)
+                if (!position) {
+                    new Logs( "Registrar Empleado", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.id ] )
+                    Utils.logger(logId, "Registrar Empleado", "No se encontró el registro", "Position:${data.id}")
+                    return TypeError.informationNotFound( logId )
+                }
+                
+                def company = Enterprises.findById(data.company)
+                if (!company) {
+                    new Logs( "Registrar Empleado", "No se encontró el registro", logId, "ERROR", false, [ companyUuid:data.id ] )
+                    Utils.logger(logId, "Registrar Empleado", "No se encontró el registro", "Compañia:${data.id}")
+                    return TypeError.informationNotFound( logId )
+                }
+                
+                
                 def employee = new Employees()
                 employee.curp = data.curp
-                employee.phoen = data.phone
-                employee.employee = data.employee
+                employee.phone = data.phone
+                employee.idEmployee = data.idEmployee
                 employee.rfc = data.rfc
-                employee.dimissedDate = data.dimissedDate
+                employee.dismissedDate = data.dismissedDate
                 employee.lastName1 = data.lastName1
                 employee.lastName2 = data.lastName2
                 employee.name = data.name
                 employee.nss = data.nss
                 employee.manage = data.manage
-                employee.position = data.position
-                employee.company = data.company             
+                employee.position = position
+                employee.company = company    
                 employee.personalEmail = data.personalEmail
                 employee.initialDate = data.initialDate
                 employee.save(flush:true, failOnError:true)

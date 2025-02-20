@@ -59,4 +59,7 @@ public class Utils {
         logger(logId,"Páginado ${table}", "Parametros validados de: ${table}")
         return [ data: [success: true], status:200]
     }
+    
+    
+    
 }

@@ -36,21 +36,51 @@ class EmployeesController {
     
     
     def validFormatData(data, logId) {
-        new Logs( "Validación de datos del usuario", "Validar datos de usuario", logId, "INFO", true, [ : ] )
-        Utils.logger(logId, "Validación de datos del usuario", " Validar datos de usuario")
+        new Logs( "Validación de datos del empleado", "Validar datos de empleado", logId, "INFO", true, [ : ] )
+        Utils.logger(logId, "Validación de datos del empleado", " Validar datos de empleado")
         def validDataExist = [
-            ['nombre de usuario':data.username]
-            // ['contraseña':data.password]
+            ['Curp':data.curp],
+            ['Phone':data.phone],
+            ['IdEmpleado':data.idEmployee],
+            ['Rfc':data.rfc],
+            ['lastName1':data.lastName1],
+            ['lastName2':data.lastName2],
+            ['name':data.name],
+            ['nss' : data.nss],
+            ['position':data.position],
+            ['company':data.company],           
+            ['personalEmail':data.personalEmail]    
         ]
-        def isArrayExist = Utils.validArrayExist(validDataExist, "usuario","dato", logId)
+        def isArrayExist = Utils.validArrayExist(validDataExist, "empleado","dato", logId)
         if(isArrayExist.status != 200) return isArrayExist
-        if (!data.username.specialCharacters()) {
-            new Logs( "Validación de datos del usuario", "El dato nombre de usuario no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.username ] )
-            Utils.logger(logId,"Validación de datos del usuario", "No coincide el formato esperado que se quiere ingresar.", data.username)
-            return TypeError.incorrectFormat( "nombre de usuario", "valor alfanúmerico", logId )
+        if (!data.name.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.name)
+            return TypeError.incorrectFormat( "Nombre de empleado", "valor alfanúmerico", logId )
         }
-        new Logs( "Validación de datos del usuario", "Control de la información de usuario", logId, "INFO", true, [ data: data, uuid: logId ] )
-        Utils.logger(logId,"Validación de datos del usuario", "Control de la información de usuario", "Los datos cumplen con los valores esperados")
+        if (!data.curp.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato Curp de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.curp ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.curp)
+            return TypeError.incorrectFormat( "Curp de empleado", "valor alfanúmerico", logId )
+        }
+        if (!data.rfc.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato RFC de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.rfc ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.rfc)
+            return TypeError.incorrectFormat( "RFC de empleado", "valor alfanúmerico", logId )
+        }
+        if (!data.nss.validNss()) {
+            new Logs( "Validación de datos del empleado", "El dato NSS de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.nss ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.nss)
+            return TypeError.incorrectFormat( "NSS de empleado", "valor alfanúmerico", logId )
+        }
+        
+        if (!data.phone.phoneNumber()) {
+            new Logs( "Validación de datos del empleado", "El dato phone de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.phone ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.phone)
+            return TypeError.incorrectFormat( "telefono del empleado", "valor alfanúmerico", logId )
+        }
+        new Logs( "Validación de datos del empleado", "Control de la información de empleado", logId, "INFO", true, [ data: data, uuid: logId ] )
+        Utils.logger(logId,"Validación de datos del empleado", "Control de la información de empleado", "Los datos cumplen con los valores esperados")
         return [data: [success: true], status:200]
     }
     

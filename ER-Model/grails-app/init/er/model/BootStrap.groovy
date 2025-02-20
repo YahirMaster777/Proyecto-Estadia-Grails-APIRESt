@@ -77,6 +77,12 @@ class BootStrap {
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
+        String.metaClass.validNss = {
+        def pageExpression = '^\\d{11}$'
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
         String.metaClass.uuidFormat = {
             def pageExpression = '^[a-f0-9]{32}$'
             def pattern = Pattern.compile(pageExpression)
