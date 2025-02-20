@@ -11,13 +11,13 @@ public class Utils {
         println log
     }
 
-    public static dataRequired(hashMapData, process, type, logId) {
+    public static dataRequired(hashMapData, process, logId) {
         for (data in hashMapData) {
             def key = data.keySet().first()
             def value = data.get(key)
             if (!value) {
-                new Logs(process, "Es necesario enviar el ${type}", logId, "ERROR", false, [type:key])
-                logger(logId, process, "Es necesario enviar el ${type}", key)
+                new Logs(process, "Es necesario enviar el dato", logId, "ERROR", false, [type:key])
+                logger(logId, process, "Es necesario enviar el dato", key)
                 return TypeError.missingParameter(key, logId)
             }
         }
