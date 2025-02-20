@@ -124,5 +124,5 @@ plugin:
 
 appName: "erModel"
 
-#rootLogs: "C:/Users/ord-back08/Documents/proyectosGrails"
-rootLogs: "C:/Users/ord-back7/Desktop/Logs"
+rootLogs: "C:/Users/ord-back08/Documents/proyectosGrails"
+# rootLogs: "C:/Users/ord-back7/Desktop/Logs"
