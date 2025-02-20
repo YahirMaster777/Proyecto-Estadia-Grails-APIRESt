@@ -40,24 +40,17 @@ public class Utils {
     public static validFormatParams(params, table, hashMapFields , logId) {
         new Logs( "Páginado ${table}", "Validar parametros de: ${table}", logId, "INFO", true, [ : ] )
         logger(logId, "Páginado ${table}", "Validar parametros de: ${table}")
-        def validDataExist = [
-            ['página': params.page],
-            ['orden': params.sort],
-            ['orden de lista': params.orderList]
-        ]
-        def isArrayExist = validArrayExist(validDataExist, table, "parametro", logId)
-        if(isArrayExist.status != 200) return isArrayExist
-        if (!params.page.onlyInt()){
+        if (params.page && (!params.page.onlyInt())){
             new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.page ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.page)
             return TypeError.incorrectFormat( "página", "número entero positivo", logId )
         }
-        if (hashMapFields.indexOf(params.sort) < 0){
+        if (params.sort && (hashMapFields.indexOf(params.sort) < 0)){
             new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.sort ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.sort)
             return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
         }
-        if (['asc', 'desc'].indexOf(params.orderList) < 0){
+        if (params.orderList && (['asc', 'desc'].indexOf(params.orderList) < 0)){
             new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.orderList ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.orderList)
             return TypeError.incorrectFormat("orden de lista","asc o desc", logId )
@@ -66,4 +59,7 @@ public class Utils {
         logger(logId,"Páginado ${table}", "Parametros validados de: ${table}")
         return [ data: [success: true], status:200]
     }
+    
+    
+    
 }

@@ -31,7 +31,7 @@ class UsersService {
             try {
                 new Logs("Actualizar usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
                 Utils.logger(logId,"Actualizar usuario","Procesando Solicitud", uuid)
-                println 
+                println "---"*100
                 println data.employeeUuid
                 def employee = Employees.findByUuid(data.employeeUuid)
                 if (!employee) {

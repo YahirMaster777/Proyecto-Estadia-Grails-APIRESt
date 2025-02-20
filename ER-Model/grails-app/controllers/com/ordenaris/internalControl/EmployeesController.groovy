@@ -7,29 +7,16 @@ import grails.converters.*
 class EmployeesController {
 	static responseFormats = ['json', 'xml']
 	def EmployeesService
-    def save(){
-        def logId = new Logs("Registrar Empleado","Inicio de solicitud", request).getId()
+    def save() {
+        def logId = new Logs("Registrar Empleado", "Inicio de solicitud", request).getId()
         def data = request.JSON   
-        Utils.logger(logId,"Registrar Empleado","Inicio de solicitud")
-        
-        def employee = Employees.findByPhoneAndPersonalEmail(data.phone, data.personalEmail).collect{ employee ->
-                return [
-                    personalEmail: employee.personalEmail,
-                    phone: employee.phone,
-                    name: employee.name
-                ]
-        }
-        print(employee)
-        
-        Employees pe = Employees.find { status == "Activo" && status == "Inactivo" &&  personalEmail == data.personalEmail || phone == data.phone }
-            if((employee.personalEmail == data.personalEmail) && (employee.phone == data.phone)){
-                new Logs("Registrar Empleado","Se encontro a un empleado con los mismos datos", logId, "INFO", false,[data:employee] )
-                Utils.logger(logId, "Registrar Empleado","Se encontro a un empleado con los mismos datos", "${data}")
-                def saveEmployeeResponse = TypeError.existingRegister(logId)
-                return respond(saveEmployeeResponse.data, status: saveEmployeeResponse.status) 
-            }
-        def saveEmployeeResponse = EmployeesService.createEmployee(data,logId)
-        return respond(saveEmployeeResponse.data, status:saveEmployeeResponse.status)
+        Utils.logger(logId, "Registrar Empleado", "Inicio de solicitud")
+    
+        def isValidData = validFormatData(data, logId)
+        if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
+
+        def saveEmployeeResponse = EmployeesService.createEmployee(data, logId)
+        return respond(saveEmployeeResponse.data, status: saveEmployeeResponse.status)
     }
     
     def update(){
@@ -46,6 +33,57 @@ class EmployeesController {
         def deleteEmployeeResponse = EmployeesService.deleteEmployee(params, logId)
         return respond(deleteEmployeeResponse.data, status:deleteEmployeeResponse.status)
     }
+    
+    
+    def validFormatData(data, logId) {
+        new Logs( "Validación de datos del empleado", "Validar datos de empleado", logId, "INFO", true, [ : ] )
+        Utils.logger(logId, "Validación de datos del empleado", " Validar datos de empleado")
+        def validDataExist = [
+            ['Curp':data.curp],
+            ['Phone':data.phone],
+            ['IdEmpleado':data.idEmployee],
+            ['Rfc':data.rfc],
+            ['lastName1':data.lastName1],
+            ['lastName2':data.lastName2],
+            ['name':data.name],
+            ['nss' : data.nss],
+            ['position':data.position],
+            ['company':data.company],           
+            ['personalEmail':data.personalEmail]    
+        ]
+        def isArrayExist = Utils.validArrayExist(validDataExist, "empleado","dato", logId)
+        if(isArrayExist.status != 200) return isArrayExist
+        if (!data.name.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.name)
+            return TypeError.incorrectFormat( "Nombre de empleado", "valor alfanúmerico", logId )
+        }
+        if (!data.curp.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato Curp de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.curp ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.curp)
+            return TypeError.incorrectFormat( "Curp de empleado", "valor alfanúmerico", logId )
+        }
+        if (!data.rfc.specialCharacters()) {
+            new Logs( "Validación de datos del empleado", "El dato RFC de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.rfc ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.rfc)
+            return TypeError.incorrectFormat( "RFC de empleado", "valor alfanúmerico", logId )
+        }
+        if (!data.nss.validNss()) {
+            new Logs( "Validación de datos del empleado", "El dato NSS de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.nss ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.nss)
+            return TypeError.incorrectFormat( "NSS de empleado", "valor alfanúmerico", logId )
+        }
+        
+        if (!data.phone.phoneNumber()) {
+            new Logs( "Validación de datos del empleado", "El dato phone de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.phone ] )
+            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.phone)
+            return TypeError.incorrectFormat( "telefono del empleado", "valor alfanúmerico", logId )
+        }
+        new Logs( "Validación de datos del empleado", "Control de la información de empleado", logId, "INFO", true, [ data: data, uuid: logId ] )
+        Utils.logger(logId,"Validación de datos del empleado", "Control de la información de empleado", "Los datos cumplen con los valores esperados")
+        return [data: [success: true], status:200]
+    }
+    
     
     
     
