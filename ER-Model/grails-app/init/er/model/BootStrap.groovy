@@ -105,6 +105,18 @@ class BootStrap {
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
+        String.metaClass.institutionalEmail = {
+            def pageExpression = "^[\\w\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.personalEmail = {
+            def pageExpression = "^[_\\w\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
         String.metaClass.validarPathImg = {
             // delegate.matches(/^\/.*\.webp$/)
             def pageExpression = '/^\\/.*\\.webp$/'

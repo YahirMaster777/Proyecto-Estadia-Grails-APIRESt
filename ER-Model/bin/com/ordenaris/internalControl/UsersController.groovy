@@ -1,6 +1,5 @@
 package com.ordenaris.internalControl
 
-
 import grails.rest.*
 import grails.converters.*
 
@@ -60,25 +59,31 @@ class UsersController {
     }
 
     def validFormatData(process,data, logId) {
-        new Logs( process, "Validar datos de usuario", logId, "INFO", true, [ : ] )
-        Utils.logger(logId, process, "Validar datos de usuario")
         def validDataExist = [
             ['nombre de usuario':data.username],
-            ['correo empresarial':data.businessEmail],
+            ['contraseña':data.password],
             ['emplado uuid':data.employeeUuid]
         ]
-        def isArrayExist = Utils.dataRequired(validDataExist, "usuario","dato", logId)
-        if(isArrayExist.status != 200) return isArrayExist
+        def isDataExist = Utils.dataRequired(validDataExist, process,"dato", logId)
+        if(isDataExist.status != 200) return isDataExist
         if (!data.username.specialCharacters()) {
-            new Logs( process, "El dato nombre de usuario no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.username ] )
-            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.username)
+            new Logs( process, "El nombre de usuario no coincide el formato esperado", logId, "ERROR", false, [  data: data.username ] )
+            Utils.logger(logId, process, "El dato nombre de usuario no coincide el formato esperado", data.username)
             return TypeError.incorrectFormat( "nombre de usuario", "valor alfanúmerico", logId )
         }
-        // TODO: Validar el correo con espresion regular
+        println data.businessEmail
+        println !data.businessEmail.institutionalEmail()
+        println !data.businessEmail.personalEmail()
+
+        if (data.businessEmail && (!data.businessEmail.personalEmail())) {
+            new Logs( process, "El correo electronico no coincide con el formato esperado", logId, "ERROR", false, [ data: data.businessEmail])
+            Utils.logger(logId, process, "El correo electronico no coincide con el formato esperado", data.businessEmail)
+            return TypeError.incorrectFormat("correo electronico", "correo electronico valido", logId)
+        }
         def isValidUuid = Utils.validFormatUuid(process, "emplado uuid",data.employeeUuid, logId)
         if(isValidUuid.status != 200) return isValidUuid
-        new Logs( process, "Control de la información de usuario", logId, "INFO", true, [ data: data, logId: logId ] )
-        Utils.logger(logId,process, "Control de la información de usuario", "Los datos cumplen con los valores esperados")
+        new Logs( process, "Validar datos de usuario", logId, "INFO", true, [ : ] )
+        Utils.logger(logId, process, "Validar datos de usuario")
         return [data: [success: true], status:200]
     }
 }

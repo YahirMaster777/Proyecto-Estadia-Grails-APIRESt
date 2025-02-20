@@ -13,8 +13,8 @@ class UsersService {
                 Utils.logger(logId,"Registrar usuario","Procesando Solicitud", "Nombre de usuario:${data.username}")
                 def employee = Employees.findByUuid(data.employeeUuid)
                 if (!employee) {
-                    new Logs( "Actualizar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
-                    Utils.logger(logId, "Actualizar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
+                    new Logs( "Registrar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
+                    Utils.logger(logId, "Registrar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
                     return TypeError.informationNotFound( logId )
                 }
                 def user = new Users()
@@ -122,20 +122,20 @@ class UsersService {
             int max = params.int('max') ?:10
             int offset = page * max
             def sort = params.sort //?:"username"
-            def orderList = params.orderList //?:"asc"
-            if (orderList && !sort) sort = "username"
-            if (sort && !orderList) orderList = "asc"
+            def order = params.order //?:"asc"
+            if (order && !sort) sort = "username"
+            if (sort && !order) order = "asc"
             def users = Users.createCriteria().list(max:max, offset:offset) {
-                if(params.filterValue) {
-                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.filterValue.toLowerCase().replaceAll(" ","%")}%'")
+                if(params.search) {
+                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.search.toLowerCase().replaceAll(" ","%")}%'")
                 }
-                if (sort || orderList) {
-                    order(sort, orderList.toLowerCase())
+                if (sort || order) {
+                    order(sort, order.toLowerCase())
                 }
             }.collect{ constructorUser(it)}
             def userCount = Users.withCriteria {
-                if(params.filterValue) {
-                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.filterValue.toLowerCase().replaceAll(" ","%")}%'")
+                if(params.search) {
+                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.search.toLowerCase().replaceAll(" ","%")}%'")
                 }
                 projections {
                     rowCount()

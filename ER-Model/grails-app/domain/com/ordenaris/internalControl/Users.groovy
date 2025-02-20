@@ -29,7 +29,7 @@ class Users implements Serializable {
 
     static constraints = {
         uuid unique:true, maxSize:32
-        password nullable: false, blank: false, password: true
+        password password: true
         username nullable: false, blank: false, unique: true, maxSize:80
         businessEmail unique:true, maxSize:100, email:true, nullable: false, blank:true
         tk nullable: true, blank:true
