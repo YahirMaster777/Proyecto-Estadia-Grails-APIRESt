@@ -106,7 +106,7 @@ class BootStrap {
             return matcher.matches()
         }
         String.metaClass.institutionalEmail = {
-            def pageExpression = "^[\\w\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
+            def pageExpression = "^[\\w\\.+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()

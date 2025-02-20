@@ -12,7 +12,7 @@ class AppsController {
         def logId = new Logs("Registrar Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Registrar Aplicacion", "Inicio de solicitud")
         def data = request.JSON
-        def isValidData = validFormatData(data, logId)
+        def isValidData = validFormatData(data, logId, )
         if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
         
         def saveAppResponse = AppsService.createApp(data, logId)
@@ -30,7 +30,7 @@ class AppsController {
          
            
         ]
-        def isArrayExist = Utils.validArrayExist(validDataExist, "Aplicacion","datos", logId)
+        def isArrayExist = Utils.validArrayExist(validDataExist, "Aplicacion", logId)
         if(isArrayExist.status != 200) return isArrayExist
         if (!data.name.specialCharacters()) {
             new Logs( "Registrar Aplicacion", "El dato nombre de Aplicacion no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )

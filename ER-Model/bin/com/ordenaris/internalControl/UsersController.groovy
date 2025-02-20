@@ -64,7 +64,7 @@ class UsersController {
             ['contraseña':data.password],
             ['emplado uuid':data.employeeUuid]
         ]
-        def isDataExist = Utils.dataRequired(validDataExist, process, "dato", logId)
+        def isDataExist = Utils.dataRequired(validDataExist, process, logId)
         if(isDataExist.status != 200) return isDataExist
         if (!data.username.specialCharacters()) {
             new Logs( process, "El nombre de usuario no coincide el formato esperado", logId, "ERROR", false, [  data: data.username ] )

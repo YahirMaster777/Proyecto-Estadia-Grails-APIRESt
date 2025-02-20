@@ -11,13 +11,13 @@ public class Utils {
         println log
     }
 
-    public static dataRequired(hashMapData, process, type, logId) {
+    public static dataRequired(hashMapData, process, logId) {
         for (validData in hashMapData) {
             def key = validData.keySet().first()
             def value = validData.get(key)
             if (!value) {
-                new Logs(process, "Es necesario enviar el ${type}", logId, "ERROR", false, [key:value])
-                logger(logId, process, "Es necesario enviar el ${type}", key)
+                new Logs(process, "Es necesario enviar el dato", logId, "ERROR", false, [key:value])
+                logger(logId, process, "Es necesario enviar el dato", key)
                 return TypeError.missingParameter(key, logId)
             }
         }
@@ -27,7 +27,7 @@ public class Utils {
     public static validFormatUuid(process, name, uuid, logId) {
         if(!uuid.uuidFormat()){
             new Logs( process, "No coincide el formato esperado", logId, "ERROR", false, [  uuid:uuid ] )
-            logger(logId,process, "No coincide el formato esperado", "${name:uuid}")
+            logger(logId,process, "No coincide el formato esperado", uuid)
             return TypeError.incorrectFormat( name, "un texto de 32 caracteres", logId )
         }
         return [ data: [success: true], status:200]
