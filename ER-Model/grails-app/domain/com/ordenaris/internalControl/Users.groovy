@@ -31,10 +31,9 @@ class Users implements Serializable {
         uuid unique:true, maxSize:32
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, maxSize:80
-        businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
+        businessEmail unique:true, maxSize:100, email:true, nullable: false, blank:true
         tk nullable: true, blank:true
         tkExpired nullable: true, blank:true
-        employee nullable: true, blank:true
     }
 
     static mapping = {

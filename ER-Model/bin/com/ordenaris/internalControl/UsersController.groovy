@@ -66,7 +66,7 @@ class UsersController {
             ['nombre de usuario':data.username]
             // ['contraseña':data.password]
         ]
-        def isArrayExist = Utils.validArrayExist(validDataExist, "usuario","dato", logId)
+        def isArrayExist = Utils.dataRequired(validDataExist, "usuario","dato", logId)
         if(isArrayExist.status != 200) return isArrayExist
         if (!data.username.specialCharacters()) {
             new Logs( "Validación de datos del usuario", "El dato nombre de usuario no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.username ] )

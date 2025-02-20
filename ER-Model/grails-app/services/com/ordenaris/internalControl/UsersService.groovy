@@ -1,6 +1,7 @@
 package com.ordenaris.internalControl
 
 import grails.gorm.transactions.Transactional
+import grails.gorm.CriteriaBuilder
 
 @Transactional
 class UsersService {
@@ -10,9 +11,17 @@ class UsersService {
             try{
                 new Logs("Registrar usuario", "Procesando Solicitud", logId, "INFO", true, [data:data.username])
                 Utils.logger(logId,"Registrar usuario","Procesando Solicitud", "Nombre de usuario:${data.username}")
+                def employee = Employees.findByUuid(data.employeeUuid)
+                if (!employee) {
+                    new Logs( "Actualizar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
+                    Utils.logger(logId, "Actualizar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
+                    return TypeError.informationNotFound( logId )
+                }
                 def user = new Users()
                 user.username = data.username
                 user.password = data.password
+                user.businessEmail = data.businessEmail
+                user.employee = employee
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
@@ -31,8 +40,6 @@ class UsersService {
             try {
                 new Logs("Actualizar usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
                 Utils.logger(logId,"Actualizar usuario","Procesando Solicitud", uuid)
-                println "---"*100
-                println data.employeeUuid
                 def employee = Employees.findByUuid(data.employeeUuid)
                 if (!employee) {
                     new Logs( "Actualizar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
@@ -49,14 +56,14 @@ class UsersService {
                 user.businessEmail = data.businessEmail
                 user.employee = employee
                 user.save(flush:true, failOnError:true)
-                new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
-                Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
+                new Logs("Actualizar usuario", "Se actualizo el usuario", logId,"INFO", true,[data:data.username])
+                Utils.logger(logId, "Actualizar usuario", "Se actualizo el usuario", "Nombre de usuario:${data.username}")
                 return [ data: [ success: true], status: 200 ]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
                 new Logs("Actualizar usuario","Error en la solicitud", logId, e, [ : ])
                 Utils.logger(logId, "Actualizar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
-                return TypeError.internalError(logId)
+                return TypeError.internalError( logId )
             }
         }
     }   
@@ -74,11 +81,11 @@ class UsersService {
             }
             new Logs( "Buscar usuario", "Usuario encontrado", logId, "INFO", true, [ data: uuid ] )
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
-            return [ data: [success: true, data:constructorSchedule(schedule) ], status: 200 ]
+            return [ data: [success: true, data:constructorUser(user) ], status: 200 ]
         }catch(Exception e) {
             new Logs("Buscar usuario","Error en la solicitud", logId, e, [ : ])
             Utils.logger(logId, "Buscar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
-            return TypeError.internalError(logId)
+            return TypeError.internalError( logId )
         }
     } 
 
@@ -93,21 +100,55 @@ class UsersService {
                     Utils.logger(logId, "Eliminar usuario", "No se encontró el registro", "Usuario:${uuid}")
                     return TypeError.informationNotFound( logId )
                 }
-                user.accountExpired = 1
-                user.save(flush:true, failOnError:true)
+                user.delete(flush:true, failOnError:true)
                 new Logs("Eliminar usuario", "Se elimino el usuario", logId,"INFO", true,[uuidUser:uuid])
-                Utils.logger(logId, "Eliminar usuario", "Se elimino el usuario", "Nombre:${data.uuid}")
+                Utils.logger(logId, "Eliminar usuario", "Se elimino el usuario", uuid)
+                return [ data: [ success: true], status: 200 ]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
                 new Logs("Eliminar usuario","Error en la solicitud", logId, e, [ : ])
                 Utils.logger(logId, "Eliminar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+                return TypeError.internalError( logId )
             }
         }
     }
 
     @Transactional(readOnly = true)
     def listUser(params, logId) {
-
+        try{
+            new Logs("Páginado usuario", "Procesando Solicitud", logId, "INFO", true, [ : ])
+            Utils.logger(logId,"Páginado usuario","Procesando Solicitud")
+            int page = (params.int('page') ?:1) -1
+            int max = params.int('max') ?:10
+            int offset = page * max
+            def sort = params.sort //?:"username"
+            def orderList = params.orderList //?:"asc"
+            if (orderList && !sort) sort = "username"
+            if (sort && !orderList) orderList = "asc"
+            def users = Users.createCriteria().list(max:max, offset:offset) {
+                if(params.filterValue) {
+                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.filterValue.toLowerCase().replaceAll(" ","%")}%'")
+                }
+                if (sort || orderList) {
+                    order(sort, orderList.toLowerCase())
+                }
+            }.collect{ constructorUser(it)}
+            def userCount = Users.withCriteria {
+                if(params.filterValue) {
+                    sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.filterValue.toLowerCase().replaceAll(" ","%")}%'")
+                }
+                projections {
+                    rowCount()
+                }
+            }[0]
+            new Logs("Páginado usuario", "Resultados de la busqueda usuario", logId,"INFO", true,[ : ])
+            Utils.logger(logId, "Páginado usuario", "Resultados de la busqueda usuario")
+            return [ data: [ success: true, data: [list: users, total: userCount]], status: 200 ]
+        } catch(Exception e) {
+            new Logs("Páginado usuario","Error en la solicitud", logId, e, [ : ])
+            Utils.logger(logId, "Páginado usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+            return TypeError.internalError( logId )
+        }
     }
 
     @Transactional(readOnly = true)

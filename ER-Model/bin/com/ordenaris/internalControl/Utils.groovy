@@ -11,8 +11,8 @@ public class Utils {
         println log
     }
 
-    public static validArrayExist(validDataExists, table, type, logId) {
-        for (validData in validDataExists) {
+    public static dataRequired(hashMapData, table, type, logId) {
+        for (validData in hashMapData) {
             def key = validData.keySet().first()
             def value = validData.get(key)
             if (!value) {
@@ -26,7 +26,7 @@ public class Utils {
         return [data: [success: true], status: 200]
     }
 
-    public static validFormatDataUuid(uuid, logId) {
+    public static validFormatUuid(uuid, logId) {
         if(!uuid.uuidFormat()){
             new Logs( "Validación del parametro uuid", "El parametro uuid no coincide con la longitud que se quiere ingresar.", logId, "ERROR", false, [  uuid: uuid ] )
             logger(logId,"Validación del parametro uuid", "El parametro uuid no coincide con la longitud que se quiere ingresar.", uuid)
@@ -41,12 +41,16 @@ public class Utils {
         new Logs( "Páginado ${table}", "Validar parametros de: ${table}", logId, "INFO", true, [ : ] )
         logger(logId, "Páginado ${table}", "Validar parametros de: ${table}")
         def validDataExist = [
-            ['página': params.page],
             ['orden': params.sort],
             ['orden de lista': params.orderList]
         ]
-        def isArrayExist = validArrayExist(validDataExist, table, "parametro", logId)
+        def isArrayExist = dataRequired(validDataExist, table, "parametro", logId)
         if(isArrayExist.status != 200) return isArrayExist
+        if (!params.page.onlyInt()){
+            new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.page ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.page)
+            return TypeError.incorrectFormat( "página", "número entero positivo", logId )
+        }
         if (!params.page.onlyInt()){
             new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.page ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.page)

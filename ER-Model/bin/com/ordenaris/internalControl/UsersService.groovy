@@ -74,7 +74,7 @@ class UsersService {
             }
             new Logs( "Buscar usuario", "Usuario encontrado", logId, "INFO", true, [ data: uuid ] )
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
-            return [ data: [success: true, data:constructorSchedule(schedule) ], status: 200 ]
+            return [ data: [success: true, data:constructorUser(user) ], status: 200 ]
         }catch(Exception e) {
             new Logs("Buscar usuario","Error en la solicitud", logId, e, [ : ])
             Utils.logger(logId, "Buscar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
