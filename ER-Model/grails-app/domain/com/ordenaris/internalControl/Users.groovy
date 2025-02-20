@@ -24,8 +24,6 @@ class Users implements Serializable {
     Date dateLocked
     Date lastLoginTime
     Date currentLoginDate
-    String flag
-    Date dateLocked
 
     Set<Roles> getAuthorities() {
         (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.role as Set<Roles>
