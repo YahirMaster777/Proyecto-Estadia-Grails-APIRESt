@@ -10,7 +10,21 @@ class EmployeesService {
             try{
                 new Logs("Registrar Empleado", "Procesando Solicitud", logId, "INFO", true, [data:data.name])
                 Utils.logger(logId,"Registrar Empleado","Procesando Solicitud")
-                def employee = new Employees(data)
+                def employee = new Employees()
+                employee.curp = data.curp
+                employee.phoen = data.phone
+                employee.employee = data.employee
+                employee.rfc = data.rfc
+                employee.dimissedDate = data.dimissedDate
+                employee.lastName1 = data.lastName1
+                employee.lastName2 = data.lastName2
+                employee.name = data.name
+                employee.nss = data.nss
+                employee.manage = data.manage
+                employee.position = data.position
+                employee.company = data.company             
+                employee.personalEmail = data.personalEmail
+                employee.initialDate = data.initialDate
                 employee.save(flush:true, failOnError:true)
                 new Logs("Registrar Empleado", "Se registro el empleado", logId,"INFO", true,[data:data.name])
                 Utils.logger(logId, "Registrar Empleado", "Se registro el empleado", "Nombre:${data.name}")

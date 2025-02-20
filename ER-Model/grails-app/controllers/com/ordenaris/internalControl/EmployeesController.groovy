@@ -7,29 +7,16 @@ import grails.converters.*
 class EmployeesController {
 	static responseFormats = ['json', 'xml']
 	def EmployeesService
-    def save(){
-        def logId = new Logs("Registrar Empleado","Inicio de solicitud", request).getId()
+    def save() {
+        def logId = new Logs("Registrar Empleado", "Inicio de solicitud", request).getId()
         def data = request.JSON   
-        Utils.logger(logId,"Registrar Empleado","Inicio de solicitud")
-        
-        def employee = Employees.findByPhoneAndPersonalEmail(data.phone, data.personalEmail).collect{ employee ->
-                return [
-                    personalEmail: employee.personalEmail,
-                    phone: employee.phone,
-                    name: employee.name
-                ]
-        }
-        print(employee)
-        
-        Employees pe = Employees.find { status == "Activo" && status == "Inactivo" &&  personalEmail == data.personalEmail || phone == data.phone }
-            if((employee.personalEmail == data.personalEmail) && (employee.phone == data.phone)){
-                new Logs("Registrar Empleado","Se encontro a un empleado con los mismos datos", logId, "INFO", false,[data:employee] )
-                Utils.logger(logId, "Registrar Empleado","Se encontro a un empleado con los mismos datos", "${data}")
-                def saveEmployeeResponse = TypeError.existingRegister(logId)
-                return respond(saveEmployeeResponse.data, status: saveEmployeeResponse.status) 
-            }
-        def saveEmployeeResponse = EmployeesService.createEmployee(data,logId)
-        return respond(saveEmployeeResponse.data, status:saveEmployeeResponse.status)
+        Utils.logger(logId, "Registrar Empleado", "Inicio de solicitud")
+    
+        def isValidData = validFormatData(data, logId)
+        if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
+
+        def saveEmployeeResponse = EmployeesService.createEmployee(data, logId)
+        return respond(saveEmployeeResponse.data, status: saveEmployeeResponse.status)
     }
     
     def update(){
@@ -46,6 +33,27 @@ class EmployeesController {
         def deleteEmployeeResponse = EmployeesService.deleteEmployee(params, logId)
         return respond(deleteEmployeeResponse.data, status:deleteEmployeeResponse.status)
     }
+    
+    
+    def validFormatData(data, logId) {
+        new Logs( "Validación de datos del usuario", "Validar datos de usuario", logId, "INFO", true, [ : ] )
+        Utils.logger(logId, "Validación de datos del usuario", " Validar datos de usuario")
+        def validDataExist = [
+            ['nombre de usuario':data.username]
+            // ['contraseña':data.password]
+        ]
+        def isArrayExist = Utils.validArrayExist(validDataExist, "usuario","dato", logId)
+        if(isArrayExist.status != 200) return isArrayExist
+        if (!data.username.specialCharacters()) {
+            new Logs( "Validación de datos del usuario", "El dato nombre de usuario no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.username ] )
+            Utils.logger(logId,"Validación de datos del usuario", "No coincide el formato esperado que se quiere ingresar.", data.username)
+            return TypeError.incorrectFormat( "nombre de usuario", "valor alfanúmerico", logId )
+        }
+        new Logs( "Validación de datos del usuario", "Control de la información de usuario", logId, "INFO", true, [ data: data, uuid: logId ] )
+        Utils.logger(logId,"Validación de datos del usuario", "Control de la información de usuario", "Los datos cumplen con los valores esperados")
+        return [data: [success: true], status:200]
+    }
+    
     
     
     
