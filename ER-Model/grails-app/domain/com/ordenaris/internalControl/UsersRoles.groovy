@@ -47,7 +47,7 @@ class UsersRoles implements Serializable {
 			user == Users.load(userId) &&
 			role == Roles.load(roleId)
 		}
-	}
+	}   
 
 	static UsersRoles create(Users user, Roles role, boolean flush = false) {
 		def instance = new UsersRoles(user: user, role: role)
