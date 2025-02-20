@@ -11,55 +11,49 @@ public class Utils {
         println log
     }
 
-    public static validArrayExist(validDataExists, table, type, logId) {
-        for (validData in validDataExists) {
-            def key = validData.keySet().first()
-            def value = validData.get(key)
+    public static dataRequired(hashMapData, process, type, logId) {
+        for (data in hashMapData) {
+            def key = data.keySet().first()
+            def value = data.get(key)
             if (!value) {
-                new Logs("Validación del ${type} de ${table}", "No se encontró el dato que se quiere ingresar.", logId, "ERROR", false, [type:key])
-                logger(logId, "Validación del ${type} de ${table}", "No se encontró el dato que se quiere ingresar", key)
+                new Logs(process, "Es necesario enviar el ${type}", logId, "ERROR", false, [type:key])
+                logger(logId, process, "Es necesario enviar el ${type}", key)
                 return TypeError.missingParameter(key, logId)
             }
         }
-        new Logs("Validación de ${type} del ${table}", "Control de la información de los ${type}", logId, "INFO", true, [:])
-        logger(logId, "Validación de ${type} del ${table}", "Control de la información de los ${type}.")
         return [data: [success: true], status: 200]
     }
 
-    public static validFormatDataUuid(uuid, logId) {
+    public static validFormatUuid(process, name, uuid, logId) {
         if(!uuid.uuidFormat()){
-            new Logs( "Validación del parametro uuid", "El parametro uuid no coincide con la longitud que se quiere ingresar.", logId, "ERROR", false, [  uuid: uuid ] )
-            logger(logId,"Validación del parametro uuid", "El parametro uuid no coincide con la longitud que se quiere ingresar.", uuid)
-            return TypeError.incorrectFormat( "uuid", "texto de 32 caracteres", logId )
+            new Logs( process, "No coincide el formato esperado", logId, "ERROR", false, [  uuid:uuid ] )
+            logger(logId,process, "No coincide el formato esperado", uuid)
+            return TypeError.incorrectFormat( name, "un texto de 32 caracteres", logId )
         }
-        new Logs( "Validación del parametro uuid", "Control de la información del uuid", logId, "INFO", true, [  uuid: uuid ] )
-        logger(logId,"Validación del parametro uuid", "El parametro uuid paso.")
         return [ data: [success: true], status:200]
     }
 
     public static validFormatParams(params, table, hashMapFields , logId) {
-        new Logs( "Páginado ${table}", "Validar parametros de: ${table}", logId, "INFO", true, [ : ] )
-        logger(logId, "Páginado ${table}", "Validar parametros de: ${table}")
         if (params.page && (!params.page.onlyInt())){
-            new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.page ] )
-            logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.page)
+            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.page ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.page)
             return TypeError.incorrectFormat( "página", "número entero positivo", logId )
         }
+        if (params.max && (!params.max.onlyInt())){
+            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.max ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.max)
+            return TypeError.incorrectFormat( "máximo", "número entero positivo", logId )
+        }
         if (params.sort && (hashMapFields.indexOf(params.sort) < 0)){
-            new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.sort ] )
-            logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.sort)
+            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.sort ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.sort)
             return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
         }
-        if (params.orderList && (['asc', 'desc'].indexOf(params.orderList) < 0)){
-            new Logs( "Páginado ${table}", "No coincide el formato esperado.", logId, "ERROR", false, [ data: params.orderList ] )
-            logger(logId,"Páginado ${table}", "No coincide el formato esperado.", params.orderList)
+        if (params.order && (['asc', 'desc'].indexOf(params.order.toLowerCase()) < 0)){
+            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.order ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.order)
             return TypeError.incorrectFormat("orden de lista","asc o desc", logId )
-        } 
-        new Logs( "Páginado ${table}", "Parametros validados de: ${table}", logId, "INFO", true, [ : ] )
-        logger(logId,"Páginado ${table}", "Parametros validados de: ${table}")
+        }
         return [ data: [success: true], status:200]
     }
-    
-    
-    
 }

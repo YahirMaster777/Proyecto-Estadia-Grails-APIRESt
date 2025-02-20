@@ -19,18 +19,18 @@ class UrlMappings {
                     }
                     group "/delete", {
                         delete "/user"(controller:'users', action: 'delete')
-                        delete "/employee"(controller:'employees', action:'delete')
+                        put "/employee"(controller:'employees', action:'delete')
                     }
-                    constraints{
-                    uuid(matches:/^[0-9a-fA-F]{32}$/)
+                    constraints {
+                        uuid(matches: '^[a-fA-F0-9]{32}$')
                     }
                 }
                 
                 group "/list", {
                     get "/user"(controller:'users', action: 'list')
-                    group "/all", {
-                        get "/user"(controller:'users', action: 'all')
-                    }
+                }
+                group "/all", {
+                    get "/user"(controller:'users', action: 'all')
                 }
             
         }
