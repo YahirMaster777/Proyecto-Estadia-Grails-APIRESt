@@ -23,6 +23,10 @@ public class Utils {
         }
         return [data: [success: true], status: 200]
     }
+    
+    
+    
+    
 
     public static validFormatUuid(process, name, uuid, logId) {
         if(!uuid.uuidFormat()){
