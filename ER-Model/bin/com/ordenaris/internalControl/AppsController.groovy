@@ -12,53 +12,66 @@ class AppsController {
         def logId = new Logs("Registrar Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Registrar Aplicacion", "Inicio de solicitud")
         def data = request.JSON
-        def isValidData = validFormatData(data, logId, )
+        def isValidData = validFormatData("Registrar Aplicacion",data, logId)
         if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
         
         def saveAppResponse = AppsService.createApp(data, logId)
-        return respond(saveAppResponse.data,status: saveAppResponse.status)
-    
+        return respond(saveAppResponse.data, status: saveAppResponse.status)
     }
     
-    def validFormatData(data, logId) {
-        new Logs( "Registrar Aplicacion", "Validando los datos ingresados", logId, "INFO", true, [ : ] )
-        Utils.logger(logId, "Registrar Aplicacion", "Validando los datos ingresados")
+    def delete(){
+        def logId = new Logs("Eliminar Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud")
+        def deleteAppResponse = AppsService.deleteApp(params, logId)
+        return respond(deleteAppResponse.data, status: deleteAppResponse.status)
+    }
+    
+    
+    
+    
+    def validFormatData(process, data, logId) {
         def validDataExist = [
             ['Criticidad':data.criticality],
             ['Nombre':data.name],
-            ['Tipo' : data.type],
-         
-           
+            ['Tipo' : data.type]
         ]
-        def isArrayExist = Utils.validArrayExist(validDataExist, "Aplicacion", logId)
+        def isArrayExist = Utils.dataRequired(validDataExist,process,logId)
         if(isArrayExist.status != 200) return isArrayExist
+        
+        new Logs( process, "Validando los datos ingresados", logId, "INFO", true, [ : ])
+        Utils.logger(logId,process, "Validando los datos ingresados")
+        
+        def listStatus=['Activa','Depracada','Pendiente','Desarollo']
+        if(data.status && (listStatus.indexOf(data.status) < 0)){
+            new Logs( process, "El dato 'status' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.status ] )
+            Utils.logger(logId,process, "El dato 'status' ingresado no coincide con el formato esperado", data.status)
+            return TypeError.incorrectFormat( "'Status de la Aplicacion'", ": 'Activa','Depracada','Pendiente','Desarollo'", logId )
+        }
+        
         if (!data.name.specialCharacters()) {
-            new Logs( "Registrar Aplicacion", "El dato nombre de Aplicacion no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )
-            Utils.logger(logId,"Registrar Aplicacion", "No coincide con el formato esperado.", data.name)
-            return TypeError.incorrectFormat( "Nombre de Aplicacion", "valor alfanúmerico", logId )
+            new Logs( process, "El dato 'name' ingresado no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )
+            Utils.logger(logId,process, "El dato 'name' ingresado no coincide con el formato esperado.", data.name)
+            return TypeError.incorrectFormat( "'Nombre'", "Un valor alfanúmerico", logId )
         }
-        if (!data.type.specialCharacters()) {
-            new Logs( "Registrar Aplicacion", "El dato type de Aplicacion no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.type ] )
-            Utils.logger(logId,"Registrar Aplicacion", "No coincide con el formato esperado.", data.type)
-            return TypeError.incorrectFormat( "type de Aplicacion", "valor alfanúmerico", logId )
+       
+        
+        def listType = ['Frontend','Backend','Aplication','Data Base']
+        if ((listType.indexOf(data.type) < 0) || (!data.type.specialCharacters())){
+            new Logs( process, "El dato 'type' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.type ] )
+            Utils.logger(logId,process, "El dato 'type' ingresado no coincide con el formato esperado", data.type)
+            return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": 'Frontend','Backend','Aplication','Data Base'", logId )
         }
-        if (!data.criticality.specialCharacters()) {
-            new Logs( "Registrar Aplicacion", "El dato criticality de Aplicacion no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.criticality ] )
-            Utils.logger(logId,"Registrar Aplicacion", "No coincide con el formato esperado.", data.criticality)
-            return TypeError.incorrectFormat( "criticality de Aplicacion", "valor alfanúmerico", logId )
+                
+        
+        def listCriticality = ['Indiferente','Baja','Media','Alta','Critica']
+        if ((listCriticality.indexOf(data.criticality) < 0) || (!data.criticality.specialCharacters())){
+            new Logs( process, "El dato 'criticality' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.criticality ] )
+            Utils.logger(logId,process, "El dato 'criticality' ingresado no coincide con el formato esperado", data.criticality)
+            return TypeError.incorrectFormat( "'Criticidad'", ": 'Indiferente','Baja','Media','Alta','Critica'", logId )
         }
         
-        
-        
-        
-        new Logs( "Registrar Aplicacion", "Control de la información de Aplicacion", logId, "INFO", true, [ data: data, uuid: logId ] )
-        Utils.logger(logId,"Registrar Aplicacion", "Control de la información de Aplicacion", "Los datos cumplen con los valores esperados")
         return [data: [success: true], status:200]
     }
     
-	
-	
-	
-
 	
 }

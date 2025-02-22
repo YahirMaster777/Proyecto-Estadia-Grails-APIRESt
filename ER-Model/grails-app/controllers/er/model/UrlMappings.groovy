@@ -4,8 +4,8 @@ class UrlMappings {
 
     static mappings = {
             group "/private", {
-                group "/create", {
-                    post "/app"(controller:'apps', action: 'save')
+                group "/app", {
+                    post "/create"(controller:'apps', action: 'save')
                     post "/user"(controller:'users', action: 'create')
                     post "/employee"(controller:'employees', action:'save')
                 }

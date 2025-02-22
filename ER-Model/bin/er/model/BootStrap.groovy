@@ -94,7 +94,7 @@ class BootStrap {
             return matcher.matches()
         }
         String.metaClass.specialCharacters = {
-            def pageExpression = '^[a-zA-Z0-9]+$'
+            def pageExpression = '^[a-zA-Z0-9\\s]+$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
