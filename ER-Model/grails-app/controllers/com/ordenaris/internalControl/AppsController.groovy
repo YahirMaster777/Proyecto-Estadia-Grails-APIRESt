@@ -21,7 +21,7 @@ class AppsController {
     
     def delete(){
         def logId = new Logs("Eliminar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud", "${params.uuid}")
+        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud")
         def deleteAppResponse = AppsService.deleteApp(params, logId)
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }

@@ -16,20 +16,12 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']],
-<<<<<<< HEAD
 	[pattern: '/recovery/**',    access: ['permitAll']],
-=======
->>>>>>> b29b44b (Correcciones de usuario y apps)
     [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/profiles/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
-<<<<<<< HEAD
-=======
-	[pattern: '/recovery/**',    access: ['permitAll']],
-	[pattern: '/apps/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
->>>>>>> b29b44b (Correcciones de usuario y apps)
 	[pattern: '/servers/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
@@ -39,17 +31,28 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 <<<<<<< HEAD
+<<<<<<< HEAD
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
     [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 =======
+=======
+>>>>>>> 9daac4f (Correcciones dell app y de la configuracion del mapping)
     [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
     [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
+<<<<<<< HEAD
 >>>>>>> b29b44b (Correcciones de usuario y apps)
+=======
+=======
+	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
+	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
+>>>>>>> 0f1a266 (Correcciones dell app y de la configuracion del mapping)
+>>>>>>> 9daac4f (Correcciones dell app y de la configuracion del mapping)
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
