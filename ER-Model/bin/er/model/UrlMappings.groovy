@@ -9,6 +9,7 @@ class UrlMappings {
                     post "/user"(controller:'users', action: 'create')
                     post "/employee"(controller:'employees', action:'save')
                 }
+                
                 group "/$uuid", {
                     group "/update",{
                         put "/user"(controller:'users', action: 'update')
@@ -20,6 +21,10 @@ class UrlMappings {
                     group "/delete", {
                         delete "/user"(controller:'users', action: 'delete')
                         put "/employee"(controller:'employees', action:'delete')
+                        delete "/app"(controller:'apps', action:'delete')
+                    }
+                    group "/activate",{
+                       patch "/app"(controller:'apps', action:'active')
                     }
                     constraints {
                         uuid(matches: '^[a-fA-F0-9]{32}$')

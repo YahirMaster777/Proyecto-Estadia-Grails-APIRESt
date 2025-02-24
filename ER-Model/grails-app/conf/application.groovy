@@ -22,11 +22,6 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/serversApps/**', access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
-    // [pattern: '/private/**',     access: ['ROLE_ROOT']],
-    [pattern: '/create/**',      access: ['ROLE_ROOT','ROLE_ADMIN']],
-    [pattern: '/read/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
-    [pattern: '/list/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
-    [pattern: '/all/**',         access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']]
 ]
 
     grails.plugin.springsecurity.filterChain.chainMap = [

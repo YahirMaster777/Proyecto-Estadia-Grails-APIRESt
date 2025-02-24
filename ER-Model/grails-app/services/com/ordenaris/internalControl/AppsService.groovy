@@ -34,12 +34,65 @@ class AppsService {
         } 
     }
     
-    def deleteApp(data, logId){
+    def activeApp(params, logId){
         Apps.withTransaction{ status ->
-            new Logs("Eliminar Aplicacion", "Procesando solicitud", logId,"INFO",true, [data:params.uuid])
-            Utils.logger(logId, "Eliminar Aplicacion", "Procesando solicitud")
-            def app = findByStatuAndUuid("Activa")
-        
+            try{
+                new Logs("Activar/Desactivar Aplicacion", "Procesando solicitud", logId, "INFO", true, [data:params.uuid])
+                Utils.logger(logId,"Activar/Desactivar Aplicacion", "Procesando solicitud")
+                def app = Apps.findByUuid(params.uuid)
+                
+                if(!app){
+                    new Logs("Activar/Desactivar Aplicacion", "No se encontro la aplicacion", logId, "INFO", false, [data:params.uuid])
+                    Utils.logger(logId, "Activar/Desactivar Aplicacion","No se encontro la aplicacion")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                if(app.status == "Activa"){
+                    new Logs("Activar/Desactivar Aplicacion", "Ya esta Activa", logId, "INFO", false, [data:params.uuid])
+                    Utils.logger(logId, "Activar/Desactivar Aplicacion","Ya esta Activa")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                print(app.status)
+                app.status="Activa"
+                app.save(failOnError:true, flush:true)
+                new Logs("Activar/Desactivar Aplicacion", "Se Activo la Aplicacion", logId, "INFO", false, [data:params.uuid])
+                Utils.logger(logId, "Activar/Desactivar Aplicacion","Se Activo la Aplicacion")
+                return [data:[success:true], status:200]
+                
+            }catch(e){
+                new Logs("Activar/Desactivar Aplicacion","Error en la solicitud", logId, e, [data:[success:false]])
+                Utils.logger(logId, "Activar/Desactivar Aplicacion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
+    
+    def deleteApp(params, logId){
+        Apps.withTransaction{ status ->
+            try{
+                new Logs("Eliminar Aplicacion", "Procesando solicitud", logId,"INFO",true, [data:params.uuid])
+                Utils.logger(logId, "Eliminar Aplicacion", "Procesando solicitud")
+                def app = Apps.findByStatusAndUuid("Pendiente", params.uuid)
+                
+                if(!app){
+                    new Logs("Eliminar Aplicacion","No se encontro la aplicacion", logId, "INFO",false, [data:params.uuid])
+                    Utils.logger(logId, "Eliminar Aplicacion", "No se encontro la aplicacion")
+                    return TypeError.informationNotFound(logId)
+                }
+                // app.status = "Deprecada"
+                app.delete(failOnError:true,flush:true)
+                new Logs("Eliminar Aplicacion", "Se elimino la aplicacion", logId, "INFO", true, [data:params.uuid])
+                Utils.logger(logId, "Eliminar Aplicacion", "Se elimino la aplicacion")
+                return [data:[success:true], status:200]
+            }catch(e){
+                new Logs("Eliminar Aplicacion","Error en la solicitud", logId, e, [data:[success:false]])
+                Utils.logger(logId, "Eliminar Aplicacion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+            
         }
     
     }

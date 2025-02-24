@@ -26,6 +26,13 @@ class AppsController {
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }
     
+    def active(){
+        def logId = new Logs("Activar/Desactivar Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Activar/Desactivar Aplicacion", "Inicio de solicitud")
+        def activeAppResponse = AppsService.activeApp(params, logId)
+        return respond(activeAppResponse.data, status:activeAppResponse.status)
+    }
+    
     
     
     

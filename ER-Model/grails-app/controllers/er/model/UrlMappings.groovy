@@ -3,19 +3,32 @@ package er.model
 class UrlMappings {
 
     static mappings = {
-        group "/admin", {
-            group "/create", {
-                post "/user"(controller:'users', action: 'create')
-                post "/employee"(controller:'employees', action:'save')
-                post "/app"(controller:'apps', action: 'create')
-            }
-            group "/$uuid", {
-                group "/update",{
-                    put "/user"(controller:'users', action: 'update')
-                    put "/employee"(controller:'employees', action: 'update')
+            group "/admin", {
+                group "/create", {
+                    post "/user"(controller:'users', action: 'create')
+                    post "/employee"(controller:'employees', action:'save')
+                    post "/app"(controller:'apps', action: 'create')
                 }
-                group "/read", {
-                    get "/user"(controller:'users', action: 'read')
+                
+                group "/$uuid", {
+                    group "/update",{
+                        put "/user"(controller:'users', action: 'update')
+                        put "/employee"(controller:'employees', action: 'update')
+                    }
+                    group "/read", {
+                        get "/user"(controller:'users', action: 'read')
+                    }
+                    group "/delete", {
+                        delete "/user"(controller:'users', action: 'delete')
+                        put "/employee"(controller:'employees', action:'delete')
+                        delete "/app"(controller:'apps', action:'delete')
+                    }
+                    group "/activate",{
+                       patch "/app"(controller:'apps', action:'active')
+                    }
+                    constraints {
+                        uuid(matches: '^[a-fA-F0-9]{32}$')
+                    }
                 }
                 group "/delete", {
                     delete "/user"(controller:'users', action: 'delete')
@@ -47,5 +60,5 @@ class UrlMappings {
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
-    }
+    
 }

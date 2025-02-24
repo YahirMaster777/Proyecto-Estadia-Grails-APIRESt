@@ -11,6 +11,7 @@ import grails.compiler.GrailsCompileStatic
 class UsersRoles implements Serializable {
 
 	private static final long serialVersionUID = 1
+
 	Users user
 	Roles role
 	Sections section
@@ -48,7 +49,7 @@ class UsersRoles implements Serializable {
 			user == Users.load(userId) &&
 			role == Roles.load(roleId)
 		}
-	}   
+	}
 
 	static UsersRoles create(Users user, Roles role, boolean flush = false) {
 		def instance = new UsersRoles(user: user, role: role)
@@ -71,14 +72,14 @@ class UsersRoles implements Serializable {
 	}
 
 	static constraints = {
-	    user nullable: false, unique:false
-		role nullable: false, unique:false
-		section nullable: true, blank:true, unique:false
-		permission nullable: true, blank:true, unique:false
+	    user nullable: false
+		role nullable: false
+		section nullable: true, blank:true
+		permission nullable: true, blank:true
 	}
 
 	static mapping = {
-		id composite: ['user', 'role']
+		id composite: ['user', 'role','section', 'permission']
 		version false
 	}
 }
