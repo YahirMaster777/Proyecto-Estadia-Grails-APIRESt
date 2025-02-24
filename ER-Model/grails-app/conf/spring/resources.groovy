@@ -1,22 +1,16 @@
 import com.ordenaris.internalControl.UserPasswordEncoderListener
 import javax.servlet.http.HttpServletResponse
+import com.ordenaris.internalControl.MyUserDetailsService
+
+import com.ordenaris.internalControl.CustomRestAuthenticationFailureHandler
+import com.ordenaris.internalControl.CustomRestAuthenticationSuccessHandler
+import com.ordenaris.internalControl.CustomAccessTokenJsonRenderer
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.rest.RestAuthenticationFilter
 // Place your Spring DSL code here
 beans = {
     userPasswordEncoderListener(UserPasswordEncoderListener)
-}
 
-
-package com.ordenaris.distribuidores
-import com.ordenaris.distribuidores.MyUserDetailsService
-
-import com.ordenaris.distribuidores.UserPasswordEncoderListener
-import com.ordenaris.distribuidores.CustomRestAuthFilter
-import com.ordenaris.distribuidores.CustomRestAuthenticationFailureHandler
-import com.ordenaris.distribuidores.CustomRestAuthenticationSuccessHandler
-import com.ordenaris.distribuidores.CustomAccessTokenJsonRenderer
-beans = {
     userDetailsService(MyUserDetailsService)
     securityContextRepository(org.springframework.security.web.context.NullSecurityContextRepository)
     passwordEncoder(CustomPasswordEncoder) {
@@ -28,7 +22,6 @@ beans = {
     restAuthenticationSuccessHandler(CustomRestAuthenticationSuccessHandler){
         customAccessTokenJsonRendere = customAccessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
     }
-    restAuthenticationFilter(CustomRestAuthFilter)
 }
 
 

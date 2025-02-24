@@ -55,25 +55,22 @@ class CustomAuthProvider implements AuthenticationProvider{
       if( respuestaBusqueda.success ){
         fnVerifyStatusUser( respuestaBusqueda.user )
 
-        def idDistribuidor = 0
-        if( respuestaBusqueda.distribuidor ){
-          idDistribuidor = respuestaBusqueda.distribuidor.id
+        def idEmployee = 0
+        if( respuestaBusqueda.employee ){
+          idEmployee = respuestaBusqueda.employee.id
         }
 
         userService.registrarActividad( respuestaBusqueda.user )
 
         def userDetails = new MyUserDetails(
           respuestaBusqueda.user.username,
-          respuestaBusqueda.user.crd,
           respuestaBusqueda.user.enabled,
           !respuestaBusqueda.user.accountExpired,
-          !respuestaBusqueda.user.crdExpired,
           !respuestaBusqueda.user.accountLocked,
-          respuestaBusqueda.autorities,          
           respuestaBusqueda.user.id,
-          idDistribuidor
+          idEmployee
         )
-        auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, respuestaBusqueda.distribuidor)
+        auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, respuestaBusqueda.employee)
         return auth
       }else{
         if( respuestaBusqueda.code == 1 ){
