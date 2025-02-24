@@ -1,4 +1,23 @@
 package com.ordenaris.internalControl
+package com.ordenaris.distribuidores
+
+// import grails.plugin.springsecurity.SpringSecurityService
+// import org.springframework.security.authentication.encoding.PasswordEncoder
+// import org.springframework.beans.factory.annotation.Autowired
+// import groovy.transform.CompileStatic
+
+// class CustomPasswordEncoder implements PasswordEncoder {
+
+//     SpringSecurityService springSecurityService
+
+//     public String encodePassword(String password, salt = null) {
+//         return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+//     }
+
+//     public boolean isPasswordValid(String encodedPassword, String rawPassword, salt = null) {
+//         return (encodedPassword == encodePassword(rawPassword, salt))
+//     }
+// }
 
     CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
         super()

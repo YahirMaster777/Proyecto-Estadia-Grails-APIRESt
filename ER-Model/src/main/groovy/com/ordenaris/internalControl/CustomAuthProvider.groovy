@@ -23,7 +23,11 @@ import grails.util.Holders
 class CustomAuthProvider implements AuthenticationProvider{
 
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
+<<<<<<< HEAD
 	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
+=======
+	def userService = Holders.grailsApplication.mainContext.getBean('userService')
+>>>>>>> c8c7a73 (implementacion respuesta personalizada del login)
 
 	Authentication authenticate(Authentication auth) throws AuthenticationException{
 		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
@@ -51,6 +55,7 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
+<<<<<<< HEAD
       // def respuestaBusqueda = userService.buscarCuenta( auth )
       def respuestaBusqueda = userService.buscarCuenta(auth)
       if( respuestaBusqueda.success ){
@@ -68,6 +73,31 @@ class CustomAuthProvider implements AuthenticationProvider{
           respuestaBusqueda.user.id
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
+=======
+      def respuestaBusqueda = userService.buscarCuenta( auth )
+      if( respuestaBusqueda.success ){
+        fnVerifyStatusUser( respuestaBusqueda.user )
+
+        def idDistribuidor = 0
+        if( respuestaBusqueda.distribuidor ){
+          idDistribuidor = respuestaBusqueda.distribuidor.id
+        }
+
+        userService.registrarActividad( respuestaBusqueda.user )
+
+        def userDetails = new MyUserDetails(
+          respuestaBusqueda.user.username,
+          respuestaBusqueda.user.crd,
+          respuestaBusqueda.user.enabled,
+          !respuestaBusqueda.user.accountExpired,
+          !respuestaBusqueda.user.crdExpired,
+          !respuestaBusqueda.user.accountLocked,
+          respuestaBusqueda.autorities,          
+          respuestaBusqueda.user.id,
+          idDistribuidor
+        )
+        auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, respuestaBusqueda.distribuidor)
+>>>>>>> c8c7a73 (implementacion respuesta personalizada del login)
         return auth
       }else{
         if( respuestaBusqueda.code == 1 ){
