@@ -16,16 +16,16 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']],
-    // [pattern: '/private/**',     access: ['ROLE_ROOT']],
-    [pattern: '/create/**',      access: ['ROLE_ROOT','ROLE_ADMIN']],
-    [pattern: '/read/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
-    [pattern: '/list/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
-    [pattern: '/all/**',         access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']]
+    [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
+    // [pattern: '/read/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/list/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/all/**',         access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']]
 ]
 
     grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-    [pattern:"/private/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
     [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
     
