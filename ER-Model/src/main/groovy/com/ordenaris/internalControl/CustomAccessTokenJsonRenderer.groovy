@@ -15,30 +15,30 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
     String generateJson(AccessToken accessToken) {
 
         Users user = Users.get accessToken.principal.id as Long
-        def employee = Employees.get( accessToken.principal.idDistribuidor as Long )
+        def employee = Employees.get( accessToken.principal.idEmployee as Long )
 
         def originalObject = [
             username         : user.username.decrypt(),
-            nombre           : "${employee.nombre.decrypt()}",   
+            nombre           : "${employee.name.decrypt()}",   
             access_token     : accessToken.accessToken,
             sso: false
             // expiration       : accessToken.expiration
         ]
 
         if( accessToken.principal.authorities.size() == 1 ){
-            def newRole = Role.findByAuthority( accessToken.principal.authorities[0] )
-            if(newRole.authority == "ROLE_ADMINISTRADOR"){
+            def newRole = Roles.findByAuthority( accessToken.principal.authorities[0] )
+            if(newRole.authority == "ROLE_ROOT"){
                 originalObject.path = "${newRole.path.decrypt()}"
-            }else if(newRole.authority == "ROLE_SOPORTE"){
+            }else if(newRole.authority == "ROLE_ADMIN"){
                 originalObject.path = "${newRole.path.decrypt()}"
             }else{
                 originalObject.path = "/control${newRole.path.decrypt()}"
             }
             originalObject.perfil = newRole.nombre.decrypt()
         }else{
-            if(newRole.authority == "ROLE_ADMINISTRADOR"){
+            if(newRole.authority == "ROLE_ROOT"){
                 originalObject.path = "${newRole.path.decrypt()}"
-            }else if(newRole.authority == "ROLE_SOPORTE"){
+            }else if(newRole.authority == "ROLE_ADMIN"){
                 originalObject.path = "${newRole.path.decrypt()}"
             }else{
                 originalObject.path = "/control${newRole.path.decrypt()}"
