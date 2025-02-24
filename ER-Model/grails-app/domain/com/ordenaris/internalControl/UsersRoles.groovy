@@ -11,6 +11,7 @@ import grails.compiler.GrailsCompileStatic
 class UsersRoles implements Serializable {
 
 	private static final long serialVersionUID = 1
+
 	Users user
 	Roles role
 
@@ -47,7 +48,7 @@ class UsersRoles implements Serializable {
 			user == Users.load(userId) &&
 			role == Roles.load(roleId)
 		}
-	}   
+	}
 
 	static UsersRoles create(Users user, Roles role, boolean flush = false) {
 		def instance = new UsersRoles(user: user, role: role)
