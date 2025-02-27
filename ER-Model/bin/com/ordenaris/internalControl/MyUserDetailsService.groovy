@@ -1,47 +1,46 @@
-package com.ordenaris.internalControl
+// package com.ordenaris.internalControl
 
-import grails.plugin.springsecurity.SpringSecurityUtils
-import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
-import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
-import grails.gorm.transactions.Transactional
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UsernameNotFoundException
+// import grails.plugin.springsecurity.SpringSecurityUtils
+// import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
+// import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
+// import grails.gorm.transactions.Transactional
+// import org.springframework.security.core.authority.SimpleGrantedAuthority
+// import org.springframework.security.core.userdetails.UserDetails
+// import org.springframework.security.core.userdetails.UsernameNotFoundException
 
-class MyUserDetailsService implements GrailsUserDetailsService {
+// class MyUserDetailsService implements GrailsUserDetailsService {
 
-   /**
-    * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
-    * one role, so we give a user with no granted roles this one which gets
-    * past that restriction but doesn't grant anything.
-    */
-   static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+//    /**
+//     * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
+//     * one role, so we give a user with no granted roles this one which gets
+//     * past that restriction but doesn't grant anything.
+//     */
+//    static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
 
-   UserDetails loadUserByUsername(String username, boolean loadRoles)
-         throws UsernameNotFoundException {
-         	println "MyUserDetailsService -> $username"
-      return loadUserByUsername(username)
-   }
+//    UserDetails loadUserByUsername(String username, boolean loadRoles)
+//          throws UsernameNotFoundException {
+//          	println "MyUserDetailsService -> $username"
+//       return loadUserByUsername(username)
+//    }
 
-   @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
-   UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
+//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-      Users user = Users.findByUsername(username)
-      if (!user) throw new NoStackUsernameNotFoundException()
+//       Users user = Users.findByUsername(username)
+//       if (!user) throw new NoStackUsernameNotFoundException()
 
-      def roles = user.authorities
+//       def roles = user.authorities
 
-      // or if you are using role groups:
-      // def roles = user.authorities.collect { it.authorities }.flatten().unique()
+//       // or if you are using role groups:
+//       // def roles = user.authorities.collect { it.authorities }.flatten().unique()
 
-      def authorities = roles.collect {
-         new SimpleGrantedAuthority(it.authority)
-      }
+//       def authorities = roles.collect {
+//          new SimpleGrantedAuthority(it.authority)
+//       }
 
-      def idEmployee =  UsersRoles.findByUser(user).employee.id
+//       def idEmployee =  UsersRoles.findByUser(user).employee.id
 
-      return new MyUserDetails(user.username,  user.enabled,
-            !user.accountExpired,!user.accountLocked, authorities ?: NO_ROLES, user.id, idEmployee)//, user.distribuidor)
-            // user.firstName + " " + user.lastName)
-   }
-}
+//       return new MyUserDetails(user.username,  user.enabled,
+//             !user.accountExpired,!user.accountLocked, authorities ?: NO_ROLES, user.id, idEmployee)
+//    }
+// }

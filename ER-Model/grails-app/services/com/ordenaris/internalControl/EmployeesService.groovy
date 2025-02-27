@@ -11,14 +11,14 @@ class EmployeesService {
                 new Logs("Registrar Empleado", "Procesando Solicitud", logId, "INFO", true, [data:data.name])
                 Utils.logger(logId,"Registrar Empleado","Procesando Solicitud")
                 
-                def position = PositionEmployees.findById(data.position)
+                def position = PositionEmployees.findByName(data.position)
                 if (!position) {
                     new Logs( "Registrar Empleado", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.id ] )
                     Utils.logger(logId, "Registrar Empleado", "No se encontró el registro", "Position:${data.id}")
                     return TypeError.informationNotFound( logId )
                 }
                 
-                def company = Enterprises.findById(data.company)
+                def company = Enterprises.findByName(data.company)
                 if (!company) {
                     new Logs( "Registrar Empleado", "No se encontró el registro", logId, "ERROR", false, [ companyUuid:data.id ] )
                     Utils.logger(logId, "Registrar Empleado", "No se encontró el registro", "Compañia:${data.id}")
