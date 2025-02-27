@@ -53,8 +53,6 @@ class BootStrap {
             def section1permission3 = new Permissions(alias:'edit_app', section:section1,uuidSection:section1.uuid, name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
             def section1permission4 = new Permissions(alias:'view_app', section:section1,uuidSection:section1.uuid, name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
             
-            
-            
             def section2permission1 = new Permissions(alias:'create_server', section:section2,uuidSection:section2.uuid, name:'Crear servidor',description:'Permiso que permite').save(flush:true)
             def section2permission2 = new Permissions(alias:'edit_server', section:section2,uuidSection:section2.uuid, name:'Editar servidor',description:'Permiso que permite').save(flush:true)
             def section2permission3 = new Permissions(alias:'delete_server', section:section2,uuidSection:section2.uuid, name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
@@ -92,26 +90,6 @@ class BootStrap {
             def listUserPermission3 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
             def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
             
-        }
-
-        if (PositionEmployees.count() == 0) {
-            def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
-            def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
-            def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
-            def innovattia = new Enterprises(name: 'Innovattia', type: 'Interna', description: 'Empresa')
-            if (!back.save(flush:true) || !front.save(flush:true)  || !ordenaris.save(flush:true)  || !innovattia.save(flush:true)){
-                back.errors.allErrors.each { println it }
-                front.errors.allErrors.each { println it }
-                ordenaris.errors.allErrors.each { println it }
-                innovattia.errors.allErrors.each { println it }
-            } else {
-                new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', idEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'Inactivo').save(flush: true)
-                new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', idEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'Inactivo').save(flush: true)
-                new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', idEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'Activo').save(flush: true)
-                new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', idEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'Activo').save(flush: true)
-                new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', idEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'Activo').save(flush: true)
-                new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', idEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'Inactivo').save(flush: true)
-            }
         }
         
         String.metaClass.validFormatDataHour = {
