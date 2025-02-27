@@ -22,6 +22,7 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
             nombre           : "${employee.name.decrypt()}",   
             access_token     : accessToken.accessToken,
             sso: false
+
             // expiration       : accessToken.expiration
         ]
 

@@ -30,12 +30,8 @@ class Users implements Serializable {
     }
     
     Set<Permissions> getPermissions(){
-        (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.permission as Set<Permissions>
-    }
-    
-    
-    
-
+        (UserSectionPermission.findAllByUser(this) as List<UserSectionPermission>)*.permission as Set<Permissions>
+    }    
     static constraints = {
         uuid unique:true, maxSize:32
         password nullable: false, blank: false, password: true

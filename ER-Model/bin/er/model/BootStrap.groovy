@@ -9,6 +9,9 @@ import com.ordenaris.internalControl.Roles;
 import com.ordenaris.internalControl.PositionEmployees;
 import com.ordenaris.internalControl.Employees;
 import com.ordenaris.internalControl.Enterprises;
+import com.ordenaris.internalControl.Sections;
+import com.ordenaris.internalControl.Permissions;
+import com.ordenaris.internalControl.UserSectionPermission;
 
 class BootStrap {
     def init = { servletContext ->
@@ -40,6 +43,32 @@ class BootStrap {
             def roleAdmin = new Roles(authority: 'ROLE_ADMIN').save(flush: true)
             def roleRoot = new Roles(authority: 'ROLE_ROOT').save(flush: true)
             def roleCustom = new Roles(authority: 'ROLE_CUSTOM').save(flush: true)
+            
+            def section1 = new Sections(url:'internalControl.com', name:'Aplicaciones', description:'Seccion que permite ver todo lo relacionado con las aplicaciones').save(flush:true)
+            def section2 = new Sections(url:'internalControl.com', name:'Servidores', description:'Seccion que permite ver todo lo relacionado con los servidores').save(flush:true)
+            def section3 = new Sections(url:'internalControl.com', name:'Empleados', description:'Seccion que permite ver todo lo relacionado con los empleados').save(flush:true)
+            
+            def section1permission1 = new Permissions(alias:'create_app',name:'Crear Apps',description:'Permiso que permite crear apps').save(flush:true)
+            def section1permission2 = new Permissions(alias:'delete_app',name:'Eliminar Apps',description:'Permiso que permite eliminar apps').save(flush:true)
+            def section1permission3 = new Permissions(alias:'edit_app',name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
+            def section1permission4 = new Permissions(alias:'view_app',name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
+            
+            
+            
+            def section2permission1 = new Permissions(alias:'create_server',name:'Crear servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission2 = new Permissions(alias:'edit_server',name:'Editar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission3 = new Permissions(alias:'delete_server',name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission4 = new Permissions(alias:'view_server',name:'Ver servidores',description:'Permiso que permite').save(flush:true)
+            
+            def section3permission1 = new Permissions(alias:'create_employee',name:'Crear Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission2 = new Permissions(alias:'delete_employee',name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission3 = new Permissions(alias:'edit_employee',name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission4 = new Permissions(alias:'view_employee',name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
+            
+            
+            
+            
+            
             def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
             def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002', businessEmail:'yairA@gmail.com', employee:employee3)
@@ -61,6 +90,12 @@ class BootStrap {
                 new UsersRoles(user: userCustom1, role: roleCustom).save(flush: true)
                 new UsersRoles(user: userCustom2, role: roleCustom).save(flush: true)
             }
+            
+            def listUserPermission1 = new UserSectionPermission (section: section1, permission: section1permission1, user: userRoot1).save(flush:true)
+            def listUserPermission2 = new UserSectionPermission (section: section1, permission: section1permission2, user: userRoot1).save(flush:true)
+            def listUserPermission3 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
+            def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
+            
         }
 
         if (PositionEmployees.count() == 0) {

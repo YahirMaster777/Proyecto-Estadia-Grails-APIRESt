@@ -59,6 +59,7 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
     
+    // compile 'org.grails.plugins:spring-security-rest-gorm:2.0.0.M2'
     runtime "mysql:mysql-connector-java:5.1.36"
     compile 'org.grails.plugins:http-builder-helper:1.1.0'
     compile "org.grails.plugins:spring-security-core:3.2.0"
