@@ -11,7 +11,6 @@ import grails.compiler.GrailsCompileStatic
 class UsersRoles implements Serializable {
 
 	private static final long serialVersionUID = 1
-
 	Users user
 	Roles role
 

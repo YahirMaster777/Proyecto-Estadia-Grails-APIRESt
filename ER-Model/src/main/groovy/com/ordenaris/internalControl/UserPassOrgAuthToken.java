@@ -1,10 +1,10 @@
-package com.ordenaris.internalControl;
+// package com.ordenaris.internalControl;
 
-import java.util.Arrays;
-import java.util.Collection;
+// import java.util.Arrays;
+// import java.util.Collection;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
+// import org.springframework.security.authentication.AbstractAuthenticationToken;
+// import org.springframework.security.core.GrantedAuthority;
 
 public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
 

@@ -8,32 +8,31 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 class MyUserDetailsService implements GrailsUserDetailsService {
 
-   /**
-    * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
-    * one role, so we give a user with no granted roles this one which gets
-    * past that restriction but doesn't grant anything.
-    */
-   static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+//    /**
+//     * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
+//     * one role, so we give a user with no granted roles this one which gets
+//     * past that restriction but doesn't grant anything.
+//     */
+//    static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
 
-   UserDetails loadUserByUsername(String username, boolean loadRoles)
-         throws UsernameNotFoundException {
-         	println "MyUserDetailsService -> $username"
-      return loadUserByUsername(username)
-   }
+//    UserDetails loadUserByUsername(String username, boolean loadRoles)
+//          throws UsernameNotFoundException {
+//          	println "MyUserDetailsService -> $username"
+//       return loadUserByUsername(username)
+//    }
 
-   @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
-   UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
+//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-      Users user = Users.findByUsername(username)
-      if (!user) throw new NoStackUsernameNotFoundException()
+//       Users user = Users.findByUsername(username)
+//       if (!user) throw new NoStackUsernameNotFoundException()
 
-      def roles = user.authorities
+//       def roles = user.authorities
 
 
-
-      def authorities = roles.collect {
-         new SimpleGrantedAuthority(it.authority)
-      }
+//       def authorities = roles.collect {
+//          new SimpleGrantedAuthority(it.authority)
+//       }
 
       return new MyUserDetails(user.username, user.password, user.enabled,
             !user.accountExpired, !user.passwordExpired,

@@ -2,22 +2,36 @@ package com.ordenaris.internalControl
 package com.ordenaris.distribuidores
 
 // import grails.plugin.springsecurity.SpringSecurityService
-// import org.springframework.security.authentication.encoding.PasswordEncoder
+// import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
+// import org.grails.datastore.mapping.engine.event.PreInsertEvent
+// import org.grails.datastore.mapping.engine.event.PreUpdateEvent
+// import org.grails.datastore.mapping.engine.event.PreLoadEvent
 // import org.springframework.beans.factory.annotation.Autowired
+// import grails.events.annotation.gorm.Listener
 // import groovy.transform.CompileStatic
 
-// class CustomPasswordEncoder implements PasswordEncoder {
+// /**
+//  * Custom Encryption Overrides Default Encryption
+//  * The spring-security version of the project was 3.1.0, and the BaseDigestPasswordEncoder class could have been restarted.
+//  * But I see that the BaseDigestPasswordEncoder class is marked as deleted, so it is implemented by rewriting the MessageDigestPasswordEncoder class method.
+//  */
+// class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
 
-//     SpringSecurityService springSecurityService
+//     // Default to MD5
+//     private String algorithm = "MD5";
 
-//     public String encodePassword(String password, salt = null) {
-//         return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+//     // Encryption Number (Enhanced Security)
+//     private int iterations = 1;
+
+//     CustomPasswordEncoder() {
+//         // The default constructor of the current class, because the parent class has no empty constructor, so we must call the parent class parametric construct, where the incoming parameters must be the encryption rules of the parent class, otherwise the error will be reported.
+//         super("SHA-256")
 //     }
 
-//     public boolean isPasswordValid(String encodedPassword, String rawPassword, salt = null) {
-//         return (encodedPassword == encodePassword(rawPassword, salt))
+//     CustomPasswordEncoder(String algorithm) {
+//         super(algorithm, false);
+//         this.algorithm = algorithm
 //     }
-// }
 
     CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
         super()
@@ -65,8 +79,9 @@ package com.ordenaris.distribuidores
     }
 
 
-    @Autowired
-    SpringSecurityService springSecurityService
+//     String getAlgorithm() {
+//         return algorithm;
+//     }
 
     @Listener(Users)
     void onPreInsertEvent(PreInsertEvent event) {
