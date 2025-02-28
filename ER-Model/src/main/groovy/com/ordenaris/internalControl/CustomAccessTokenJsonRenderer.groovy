@@ -1,18 +1,18 @@
-package com.ordenaris.internalControl
+// package com.ordenaris.internalControl
 
-import com.ordenaris.internalControl.Users
+// import com.ordenaris.internalControl.Users
 
-import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.rest.token.AccessToken
-import grails.plugin.springsecurity.rest.token.rendering.AccessTokenJsonRenderer
-import groovy.json.JsonBuilder
-import org.springframework.security.core.GrantedAuthority
+// import grails.gorm.transactions.Transactional
+// import grails.plugin.springsecurity.rest.token.AccessToken
+// import grails.plugin.springsecurity.rest.token.rendering.AccessTokenJsonRenderer
+// import groovy.json.JsonBuilder
+// import org.springframework.security.core.GrantedAuthority
 
-@Transactional
-class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
+// @Transactional
+// class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
 
-    @Override
-    String generateJson(AccessToken accessToken) {
+//     @Override
+//     String generateJson(AccessToken accessToken) {
 
         Users user = Users.get accessToken.principal.id as Long
 
@@ -45,6 +45,6 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
         //     originalObject.perfil = newRole.nombre
         // }
         return new JsonBuilder(originalObject).toPrettyString()
-    }
+    // }
 
-}
+// }
