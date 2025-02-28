@@ -9,6 +9,7 @@ class Sections {
     String description
     String status = 'Activa'
     
+    
     static mapping = {
         version false
         status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"

@@ -100,15 +100,45 @@ class ProfilesService {
         try{
             new Logs("Informacion del perfil", "Procesando solicitud",logId, "INFO", true, [data:params.uuid])
             Utils.logger(logId,"Informacion del perfil", "Procesando solicitud")
+            def permissions = TemplatePermissions.findAllByUuidTemplate(params.uuid).collect { permissions ->
+                return [  
+                    permiso: permissions.permissionId
+                ]
+            }
+            
+            // def permiso = Permissions.findByUuid(permissions.permissionId){permiso ->
+            //     return[
+            //         uuidSeccion: permiso.uuidSection
+            //     ]
+            
+            // }
+            
+            def secciones = Sections.findByUuid(){ seccion ->
+                return[
+                    nombre: seccion.name,
+                    permisos: permissions
+                ]
+                
+            }
+            
+            def section = TemplatePermissions.findAllByUuidTemplateAnd(params.uuid).collect{ section ->
+                return [
+                    seccion :section.sectionId,
+                    permisos: permissions
+                ]
+                
+            }
+            
+            
+          
             def profile = Templates.findByUuid(params.uuid).collect { profile ->
                 return [
                     uuid       : profile.uuid,
                     name       : profile.name,
-                    description: profile.description
+                    description: profile.description,
+                    secciones: section
                 ]
             }
-
-            println(profile.uuid[0])
             
             if (!profile) {
                 new Logs("Información del perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
@@ -116,20 +146,10 @@ class ProfilesService {
                 return TypeError.informationNotFound(logId)
             }
             
-            def permissions = TemplatePermissions.findByUuidTemplate(profile.uuid).collect { permissions ->
-                return [  
-                    seccion : permissions.sectionId,
-                    permisos: permissions.permissionId
-                ]
-            }
-            
-            println(permissions)
-            
-            def info = [informacion: profile, permisos:permissions]
 
             new Logs("Informacion del perfil", "Perfil Encontrado", logId, "INFO", true, [data:params.uuid])
             Utils.logger(logId,"Informacion del perfil", "Perfil Encontrado")
-            return [data:[success:true,data:info], status:200]
+            return [data:[success:true,data:profile], status:200]
             
             
         }catch(e){
