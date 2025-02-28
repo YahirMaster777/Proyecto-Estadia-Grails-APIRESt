@@ -21,14 +21,14 @@ class AppsController {
     
     def delete(){
         def logId = new Logs("Eliminar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud")
+        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud", "${params.uuid}")
         def deleteAppResponse = AppsService.deleteApp(params, logId)
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }
     
-    def active(){
-        def logId = new Logs("Activar/Desactivar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Activar/Desactivar Aplicacion", "Inicio de solicitud")
+    def activate(){
+        def logId = new Logs("Activar Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Activar Aplicacion", "Inicio de solicitud", "${params.uuid}")
         def activeAppResponse = AppsService.activeApp(params, logId)
         return respond(activeAppResponse.data, status:activeAppResponse.status)
     }
