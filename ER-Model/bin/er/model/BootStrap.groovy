@@ -48,22 +48,22 @@ class BootStrap {
             def section2 = new Sections(url:'internalControl.com', name:'Servidores', description:'Seccion que permite ver todo lo relacionado con los servidores').save(flush:true)
             def section3 = new Sections(url:'internalControl.com', name:'Empleados', description:'Seccion que permite ver todo lo relacionado con los empleados').save(flush:true)
             
-            def section1permission1 = new Permissions(alias:'create_app',name:'Crear Apps',description:'Permiso que permite crear apps').save(flush:true)
-            def section1permission2 = new Permissions(alias:'delete_app',name:'Eliminar Apps',description:'Permiso que permite eliminar apps').save(flush:true)
-            def section1permission3 = new Permissions(alias:'edit_app',name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
-            def section1permission4 = new Permissions(alias:'view_app',name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
+            def section1permission1 = new Permissions(alias:'create_app', section:section1,uuidSection:section1.uuid, name:'Crear Apps',description:'Permiso que permite crear apps').save(flush:true)
+            def section1permission2 = new Permissions(alias:'delete_app', section:section1,uuidSection:section1.uuid, name:'Eliminar Apps',description:'Permiso que permite eliminar apps').save(flush:true)
+            def section1permission3 = new Permissions(alias:'edit_app', section:section1,uuidSection:section1.uuid, name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
+            def section1permission4 = new Permissions(alias:'view_app', section:section1,uuidSection:section1.uuid, name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
             
             
             
-            def section2permission1 = new Permissions(alias:'create_server',name:'Crear servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission2 = new Permissions(alias:'edit_server',name:'Editar servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission3 = new Permissions(alias:'delete_server',name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission4 = new Permissions(alias:'view_server',name:'Ver servidores',description:'Permiso que permite').save(flush:true)
+            def section2permission1 = new Permissions(alias:'create_server', section:section2,uuidSection:section2.uuid, name:'Crear servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission2 = new Permissions(alias:'edit_server', section:section2,uuidSection:section2.uuid, name:'Editar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission3 = new Permissions(alias:'delete_server', section:section2,uuidSection:section2.uuid, name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission4 = new Permissions(alias:'view_server', section:section2,uuidSection:section2.uuid, name:'Ver servidores',description:'Permiso que permite').save(flush:true)
             
-            def section3permission1 = new Permissions(alias:'create_employee',name:'Crear Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission2 = new Permissions(alias:'delete_employee',name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission3 = new Permissions(alias:'edit_employee',name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission4 = new Permissions(alias:'view_employee',name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission1 = new Permissions(alias:'create_employee', section:section3,uuidSection:section3.uuid, name:'Crear Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission2 = new Permissions(alias:'delete_employee', section:section3,uuidSection:section3.uuid, name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission3 = new Permissions(alias:'edit_employee', section:section3,uuidSection:section3.uuid, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission4 = new Permissions(alias:'view_employee', section:section3,uuidSection:section3.uuid, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
             
             
             
@@ -170,6 +170,15 @@ class BootStrap {
         Date.metaClass.log = {
             delegate.format("yyyy-MM-dd HH:mm:ss")
         }
+        
+        String.metaClass.validPort = {
+            def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        
+        
         Object.metaClass.toPrettyString = {
             try {
                 return new JsonBuilder(delegate).toPrettyString().replaceAll('\n', '').replaceAll('    ', '')

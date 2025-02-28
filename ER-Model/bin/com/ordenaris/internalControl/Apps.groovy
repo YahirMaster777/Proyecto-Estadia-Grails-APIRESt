@@ -1,6 +1,6 @@
 package com.ordenaris.internalControl
 class Apps {
-    static hasMany = [serverApp: ServersApps]
+    static hasMany = [serverApp: ServersApps, deployDates:DeployDates]
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String name
     String urlRepository
@@ -19,7 +19,7 @@ class Apps {
         version false
         type sqlType:"Enum('Frontend','Backend','Aplication','Data Base')"
         criticality sqlType: "Enum('Indiferente', 'Baja', 'Media', 'Alta', 'Critica')"
-        status sqlType : "Enum('Activa','Depracada','Pendiente','Desarollo')"
+        status sqlType : "Enum('Activa','Deprecada','Pendiente','Desarollo')"
 
     }   
     static constraints = {
@@ -27,19 +27,38 @@ class Apps {
         type inList:['Frontend','Backend','Aplication','Data Base']
         dateUndeploy nullable:true, blank:true
         domain nullable:true, maxSize:150
-        status inList: ['Activa','Depracada','Pendiente','Desarollo']
+        status inList: ['Activa','Deprecada','Pendiente','Desarollo']
         criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         versionApp nullable:true, maxSize:20
         uuid maxSize:32, unique:true
         port blank:true, nullable:true,maxSize:5
         description maxSize:150
-        name maxSize:50
+        name maxSize:50 
+    }
+}
+
+class DeployDates{
+    Date dateDeploy = new Date()
+    String uuidApp
+    String typeEnvironment
+    Apps app
+    String version
+    
+    static mapping = {
+        version false
+       typeEnvironment sqlType: "Enum('Pruebas', 'Desarrollo', 'Produccion')"
+    }
+    
+    static constraints = {
+        typeEnvironment inList:['Pruebas', 'Desarrollo', 'Produccion']
     }
 }
 
 class AppConnections{
     Apps app
     Apps service
+    String uuidApp
+    String uuidService
     String description
     String portApp
     String portService

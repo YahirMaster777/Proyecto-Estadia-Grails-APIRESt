@@ -1,6 +1,6 @@
 import com.ordenaris.internalControl.UserPasswordEncoderListener
-import com.ordenaris.internalControl.CustomAuthenticationSuccessHandler
-import com.ordenaris.internalControl.CustomAccessTokenJsonRenderer
+// import com.ordenaris.internalControl.CustomAuthenticationSuccessHandler
+// import com.ordenaris.internalControl.CustomAccessTokenJsonRenderer
 // import javax.servlet.http.HttpServletResponse
 // import com.ordenaris.internalControl.MyUserDetailsService
 
@@ -19,10 +19,10 @@ beans = {
     // }
     // restAuthenticationFailureHandler(CustomRestAuthenticationFailureHandler){
     //     statusCode = HttpServletResponse.SC_UNAUTHORIZED
+    // // }
+    // authenticationSuccessHandler(CustomAuthenticationSuccessHandler){
+    //     customAccessTokenJsonRendere = customAccessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
     // }
-    authenticationSuccessHandler(CustomAuthenticationSuccessHandler){
-        customAccessTokenJsonRendere = customAccessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
-    }
 }
 
 

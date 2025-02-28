@@ -3,10 +3,10 @@ package com.ordenaris.internalControl
 class TemplatePermissions {
     Date dateCreated
     Date lastUpdated
-    Sections section
     String description
     Permissions permission
     String uuidTemplate
+  
     static belongsTo=[template : Templates]
     
     

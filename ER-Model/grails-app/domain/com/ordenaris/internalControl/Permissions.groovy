@@ -6,14 +6,17 @@ class Permissions {
     String name
     String description
     String alias
-
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
+    Sections section
+    String uuidSection
     
     static mapping ={
         version false
     }
     static constraints = {
-        name unique: true, blank: false, maxSize:50
+        uuid unique:true, maxSize:32
+        name maxSize:50
         description maxSize:150
-        alias maxSize:50
+        alias maxSize:50, unique: true
     }
 }

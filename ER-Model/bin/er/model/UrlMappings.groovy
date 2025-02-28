@@ -10,6 +10,8 @@ class UrlMappings {
                     post "/employee"(controller:'employees', action:'save')
                     post "/profile"(controller:'profiles', action:'save')
                     post "/profile-permissions"(controller:'profilePermissions', action:'save')
+                    post "/app-conections"(controller:'appConnections', action:'save')
+                    post "/section"(controller:'sections', action:'save')
                 }
                 
                 group "/$uuid", {
@@ -21,6 +23,7 @@ class UrlMappings {
                     group "/read", {
                         get "/user"(controller:'users', action: 'read')
                         get "/profile"(controller:'profiles', action:'info')
+                        get "/app"(controller:'apps', action:'info')
                     }
                     group "/delete", {
                         delete "/user"(controller:'users', action: 'delete')
@@ -29,7 +32,12 @@ class UrlMappings {
                         delete "/profile"(controller:'profiles', action:'delete')
                     }
                     group "/activate",{
-                       patch "/app"(controller:'apps', action:'active')
+                       patch "/app"(controller:'apps', action:'activate')
+                       patch "/section"(controller:'sections', action:'activate')
+                    }
+                    group "/deactivate",{
+                        patch "/app"(controller:'apps', action:'deactivate')
+                        patch "/section"(controller: 'sections', action:'deactivate')
                     }
                     constraints {
                         uuid(matches: '^[a-fA-F0-9]{32}$')
@@ -38,9 +46,11 @@ class UrlMappings {
                 
                 group "/list", {
                     get "/user"(controller:'users', action: 'list')
+                    
                 }
                 group "/all", {
                     get "/user"(controller:'users', action: 'all')
+                    get "/app"(controller:'apps', action:'all')
                 }
             
         }

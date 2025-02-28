@@ -21,16 +21,40 @@ class AppsController {
     
     def delete(){
         def logId = new Logs("Eliminar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud")
+        Utils.logger(logId, "Eliminar Aplicacion", "Inicio de solicitud", "${params.uuid}")
         def deleteAppResponse = AppsService.deleteApp(params, logId)
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }
     
-    def active(){
-        def logId = new Logs("Activar/Desactivar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Activar/Desactivar Aplicacion", "Inicio de solicitud")
+    def activate(){
+        def logId = new Logs("Activar Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Activar Aplicacion", "Inicio de solicitud", "${params.uuid}")
         def activeAppResponse = AppsService.activeApp(params, logId)
         return respond(activeAppResponse.data, status:activeAppResponse.status)
+    }
+    
+    def deactivate(){
+        def logId = new Logs("Desactivar Aplicacion","Inicio de solicitud", request).getId()
+        Utils.logger(logId,"Desactivar Aplicacion", "Inicio de solicitud", "${params.uuid}")
+        def deactivateAppResponse = AppsService.deactivateApp(params, logId)
+        return respond(deactivateAppResponse.data, status:deactivateAppResponse.status)
+    }
+    
+    
+    def info(){
+        def logId = new Logs("Informacion de Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId,"Informacion de Aplicacion","Inicio de solicitud")
+        def infoAppResponse = AppsService.infoApp(params, logId)
+        return respond(infoAppResponse.data, status:infoAppResponse.status)
+    }
+    
+    
+    
+    def all(){
+        def logId = new Logs( "Lista de Aplicaciones", "Iniciando solicitud", request).getId()
+        Utils.logger(logId,"Lista de Aplicaciones","Inicio de solicitud")
+        def apps = AppsService.allApps(logId)
+        return respond(apps.data , status:apps.status)
     }
     
     
