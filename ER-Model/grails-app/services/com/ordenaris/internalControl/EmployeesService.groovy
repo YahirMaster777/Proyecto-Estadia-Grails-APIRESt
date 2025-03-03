@@ -10,10 +10,6 @@ class EmployeesService {
             try{
                 new Logs("Registrar Empleado", "Procesando Solicitud", logId, "INFO", true, [data:data.name])
                 Utils.logger(logId,"Registrar Empleado","Procesando Solicitud")
-<<<<<<< HEAD
-=======
-                
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
                 def position = PositionEmployees.findByName(data.position)
                 if (!position) {
                     new Logs( "Registrar Empleado", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.id ] )

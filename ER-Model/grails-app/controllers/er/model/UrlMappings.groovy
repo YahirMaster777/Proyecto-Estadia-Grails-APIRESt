@@ -43,7 +43,6 @@ class UrlMappings {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
-            
             group "/list", {
                 get "/user"(controller:'users', action: 'list')
             }
