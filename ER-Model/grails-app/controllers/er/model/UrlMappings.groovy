@@ -43,13 +43,6 @@ class UrlMappings {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
-            group "/list", {
-                get "/user"(controller:'users', action: 'list')
-            }
-            group "/all", {
-                get "/user"(controller:'users', action: 'all')
-                get "/app"(controller:'apps', action:'all')
-            }
         }
         group "/list", {
             get "/user"(controller:'users', action: 'list')
@@ -59,7 +52,7 @@ class UrlMappings {
             get "/user"(controller:'users', action: 'all')
             get "/app"(controller:'apps', action:'all')
         }
-    }
+    
     group "/public", {
         patch "/$uuid/reset-password"(controller: 'recovery', action: 'resetPassword')
         post "/token"(controller: 'recovery', action: 'createToken')
@@ -70,8 +63,8 @@ class UrlMappings {
         }
     }
     get "/api/login"(controller:'recovery', action: 'activateAccount')
-
     "/"(controller: 'application', action:'index')
     "500"(view: '/error')
     "404"(view: '/notFound')
+}
 }

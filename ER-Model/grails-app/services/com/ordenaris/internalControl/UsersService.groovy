@@ -91,7 +91,7 @@ def authenticationEventPublisher
         return AuthorityUtils.createAuthorityList(authorities as String[])
     }
     
-       def getToken( userDetails ){
+    def getToken( userDetails ){
         AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
         tokenStorageService.storeToken(accessToken.accessToken, userDetails)
         authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
@@ -142,29 +142,6 @@ def authenticationEventPublisher
                 Utils.logger(logId, "Eliminar usuario", "Error en la solicitud al eliminar el usuario", "f: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
-        }
-    }
-
-    @Transactional(readOnly = true)
-    buscarCuenta(auth){
-        try{
-            new Logs("Iniciar seción", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
-            Utils.logger(logId,"Iniciar seción","Procesando Solicitud", uuid)
-            def user = Users.findByUsername(auth.username)
-            if (!user) {
-                new Logs( "Iniciar seción", "No se encontró el registro", logId, "ERROR", false, [ : ] )
-                Utils.logger(logId, "Iniciar seción", "No se encontró el registro")
-                return TypeError.informationNotFound( logId )
-            }
-
-            new Logs("Eliminar usuario", "Se elimino el usuario", logId,"INFO", true,[])
-            Utils.logger(logId, "Eliminar usuario", "Se elimino el usuario", uuid)
-            return [ data: [ success: true], status: 200 ]
-        } catch(Exception e) {
-            uStatus.setRollbackOnly()
-            new Logs("Iniciar seción","Error en la solicitud al iniciar seción", logId, e, [ : ])
-            Utils.logger(logId, "Iniciar seción", "Error en la solicitud al iniciar seción", "f: ${e.getMessage()}")
-            return TypeError.internalError( logId )
         }
     }
 
