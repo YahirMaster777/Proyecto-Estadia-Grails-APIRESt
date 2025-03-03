@@ -71,10 +71,19 @@ class UsersService {
     def buscarCuenta(UserPassOrgAuthToken auth){
         def username = auth.name
         Users user = Users.findByUsername(username)
-        
-        return [user:user, success:true,  authorities: authorities]
-        
+        println user.username
+        return user
     }
+    
+    def getUserAuthorities( Users user ){
+        def userRoles = UsersRoles.findAllByUser(user)
+        def authorities = []
+        if(userRoles.size() > 0){
+            authorities = userRoles.role.authority
+        }
+        return AuthorityUtils.createAuthorityList(authorities as String[])
+    }
+    
 
 
     @Transactional(readOnly = true)

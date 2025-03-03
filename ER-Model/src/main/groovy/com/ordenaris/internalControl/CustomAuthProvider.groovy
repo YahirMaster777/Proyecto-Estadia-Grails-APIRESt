@@ -51,10 +51,12 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
-      // def respuestaBusqueda = userService.buscarCuenta( auth )
       def respuestaBusqueda = userService.buscarCuenta(auth)
-      if( respuestaBusqueda.success ){
-        fnVerifyStatusUser( respuestaBusqueda.user )
+      
+      def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
+     
+      if( respuestaBusqueda ){
+        
 
 
         def userDetails = new MyUserDetails(
@@ -63,20 +65,15 @@ class CustomAuthProvider implements AuthenticationProvider{
           respuestaBusqueda.user.enabled,
           !respuestaBusqueda.user.accountExpired,
           !respuestaBusqueda.user.passwordExpired,
-          !respuestaBusqueda.user.accountLocked,
-          respuestaBusqueda.autorities,          
-          respuestaBusqueda.user.id
+          !respuestaBusqueda.user.accountLocked,       
+          respuestaBusqueda.user.id,
+          getUserAuthorities.authorities
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
+        println auth
         return auth
       }else{
-        if( respuestaBusqueda.code == 1 ){
-          throw new BadCredentialsException("Usuario not found")
-        }else if( respuestaBusqueda.code == 2 ){
-          throw new BadCredentialsException("Usuario not role found")
-        }else if( respuestaBusqueda.code == 3 ){
-          throw new BadCredentialsException("Usuario loging block")
-        }
+          println 'Error'
       }
 
    	}
