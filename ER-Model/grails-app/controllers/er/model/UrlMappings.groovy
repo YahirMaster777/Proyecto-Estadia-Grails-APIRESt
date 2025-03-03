@@ -44,13 +44,15 @@ class UrlMappings {
                     }
                 }
             }
+            
             group "/list", {
                 get "/user"(controller:'users', action: 'list')
+                
             }
             group "/all", {
                 get "/user"(controller:'users', action: 'all')
+                get "/app"(controller:'apps', action:'all')
             }
-            
         }
         group "/public", {
             patch "/$uuid/reset-password"(controller: 'recovery', action: 'resetPassword')

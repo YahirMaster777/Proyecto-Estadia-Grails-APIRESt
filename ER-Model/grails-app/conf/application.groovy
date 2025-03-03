@@ -22,7 +22,6 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
-	[pattern: '/apps/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/servers/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
@@ -34,6 +33,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
+    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST

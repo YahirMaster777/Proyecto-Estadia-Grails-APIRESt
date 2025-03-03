@@ -19,10 +19,7 @@ class BootStrap {
     def init = { servletContext ->
         if (PositionEmployees.count() == 0) {
             new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
-<<<<<<< HEAD
             new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
-=======
->>>>>>> aa85c83 (cambios del boostrapt)
             def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
             def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
             def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
