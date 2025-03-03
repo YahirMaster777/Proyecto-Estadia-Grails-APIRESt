@@ -61,7 +61,7 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         } else if ("SHA-256-1".equalsIgnoreCase(algorithm)) {
             return rawPass.encodeAsSHA256()
         } else {
-            // Other encryption methods using Users configurations
+            // Other encryption methods using user configurations
             return new String(Hex.encode(digest))
         }
     }
