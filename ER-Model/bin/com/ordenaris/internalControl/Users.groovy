@@ -39,6 +39,8 @@ class Users implements Serializable {
         businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
         flag nullable:true, blank:true, maxSize:32
         dateLocked nullable:true, blank:true
+        lastLoginTime nullable:true, blank:true
+        currentLoginDate nullable:true, blank:true
     }
 
     static mapping = {
