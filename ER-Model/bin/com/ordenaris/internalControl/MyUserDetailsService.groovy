@@ -1,4 +1,8 @@
 package com.ordenaris.internalControl
+<<<<<<< HEAD
+=======
+
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
 import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
@@ -6,8 +10,27 @@ import grails.gorm.transactions.Transactional
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+<<<<<<< HEAD
 class MyUserDetailsService implements GrailsUserDetailsService {
 
+=======
+
+class MyUserDetailsService implements GrailsUserDetailsService {
+
+   /**
+    * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
+    * one role, so we give a user with no granted roles this one which gets
+    * past that restriction but doesn't grant anything.
+    */
+   static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+
+   UserDetails loadUserByUsername(String username, boolean loadRoles)
+         throws UsernameNotFoundException {
+         	println "MyUserDetailsService -> $username"
+      return loadUserByUsername(username)
+   }
+
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -16,12 +39,21 @@ class MyUserDetailsService implements GrailsUserDetailsService {
 
       def roles = user.authorities
 
+<<<<<<< HEAD
 
 
 
 //       def authorities = roles.collect {
 //          new SimpleGrantedAuthority(it.authority)
 //       }
+=======
+      // or if you are using role groups:
+      // def roles = user.authorities.collect { it.authorities }.flatten().unique()
+
+      def authorities = roles.collect {
+         new SimpleGrantedAuthority(it.authority)
+      }
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
       return new MyUserDetails(user.username, user.password, user.enabled,
             !user.accountExpired, !user.passwordExpired,

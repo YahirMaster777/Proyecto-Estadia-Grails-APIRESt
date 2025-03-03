@@ -44,5 +44,9 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
         }
         response.setContentType("aplication/json")
         response.setCharacterEncoding("UTF-8");
+<<<<<<< HEAD
     
+=======
+    }
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 }

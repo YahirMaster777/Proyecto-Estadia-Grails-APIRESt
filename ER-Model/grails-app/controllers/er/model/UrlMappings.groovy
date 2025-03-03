@@ -7,7 +7,11 @@ class UrlMappings {
                 group "/create", {
                     post "/app"(controller:'apps', action: 'save')
                     post "/user"(controller:'users', action: 'create')
+<<<<<<< HEAD
                     post "/employee"(controller:'employees', action:'create')
+=======
+                    post "/employee"(controller:'employees', action:'save')
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
                     post "/profile"(controller:'profiles', action:'save')
                     post "/profile-permissions"(controller:'profilePermissions', action:'save')
                     post "/app-conections"(controller:'appConnections', action:'save')
@@ -43,7 +47,19 @@ class UrlMappings {
                         uuid(matches: '^[a-fA-F0-9]{32}$')
                     }
                 }
+<<<<<<< HEAD
             }
+=======
+                
+                group "/list", {
+                    get "/user"(controller:'users', action: 'list')
+                    
+                }
+                group "/all", {
+                    get "/user"(controller:'users', action: 'all')
+                    get "/app"(controller:'apps', action:'all')
+                }
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
             
             group "/list", {
                 get "/user"(controller:'users', action: 'list')

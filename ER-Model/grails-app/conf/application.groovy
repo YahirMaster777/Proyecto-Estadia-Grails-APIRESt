@@ -16,12 +16,16 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']],
+<<<<<<< HEAD
 	[pattern: '/recovery/**',    access: ['permitAll']],
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
     [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/profiles/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 	[pattern: '/recovery/**',    access: ['permitAll']],
@@ -36,14 +40,27 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/serversApps/**', access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
+=======
+    // [pattern: '/read/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/list/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/all/**',         access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']]
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 ]
 
-grails.plugin.springsecurity.filterChain.chainMap = [
+    grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+<<<<<<< HEAD
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
     [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+=======
+    [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
+    [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
+    
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
@@ -62,6 +79,7 @@ grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username' // Par
 grails.plugin.springsecurity.rest.login.passwordPropertyName='password' // Parametro para el inicio de sesión.
 grails.plugin.springsecurity.rest.login.endpointUrl='/api/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
+<<<<<<< HEAD
 grails.plugin.springsecurity.useSecurityEventListener = true // Activar eventos
 
 grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
@@ -87,6 +105,8 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
         user.save(flush: true, failOnError: true)
     }
 }
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
 grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
 grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'

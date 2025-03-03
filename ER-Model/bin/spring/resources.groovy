@@ -23,6 +23,7 @@ beans = {
         customAccessTokenJsonRendere = customAccessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
     }
     restAuthenticationFilter(CustomRestAuthFilter)
+<<<<<<< HEAD
 }
 
 
@@ -47,4 +48,6 @@ beans = {
         customAccessTokenJsonRendere = customAccessTokenJsonRenderer(CustomAccessTokenJsonRenderer)
     }
     restAuthenticationFilter(CustomRestAuthFilter)
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 }

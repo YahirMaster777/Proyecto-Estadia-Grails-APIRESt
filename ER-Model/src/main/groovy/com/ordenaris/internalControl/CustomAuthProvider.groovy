@@ -1,8 +1,14 @@
 package com.ordenaris.internalControl
 
+<<<<<<< HEAD
 import java.util.Collection;
 
 // import java.util.Collection;
+=======
+import com.ordenaris.internalControl.*
+
+import java.util.Collection;
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
@@ -22,7 +28,10 @@ import grails.util.Holders
 
 class CustomAuthProvider implements AuthenticationProvider{
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
 	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
 
@@ -69,6 +78,7 @@ class CustomAuthProvider implements AuthenticationProvider{
           respuestaBusqueda.user.id
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
+<<<<<<< HEAD
 
       def respuestaBusqueda = userService.buscarCuenta( auth )
       if( respuestaBusqueda.success ){
@@ -94,6 +104,8 @@ class CustomAuthProvider implements AuthenticationProvider{
           respuestaBusqueda.user.id
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
         return auth
       }else{
         if( respuestaBusqueda.code == 1 ){
@@ -105,6 +117,7 @@ class CustomAuthProvider implements AuthenticationProvider{
         }
       }
 
+<<<<<<< HEAD
         def userDetails = new MyUserDetails(
           respuestaBusqueda.user.username,
           respuestaBusqueda.user.crd,
@@ -146,5 +159,8 @@ class CustomAuthProvider implements AuthenticationProvider{
 //           throw new BadCredentialsException("Usuario loging block")
 //         }
 //       }
+=======
+   	}
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
 }

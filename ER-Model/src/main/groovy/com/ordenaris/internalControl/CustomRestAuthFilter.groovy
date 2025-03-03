@@ -5,6 +5,10 @@ import javax.servlet.ServletException
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
+<<<<<<< HEAD
+=======
+
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication

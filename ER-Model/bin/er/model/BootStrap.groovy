@@ -9,11 +9,14 @@ import com.ordenaris.internalControl.Roles;
 import com.ordenaris.internalControl.PositionEmployees;
 import com.ordenaris.internalControl.Employees;
 import com.ordenaris.internalControl.Enterprises;
+<<<<<<< HEAD
 import com.ordenaris.internalControl.Settings
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
 import com.ordenaris.internalControl.Settings
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
@@ -59,6 +62,11 @@ class BootStrap {
             def section1permission3 = new Permissions(alias:'edit_app', section:section1,uuidSection:section1.uuid, name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
             def section1permission4 = new Permissions(alias:'view_app', section:section1,uuidSection:section1.uuid, name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
             
+<<<<<<< HEAD
+=======
+            
+            
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
             def section2permission1 = new Permissions(alias:'create_server', section:section2,uuidSection:section2.uuid, name:'Crear servidor',description:'Permiso que permite').save(flush:true)
             def section2permission2 = new Permissions(alias:'edit_server', section:section2,uuidSection:section2.uuid, name:'Editar servidor',description:'Permiso que permite').save(flush:true)
             def section2permission3 = new Permissions(alias:'delete_server', section:section2,uuidSection:section2.uuid, name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
@@ -68,7 +76,15 @@ class BootStrap {
             def section3permission2 = new Permissions(alias:'delete_employee', section:section3,uuidSection:section3.uuid, name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission3 = new Permissions(alias:'edit_employee', section:section3,uuidSection:section3.uuid, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission4 = new Permissions(alias:'view_employee', section:section3,uuidSection:section3.uuid, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
+<<<<<<< HEAD
     
+=======
+            
+            
+            
+            
+            
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
             def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
             def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002', businessEmail:'yairA@gmail.com', employee:employee3)
@@ -135,12 +151,15 @@ class BootStrap {
         }
         String.metaClass.specialCharacters = {
             def pageExpression = '^[a-zA-Z0-9\\s]+$'
+<<<<<<< HEAD
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
         String.metaClass.validPassword = {
             def pageExpression = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){8,40}$'
+=======
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
