@@ -5,7 +5,7 @@ class serverConnections {
     Servers subServer
     String portServer
     String portSubServer
-    String status
+    String status = 'Activa'
     Date dateCreated
     Date lastUpdated
 

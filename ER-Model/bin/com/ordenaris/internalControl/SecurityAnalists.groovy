@@ -8,7 +8,7 @@ class SecurityAnalists {
     Servers server
     Date assigned
     Date lastUpdated
-    String statusAnalist
+    String statusAnalist = 'Activo'
     
     static constraints = {
         uuid unique:true, maxSize:32

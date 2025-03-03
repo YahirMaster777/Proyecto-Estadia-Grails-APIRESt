@@ -51,7 +51,7 @@ class EmployeesController {
             ['company':data.company],           
             ['personalEmail':data.personalEmail]    
         ]
-        def isDataExist = Utils.validArrayExist(validDataExist, "empleado","dato", logId)
+        def isDataExist = Utils.dataRequired(validDataExist, "empleado","dato", logId)
         if(isDataExist.status != 200) return isDataExist
         if (!data.name.specialCharacters()) {
             new Logs( "Validación de datos del empleado", "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )

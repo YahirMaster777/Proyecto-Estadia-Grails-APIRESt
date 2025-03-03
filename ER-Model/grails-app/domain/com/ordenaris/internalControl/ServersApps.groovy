@@ -10,7 +10,7 @@ class ServersApps {
     String description
     String portApp
     String portServer
-    String status
+    String status = 'Activa'
     Date dateCreated
     Date lastUpdated
     String environmentType
@@ -29,6 +29,6 @@ class ServersApps {
         description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
         environmentType inList:['Pruebas','Producción','Desarrollo']
-        status inList:['Activa','Inactiva','Matenimiento','Pruebas']
+        status inList:['Activa','Inactiva','Matenimiento','Pruebas'], blank: true, nullable:true
     }
 }

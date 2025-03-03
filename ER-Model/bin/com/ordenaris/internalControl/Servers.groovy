@@ -16,7 +16,7 @@ class Servers {
     String macAddress
     String criticality
     String location
-    String status
+    String status = 'Activa'
     Date dateCreated
     Date lastUpdated
 
@@ -29,8 +29,8 @@ class Servers {
     static constraints = {
         uuid unique: true, maxSize: 32
         type inList:['Virtual','Fisico','Dedicado']
-        criticality inList:['Indiferente','Baja','Media','Alta','Critica'], blank: true, nullable:true
-        status :['Activo','Inactivo','Mantenimiento']
+        criticality inList:['Indiferente','Baja','Media','Alta','Critica']
+        status inList:['Activo','Inactivo','Mantenimiento'], blank: true, nullable:true
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true

@@ -19,6 +19,10 @@ class Servers {
     String status
     Date dateCreated
     Date lastUpdated
+    Date dateDeploy
+    Date dateLastDeploy
+    Date dateAcquisition
+    String operatingSystem
 
     static mapping = {
         version false
@@ -34,6 +38,7 @@ class Servers {
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true
+        dateLastDeploy blank:true, nullable:true
         macAddress unique:true,maxSize: 17
         location maxSize: 50
         company blank:true, nullable: true
@@ -41,6 +46,7 @@ class Servers {
         cloudProvider maxSize: 20
         processingCapacity maxSize: 7
         storage maxSize: 7
+        operatingSystem maxSize:20
         memory maxSize: 7
     }
 }
