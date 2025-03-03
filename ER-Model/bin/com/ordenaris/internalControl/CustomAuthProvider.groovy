@@ -1,5 +1,7 @@
 package com.ordenaris.internalControl
 
+import com.ordenaris.internalControl.*
+
 import java.util.Collection;
 
 import org.springframework.security.core.Authentication
@@ -49,7 +51,8 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
-      def respuestaBusqueda = userService.buscarCuenta( auth )
+      // def respuestaBusqueda = userService.buscarCuenta( auth )
+      def respuestaBusqueda = userService.buscarCuenta(auth)
       if( respuestaBusqueda.success ){
         fnVerifyStatusUser( respuestaBusqueda.user )
 
