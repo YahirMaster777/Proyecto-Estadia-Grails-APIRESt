@@ -1,4 +1,4 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
 
 import grails.plugin.springsecurity.SpringSecurityService
 import groovy.json.*
@@ -44,5 +44,5 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
         }
         response.setContentType("aplication/json")
         response.setCharacterEncoding("UTF-8");
-    
+    }
 }

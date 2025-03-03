@@ -1,8 +1,8 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
+
+import com.ordenaris.recibeya.*
 
 import java.util.Collection;
-
-// import java.util.Collection;
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
@@ -23,7 +23,7 @@ import grails.util.Holders
 class CustomAuthProvider implements AuthenticationProvider{
 
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
-	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
+	def userService = Holders.grailsApplication.mainContext.getBean('userService')
 
 	Authentication authenticate(Authentication auth) throws AuthenticationException{
 		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
@@ -51,8 +51,7 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
-      // def respuestaBusqueda = userService.buscarCuenta( auth )
-      def respuestaBusqueda = userService.buscarCuenta(auth)
+      def respuestaBusqueda = userService.buscarCuenta( auth )
       if( respuestaBusqueda.success ){
         fnVerifyStatusUser( respuestaBusqueda.user )
 
@@ -78,5 +77,7 @@ class CustomAuthProvider implements AuthenticationProvider{
           throw new BadCredentialsException("Usuario loging block")
         }
       }
+
+   	}
 
 }

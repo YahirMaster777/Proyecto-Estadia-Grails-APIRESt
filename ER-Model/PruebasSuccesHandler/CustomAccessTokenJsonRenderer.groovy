@@ -1,7 +1,7 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
 
-import com.ordenaris.internalControl.Users
-import com.ordenaris.internalControl.Employees
+import com.ordenaris.recibeya.User
+
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.rest.token.AccessToken
 import grails.plugin.springsecurity.rest.token.rendering.AccessTokenJsonRenderer
@@ -14,17 +14,7 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
     @Override
     String generateJson(AccessToken accessToken) {
 
-        Users user = Users.get accessToken.principal.id as Long
-        def originalObject = [
-            username         : user.username,
-            access_token     : accessToken.accessToken,
-            expiration       : accessToken.expiration,
-            role             : accessToken.principal.authorities[0].authority,
-        ]
-        return new JsonBuilder(originalObject).toPrettyString()
-    }
-
-        Users user = Users.get accessToken.principal.id as Long
+        User user = User.get accessToken.principal.id as Long
 
         def originalObject = [
             username         : user.username,
@@ -55,6 +45,6 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
         //     originalObject.perfil = newRole.nombre
         // }
         return new JsonBuilder(originalObject).toPrettyString()
-    // }
+    }
 
-// }
+}

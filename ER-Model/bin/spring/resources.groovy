@@ -48,13 +48,3 @@ beans = {
     }
     restAuthenticationFilter(CustomRestAuthFilter)
 }
-
-
-
-
-
-
-
-
-
-
