@@ -12,5 +12,5 @@ import org.springframework.security.core.GrantedAuthority
       super(username, password, enabled, accountNonExpired,
             credentialsNonExpired, accountNonLocked, authorities, id)
 
-   
+   // }
 }

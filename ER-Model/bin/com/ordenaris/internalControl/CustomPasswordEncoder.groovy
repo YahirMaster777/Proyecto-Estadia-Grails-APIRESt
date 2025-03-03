@@ -1,5 +1,4 @@
 package com.ordenaris.internalControl
-package com.ordenaris.distribuidores
 
 import grails.plugin.springsecurity.SpringSecurityService
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
@@ -33,12 +32,13 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         this.algorithm = algorithm
     }
 
-    CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
-        super()
-        setEncodeHashAsBase64(encodeHashAsBase64);
-        this.algorithm = algorithm;
-        getMessageDigest();
-    }
+
+//     CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
+//         super()
+//         setEncodeHashAsBase64(encodeHashAsBase64);
+//         this.algorithm = algorithm;
+//         getMessageDigest();
+//     }
 
     
     String encodePassword(String rawPass, Object salt) {
@@ -55,7 +55,7 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         } else if ("SHA-256-1".equalsIgnoreCase(algorithm)) {
             return rawPass.encodeAsSHA256()
         } else {
-            // Other encryption methods using user configurations
+            // Other encryption methods using Users configurations
             return new String(Hex.encode(digest))
         }
     }

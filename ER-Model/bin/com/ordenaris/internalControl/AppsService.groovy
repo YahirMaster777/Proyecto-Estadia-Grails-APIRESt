@@ -142,7 +142,10 @@ class AppsService {
                         servicio: service.uuidService
                     ]
                 }
- 
+                
+                
+                
+                  
                 // def nameService = Apps.findByUuid(services.uuidService).collect{ app->
                 //     return[
                 //         servicio: app.name

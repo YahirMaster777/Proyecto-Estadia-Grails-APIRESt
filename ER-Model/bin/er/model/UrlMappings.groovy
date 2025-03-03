@@ -7,7 +7,7 @@ class UrlMappings {
                 group "/create", {
                     post "/app"(controller:'apps', action: 'save')
                     post "/user"(controller:'users', action: 'create')
-                    post "/employee"(controller:'employees', action:'save')
+                    post "/employee"(controller:'employees', action:'create')
                     post "/profile"(controller:'profiles', action:'save')
                     post "/profile-permissions"(controller:'profilePermissions', action:'save')
                     post "/app-conections"(controller:'appConnections', action:'save')
@@ -43,21 +43,30 @@ class UrlMappings {
                         uuid(matches: '^[a-fA-F0-9]{32}$')
                     }
                 }
-                
-                group "/list", {
-                    get "/user"(controller:'users', action: 'list')
-                    
-                }
-                group "/all", {
-                    get "/user"(controller:'users', action: 'all')
-                    get "/app"(controller:'apps', action:'all')
-                }
+            }
             
+            group "/list", {
+                get "/user"(controller:'users', action: 'list')
+                
+            }
+            group "/all", {
+                get "/user"(controller:'users', action: 'all')
+                get "/app"(controller:'apps', action:'all')
+            }
         }
-        group "/public", {}
+        group "/public", {
+            patch "/$uuid/reset-password"(controller: 'recovery', action: 'resetPassword')
+            post "/token"(controller: 'recovery', action: 'createToken')
+            // post "/uuid"(controller: 'intentRecovery', action: 'createTkn')
+            // put "/recovery-password"(controller:'uuid', action: 'recovery')
+            constraints {
+                uuid(matches: '^[a-fA-F0-9]{32}$')
+            }
+        }
+        get "/api/login"(controller:'recovery', action: 'activateAccount')
 
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')
         "404"(view: '/notFound')
-    }
+    
 }

@@ -9,6 +9,11 @@ import com.ordenaris.internalControl.Roles;
 import com.ordenaris.internalControl.PositionEmployees;
 import com.ordenaris.internalControl.Employees;
 import com.ordenaris.internalControl.Enterprises;
+import com.ordenaris.internalControl.Settings
+import com.ordenaris.internalControl.Sections;
+import com.ordenaris.internalControl.Permissions;
+import com.ordenaris.internalControl.UserSectionPermission;
+import com.ordenaris.internalControl.Settings
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
@@ -16,6 +21,8 @@ import com.ordenaris.internalControl.UserSectionPermission;
 class BootStrap {
     def init = { servletContext ->
         if (PositionEmployees.count() == 0) {
+            new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
+            new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
             def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
             def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
             def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
@@ -39,7 +46,6 @@ class BootStrap {
                 employee5.save(flush:true)
                 employee6.save(flush:true)
             }
-        
             def roleAdmin = new Roles(authority: 'ROLE_ADMIN').save(flush: true)
             def roleRoot = new Roles(authority: 'ROLE_ROOT').save(flush: true)
             def roleCustom = new Roles(authority: 'ROLE_CUSTOM').save(flush: true)
@@ -62,13 +68,14 @@ class BootStrap {
             def section3permission2 = new Permissions(alias:'delete_employee', section:section3,uuidSection:section3.uuid, name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission3 = new Permissions(alias:'edit_employee', section:section3,uuidSection:section3.uuid, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission4 = new Permissions(alias:'view_employee', section:section3,uuidSection:section3.uuid, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
-   
+    
             def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
             def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002', businessEmail:'yairA@gmail.com', employee:employee3)
             def userAdmin2 =  new Users(username: 'emilioA', password: '1a2b3c4d', businessEmail:'emilioA@gmail.com', employee:employee4)
             def userCustom1 =  new Users(username: 'yairC', password: 'Yair141002',  businessEmail:'yairC@gmail.com', employee:employee5)
             def userCustom2 =  new Users(username: 'emilioC', password: '1a2b3c4d', businessEmail:'emilioC@gmail.com', employee:employee6)
+            new Users(username: 'emilio.mendoza@ordenaris.com', password: '1a2b3c4d', businessEmail:'emilioT@gmail.com', employee:employee2).save(flush:true)
             if (!userRoot1.save(flush: true) || !userRoot2.save(flush: true) || !userAdmin1.save(flush: true) || !userAdmin2.save(flush: true) || !userCustom1.save(flush: true) || !userCustom2.save(flush: true)) {
                 userRoot1.errors.allErrors.each { println it }
                 userRoot2.errors.allErrors.each { println it }
@@ -91,9 +98,13 @@ class BootStrap {
             def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
             
         }
+        def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
+        servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
+        def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
+        servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
         
-        String.metaClass.validFormatDataHour = {
-            def horaCodeExpression = '([0-1][1-9]|[2][0-3])(:)([0-5][0-9])$'
+        String.metaClass.formatHour = {
+            def horaCodeExpression = '^([0-1][1-9]|[2][0-3])(:)([0-5][0-9])(:)([0-5][0-9])$'
             def pattern = Pattern.compile(horaCodeExpression) 
             def matcher = pattern.matcher( delegate ) 
             return matcher.matches()  
@@ -117,7 +128,7 @@ class BootStrap {
             return matcher.matches()
         }
         String.metaClass.uuidFormat = {
-            def pageExpression = '[a-fA-F0-9]{32}$'
+            def pageExpression = '^[a-fA-F0-9]{32}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
@@ -128,8 +139,44 @@ class BootStrap {
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
+        String.metaClass.validPassword = {
+            def pageExpression = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){8,40}$'
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
         String.metaClass.onlyDouble = {
             def pageExpression = "^[0-9]+(.[0-9]+)?\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.macAddress = {
+            def pageExpression = "^([0-9A-Fa-f]{2}[\\:-]){5}([0-9A-Fa-f]{2})\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.ipAddress = {
+            def pageExpression = "^(\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.validPort = {
+            def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.institutionalEmail = {
+            def pageExpression = "^[a-zA-Z0-9\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
+            def pattern = Pattern.compile(pageExpression)
+            def matcher = pattern.matcher(delegate)
+            return matcher.matches()
+        }
+        String.metaClass.personalEmail = {
+            def pageExpression = "^[\\w\\%*.=-]+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()

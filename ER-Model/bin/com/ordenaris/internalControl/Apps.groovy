@@ -20,6 +20,7 @@ class Apps {
         type sqlType:"Enum('Frontend','Backend','Aplication','Data Base')"
         criticality sqlType: "Enum('Indiferente', 'Baja', 'Media', 'Alta', 'Critica')"
         status sqlType : "Enum('Activa','Deprecada','Pendiente','Desarollo')"
+
     }   
     static constraints = {
         urlRepository nullable:true, maxSize:150, blank:true

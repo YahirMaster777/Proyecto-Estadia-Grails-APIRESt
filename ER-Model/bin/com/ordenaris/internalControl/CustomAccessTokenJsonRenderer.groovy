@@ -8,9 +8,6 @@ import grails.plugin.springsecurity.rest.token.rendering.AccessTokenJsonRenderer
 import groovy.json.JsonBuilder
 import org.springframework.security.core.GrantedAuthority
 
-@Transactional
-class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
-
     @Override
     String generateJson(AccessToken accessToken) {
 

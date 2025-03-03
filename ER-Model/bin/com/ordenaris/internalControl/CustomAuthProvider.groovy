@@ -22,6 +22,7 @@ import grails.util.Holders
 
 class CustomAuthProvider implements AuthenticationProvider{
 
+
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
 	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
 
@@ -69,8 +70,30 @@ class CustomAuthProvider implements AuthenticationProvider{
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
 
-//         userService.registrarActividad( respuestaBusqueda.user )
+      def respuestaBusqueda = userService.buscarCuenta( auth )
+      if( respuestaBusqueda.success ){
+        fnVerifyStatusUser( respuestaBusqueda.user )
 
+        def idDistribuidor = 0
+        if( respuestaBusqueda.distribuidor ){
+          idDistribuidor = respuestaBusqueda.distribuidor.id
+        }
+//       def respuestaBusqueda = userService.buscarCuenta( auth )
+//       if( respuestaBusqueda.success ){
+//         fnVerifyStatusUser( respuestaBusqueda.user )
+
+
+        def userDetails = new MyUserDetails(
+          respuestaBusqueda.user.username,
+          respuestaBusqueda.user.password,
+          respuestaBusqueda.user.enabled,
+          !respuestaBusqueda.user.accountExpired,
+          !respuestaBusqueda.user.passwordExpired,
+          !respuestaBusqueda.user.accountLocked,
+          respuestaBusqueda.autorities,          
+          respuestaBusqueda.user.id
+        )
+        auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
         return auth
       }else{
         if( respuestaBusqueda.code == 1 ){
@@ -82,5 +105,46 @@ class CustomAuthProvider implements AuthenticationProvider{
         }
       }
 
+        def userDetails = new MyUserDetails(
+          respuestaBusqueda.user.username,
+          respuestaBusqueda.user.crd,
+          respuestaBusqueda.user.enabled,
+          !respuestaBusqueda.user.accountExpired,
+          !respuestaBusqueda.user.crdExpired,
+          !respuestaBusqueda.user.accountLocked,
+          respuestaBusqueda.autorities,          
+          respuestaBusqueda.user.id,
+          idDistribuidor
+        )
+        auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, respuestaBusqueda.distribuidor)
+        return auth
+      }else{
+        if( respuestaBusqueda.code == 1 ){
+          throw new BadCredentialsException("Usuario not found")
+        }else if( respuestaBusqueda.code == 2 ){
+          throw new BadCredentialsException("Usuario not role found")
+        }else if( respuestaBusqueda.code == 3 ){
+          throw new BadCredentialsException("Usuario loging block")
+        }
+      }
+//         def userDetails = new MyUserDetails(
+//           respuestaBusqueda.user.username,
+//           respuestaBusqueda.user.enabled,
+//           !respuestaBusqueda.user.accountExpired,
+//           !respuestaBusqueda.user.accountLocked,
+//           respuestaBusqueda.user.id,
+//           idEmployee
+//         )
+//         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, respuestaBusqueda.employee)
+//         return auth
+//       }else{
+//         if( respuestaBusqueda.code == 1 ){
+//           throw new BadCredentialsException("Usuario not found")
+//         }else if( respuestaBusqueda.code == 2 ){
+//           throw new BadCredentialsException("Usuario not role found")
+//         }else if( respuestaBusqueda.code == 3 ){
+//           throw new BadCredentialsException("Usuario loging block")
+//         }
+//       }
 
-// }
+}

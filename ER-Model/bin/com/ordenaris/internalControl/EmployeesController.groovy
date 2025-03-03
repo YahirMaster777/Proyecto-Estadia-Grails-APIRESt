@@ -12,7 +12,7 @@ class EmployeesController {
         def data = request.JSON   
         Utils.logger(logId, "Registrar Empleado", "Inicio de solicitud")
     
-        def isValidData = validFormatData(data, logId)
+        def isValidData = validFormatData("Registrar Empleado", data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
 
         def saveEmployeeResponse = EmployeesService.createEmployee(data, logId)
@@ -35,9 +35,7 @@ class EmployeesController {
     }
     
     
-    def validFormatData(data, logId) {
-        new Logs( "Validación de datos del empleado", "Validar datos de empleado", logId, "INFO", true, [ : ] )
-        Utils.logger(logId, "Validación de datos del empleado", " Validar datos de empleado")
+    def validFormatData(process, data, logId) {
         def validDataExist = [
             ['Curp':data.curp],
             ['Phone':data.phone],
@@ -51,36 +49,36 @@ class EmployeesController {
             ['company':data.company],           
             ['personalEmail':data.personalEmail]    
         ]
-        def isDataExist = Utils.dataRequired(validDataExist, "empleado","dato", logId)
+        def isDataExist = Utils.dataRequired(validDataExist,process, logId)
         if(isDataExist.status != 200) return isDataExist
         if (!data.name.specialCharacters()) {
-            new Logs( "Validación de datos del empleado", "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )
-            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.name)
+            new Logs( process, "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.name)
             return TypeError.incorrectFormat( "Nombre de empleado", "valor alfanúmerico", logId )
         }
         if (!data.curp.specialCharacters()) {
-            new Logs( "Validación de datos del empleado", "El dato Curp de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.curp ] )
-            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.curp)
+            new Logs( process, "El dato Curp de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.curp ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.curp)
             return TypeError.incorrectFormat( "Curp de empleado", "valor alfanúmerico", logId )
         }
         if (!data.rfc.specialCharacters()) {
-            new Logs( "Validación de datos del empleado", "El dato RFC de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.rfc ] )
-            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.rfc)
+            new Logs( process, "El dato RFC de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.rfc ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.rfc)
             return TypeError.incorrectFormat( "RFC de empleado", "valor alfanúmerico", logId )
         }
         if (!data.nss.validNss()) {
-            new Logs( "Validación de datos del empleado", "El dato NSS de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.nss ] )
-            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.nss)
+            new Logs( process, "El dato NSS de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.nss ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.nss)
             return TypeError.incorrectFormat( "NSS de empleado", "valor alfanúmerico", logId )
         }
         
         if (!data.phone.phoneNumber()) {
-            new Logs( "Validación de datos del empleado", "El dato phone de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.phone ] )
-            Utils.logger(logId,"Validación de datos del empleado", "No coincide el formato esperado que se quiere ingresar.", data.phone)
+            new Logs( process, "El dato phone de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.phone ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.phone)
             return TypeError.incorrectFormat( "telefono del empleado", "valor alfanúmerico", logId )
         }
-        new Logs( "Validación de datos del empleado", "Control de la información de empleado", logId, "INFO", true, [ data: data, uuid: logId ] )
-        Utils.logger(logId,"Validación de datos del empleado", "Control de la información de empleado", "Los datos cumplen con los valores esperados")
+        new Logs( process, "Control de la información de empleado", logId, "INFO", true, [ data: data, uuid: logId ] )
+        Utils.logger(logId,process, "Control de la información de empleado", "Los datos cumplen con los valores esperados")
         return [data: [success: true], status:200]
     }
     

@@ -5,7 +5,6 @@ import grails.gorm.CriteriaBuilder
 
 @Transactional
 class UsersService {
-
     def createUser(data, logId) {
         Users.withTransaction{uStatus ->
             try{
@@ -13,23 +12,23 @@ class UsersService {
                 Utils.logger(logId,"Registrar usuario","Procesando Solicitud", "Nombre de usuario:${data.username}")
                 def employee = Employees.findByUuid(data.employeeUuid)
                 if (!employee) {
-                    new Logs( "Actualizar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
-                    Utils.logger(logId, "Actualizar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
+                    new Logs( "Registrar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
+                    Utils.logger(logId, "Registrar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
                     return TypeError.informationNotFound( logId )
                 }
                 def user = new Users()
                 user.username = data.username
                 user.password = data.password
-                user.businessEmail = data.businessEmail
                 user.employee = employee
+                data.businessEmail?user.businessEmail=data.businessEmail:user.businessEmail
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
                 return [ data: [ success: true], status: 200 ]
             }catch(e){
                 uStatus.setRollbackOnly()
-                new Logs("Registrar usuario","Error en la solicitud", logId, e, [ : ])
-                Utils.logger(logId, "Registrar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+                new Logs("Registrar usuario","Error en la solicitud al crear un usuario", logId, e, [ : ])
+                Utils.logger(logId, "Registrar usuario", "Error en la solicitud al crear un usuario", "f: ${e.getMessage()}")
                 return TypeError.internalError(logId)
             }
         }
@@ -61,8 +60,8 @@ class UsersService {
                 return [ data: [ success: true], status: 200 ]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
-                new Logs("Actualizar usuario","Error en la solicitud", logId, e, [ : ])
-                Utils.logger(logId, "Actualizar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+                new Logs("Actualizar usuario","Error en la solicitud al actualizar un usuario", logId, e, [ : ])
+                Utils.logger(logId, "Actualizar usuario", "Error en la solicitud al actualizar un usuario", "f: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
         }
@@ -109,8 +108,8 @@ class UsersService {
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
             return [ data: [success: true, data:constructorUser(user) ], status: 200 ]
         }catch(Exception e) {
-            new Logs("Buscar usuario","Error en la solicitud", logId, e, [ : ])
-            Utils.logger(logId, "Buscar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+            new Logs("Buscar usuario","Error en la solicitud al buscar el usuario", logId, e, [ : ])
+            Utils.logger(logId, "Buscar usuario", "Error en la solicitud al buscar el usuario", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
         }
     } 
@@ -132,10 +131,33 @@ class UsersService {
                 return [ data: [ success: true], status: 200 ]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
-                new Logs("Eliminar usuario","Error en la solicitud", logId, e, [ : ])
-                Utils.logger(logId, "Eliminar usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+                new Logs("Eliminar usuario","Error en la solicitud al eliminar el usuario", logId, e, [ : ])
+                Utils.logger(logId, "Eliminar usuario", "Error en la solicitud al eliminar el usuario", "f: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
+        }
+    }
+
+    @Transactional(readOnly = true)
+    buscarCuenta(auth){
+        try{
+            new Logs("Iniciar seción", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
+            Utils.logger(logId,"Iniciar seción","Procesando Solicitud", uuid)
+            def user = Users.findByUsername(auth.username)
+            if (!user) {
+                new Logs( "Iniciar seción", "No se encontró el registro", logId, "ERROR", false, [ : ] )
+                Utils.logger(logId, "Iniciar seción", "No se encontró el registro")
+                return TypeError.informationNotFound( logId )
+            }
+
+            new Logs("Eliminar usuario", "Se elimino el usuario", logId,"INFO", true,[])
+            Utils.logger(logId, "Eliminar usuario", "Se elimino el usuario", uuid)
+            return [ data: [ success: true], status: 200 ]
+        } catch(Exception e) {
+            uStatus.setRollbackOnly()
+            new Logs("Iniciar seción","Error en la solicitud al iniciar seción", logId, e, [ : ])
+            Utils.logger(logId, "Iniciar seción", "Error en la solicitud al iniciar seción", "f: ${e.getMessage()}")
+            return TypeError.internalError( logId )
         }
     }
 
@@ -147,17 +169,13 @@ class UsersService {
             int page = (params.int('page') ?:1) -1
             int max = params.int('max') ?:10
             int offset = page * max
-            def sort = params.sort //?:"username"
-            def order = params.order //?:"asc"
-            if (order && !sort) sort = "username"
-            if (sort && !order) order = "asc"
+            params.sort?params.sort:"id"
+            params.order?params.order:"asc"
             def users = Users.createCriteria().list(max:max, offset:offset) {
                 if(params.search) {
                     sqlRestriction("lower(concat(business_email, ' ' ,username)) like '%${params.search.toLowerCase().replaceAll(" ","%")}%'")
                 }
-                if (sort || order) {
-                    order(sort, order.toLowerCase())
-                }
+                order(params.sort, params.order.toLowerCase())
             }.collect{ constructorUser(it)}
             def userCount = Users.withCriteria {
                 if(params.search) {
@@ -171,8 +189,8 @@ class UsersService {
             Utils.logger(logId, "Páginado usuario", "Resultados de la busqueda usuario")
             return [ data: [ success: true, data: [list: users, total: userCount]], status: 200 ]
         } catch(Exception e) {
-            new Logs("Páginado usuario","Error en la solicitud", logId, e, [ : ])
-            Utils.logger(logId, "Páginado usuario", "Error en la solicitud", "f: ${e.getMessage()}")
+            new Logs("Páginado usuario","Error en la solicitud al obtener el paginado", logId, e, [ : ])
+            Utils.logger(logId, "Páginado usuario", "Error en la solicitud al obtener el paginado", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
         }
     }
@@ -189,13 +207,12 @@ class UsersService {
             Utils.logger(logId, "Páginado usuario","Usuarios encontrados" )
             return [data: [success: true, data: userList, total: userCount], status: 200]
         } catch(Exception e) {
-            new Logs( "Páginado usuario", "Ha ocurrido una excepción al obtener los usuarios", logId, e, [ : ] )
-            Utils.logger(logId, "Páginado usuario", "Atrapando errorres", "f: ${e.getMessage()}")
+            new Logs( "Páginado usuario", "Error en la solicitud al mostrar los resultados", logId, e, [ : ] )
+            Utils.logger(logId, "Páginado usuario", "Error en la solicitud al mostrar los resultados", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
         }
     }
 
-    // TODO: metodo para recuperar la contraseña
     def constructorUser(user) {
         return [
             uuid: user.uuid,

@@ -5,32 +5,24 @@ import javax.servlet.ServletException
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
-<<<<<<< HEAD
-=======
-
->>>>>>> 32e19a9 (implementacion de login dinamico)
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
+
 import grails.plugin.springsecurity.rest.token.AccessToken
 import grails.plugin.springsecurity.rest.token.generation.TokenGenerator
 import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
+
 import org.springframework.security.core.userdetails.UserDetails
+
 import grails.plugin.springsecurity.rest.RestAuthenticationFilter
 import com.google.common.io.CharStreams
 import groovy.json.JsonSlurper
-import groovy.json.JsonBuilder
 import grails.plugin.springsecurity.SpringSecurityUtils
-import org.springframework.security.authentication.BadCredentialsException
+
 import org.springframework.security.authentication.AuthenticationDetailsSource
 import grails.util.Holders
-import com.ordenaris.distribuidores.UserService
-import com.ordenaris.distribuidores.RegistroService
-import com.ordenaris.distribuidores.FuncionService
-import com.ordenaris.api.Ordenaris
-import com.ordenaris.distribuidores.User
-import com.ordenaris.distribuidores.Constants
 
 class CustomRestAuthFilter extends RestAuthenticationFilter {
 
@@ -39,19 +31,17 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 	CustomRestAuthenticationFailureHandler authenticationFailureHandler = new CustomRestAuthenticationFailureHandler()
 	CustomRestAuthenticationSuccessHandler authenticationSuccessHandler = new CustomRestAuthenticationSuccessHandler()
 
-	def ordenaris = new Ordenaris()
-
 	private UserPassOrgAuthToken extractCredentialsFromJsonPayload(HttpServletRequest httpServletRequest){
 		String username = httpServletRequest.JSON.username
-		String crd = httpServletRequest.JSON.password
+		String password = httpServletRequest.JSON.password
 		
-		if( username && crd ){
-			return new UserPassOrgAuthToken(username, crd)
+		if( username && password ){
+			return new UserPassOrgAuthToken(username, password)
 		}else{
 			return null
 		}
 		username = ""
-		crd = ""
+		password = ""
 	}
 
 	@Override

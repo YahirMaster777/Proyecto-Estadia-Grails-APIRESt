@@ -48,10 +48,4 @@ public class TypeError {
     static HashMap existingRegister(String logId) {
         return [data: [success:false, message: String.format("No es posible procesar la solicitud, por favor utilice valores diferentes."), id:logId], status: 409];
     }
-    
-    //prueba de validacion de datos unicos
-    static HashMap existingData(String data,String logId){
-        return [data: [success:false, message: String.format("El dato %s, Ya se encuentra Registrado, por favor utilice un valor diferente", data), id:logId], status: 409];
-    }
-
 }
