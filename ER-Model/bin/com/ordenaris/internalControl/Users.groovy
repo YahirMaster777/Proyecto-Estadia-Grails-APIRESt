@@ -20,11 +20,8 @@ class Users implements Serializable {
     boolean accountLocked
     Employees employee
     boolean passwordExpired
-<<<<<<< HEAD
     String flag
     Date dateLocked
-=======
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
     Date lastLoginTime
     Date currentLoginDate
 
@@ -39,18 +36,9 @@ class Users implements Serializable {
         uuid unique:true, maxSize:32
         password password: true
         username nullable: false, blank: false, unique: true, maxSize:80
-<<<<<<< HEAD
         businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
         flag nullable:true, blank:true, maxSize:32
         dateLocked nullable:true, blank:true
-=======
-        businessEmail unique:true, maxSize:100, email:true, nullable: false, blank:true
-        tk nullable: true, blank:true
-        tkExpired nullable: true, blank:true
-        employee nullable: true, blank:true
-        lastLoginTime nullable:true, blank:true
-        currentLoginDate nullable:true, blank:true
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
     }
 
     static mapping = {

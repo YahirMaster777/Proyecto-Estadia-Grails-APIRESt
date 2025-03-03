@@ -75,7 +75,6 @@ class UsersService {
         
     }
 
-<<<<<<< HEAD
 
 
       @Transactional(readOnly = true)
@@ -93,8 +92,6 @@ class UsersService {
 
         return [success: true, user: user, authorities: authorities]
     }
-=======
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {
