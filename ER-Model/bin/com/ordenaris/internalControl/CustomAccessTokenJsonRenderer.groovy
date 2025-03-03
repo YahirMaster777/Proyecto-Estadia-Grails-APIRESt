@@ -18,9 +18,11 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
 
         def originalObject = [
             username         : user.username,
+            role             : accessToken.principal.authorities[0].authority,
             access_token     : accessToken.accessToken,
+            refresh_token    : accessToken.refreshToken,
             expiration       : accessToken.expiration,
-            role             : accessToken.principal.authorities[0].authority
+            
 
         ]
 

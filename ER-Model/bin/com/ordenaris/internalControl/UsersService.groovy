@@ -2,9 +2,15 @@ package com.ordenaris.internalControl
 
 import grails.gorm.transactions.Transactional
 import grails.gorm.CriteriaBuilder
+import org.springframework.security.core.authority.AuthorityUtils
+import grails.plugin.springsecurity.rest.token.AccessToken
+import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
 class UsersService {
+def tokenGenerator, tokenStorageService
+def springSecurityService
+def authenticationEventPublisher
 
     def createUser(data, logId) {
         Users.withTransaction{uStatus ->
@@ -75,13 +81,21 @@ class UsersService {
         return user
     }
     
-    def getUserAuthorities( Users user ){
-        def userRoles = UsersRoles.findAllByUser(user)
+    def getUserAuthorities( Users username ){
+        def userRoles = UsersRoles.findAllByUser(username)
+       
         def authorities = []
         if(userRoles.size() > 0){
             authorities = userRoles.role.authority
-        }
+        }        
         return AuthorityUtils.createAuthorityList(authorities as String[])
+    }
+    
+       def getToken( userDetails ){
+        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
+        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
+        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
+        return accessToken
     }
     
 

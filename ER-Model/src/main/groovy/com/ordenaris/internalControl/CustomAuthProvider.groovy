@@ -52,22 +52,24 @@ class CustomAuthProvider implements AuthenticationProvider{
     def doAuthentication(UserPassOrgAuthToken auth){
 
       def respuestaBusqueda = userService.buscarCuenta(auth)
-      
+      println 'usuario: '+respuestaBusqueda
       def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
+      println 'roles:'+getUserAuthorities
      
       if( respuestaBusqueda ){
         
 
 
         def userDetails = new MyUserDetails(
-          respuestaBusqueda.user.username,
-          respuestaBusqueda.user.password,
-          respuestaBusqueda.user.enabled,
-          !respuestaBusqueda.user.accountExpired,
-          !respuestaBusqueda.user.passwordExpired,
-          !respuestaBusqueda.user.accountLocked,       
-          respuestaBusqueda.user.id,
-          getUserAuthorities.authorities
+          respuestaBusqueda.username,
+          respuestaBusqueda.password,
+          respuestaBusqueda.enabled,
+          !respuestaBusqueda.accountExpired,
+          !respuestaBusqueda.passwordExpired,
+          !respuestaBusqueda.accountLocked,
+          getUserAuthorities,
+          respuestaBusqueda.id
+         
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
         println auth
