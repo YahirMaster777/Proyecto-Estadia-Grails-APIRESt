@@ -22,6 +22,16 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+<<<<<<< HEAD
+=======
+	[pattern: '/recovery/**',    access: ['permitAll']],
+    [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profiles/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+	[pattern: '/apps/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
+>>>>>>> 1eeb3b8 (actualización de los servicos)
 	[pattern: '/servers/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
