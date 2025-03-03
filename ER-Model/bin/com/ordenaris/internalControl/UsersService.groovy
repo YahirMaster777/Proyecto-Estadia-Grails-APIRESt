@@ -2,9 +2,16 @@ package com.ordenaris.internalControl
 
 import grails.gorm.transactions.Transactional
 import grails.gorm.CriteriaBuilder
+import org.springframework.security.core.authority.AuthorityUtils
+import grails.plugin.springsecurity.rest.token.AccessToken
+import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
 class UsersService {
+def tokenGenerator, tokenStorageService
+def springSecurityService
+def authenticationEventPublisher
+
     def createUser(data, logId) {
         Users.withTransaction{uStatus ->
             try{
@@ -70,28 +77,28 @@ class UsersService {
     def buscarCuenta(UserPassOrgAuthToken auth){
         def username = auth.name
         Users user = Users.findByUsername(username)
-        
-        return [user:user, success:true,  authorities: authorities]
-        
+        println user.username
+        return user
     }
-
-
-
-      @Transactional(readOnly = true)
-    def buscarCuenta(UserPassOrgAuthToken auth) {
-        def username = auth.name
-        Users user = Users.findByUsername(username)
-        if (!user) {
-            return [success: false, code: 1, message: "Usuario no encontrado"]
-        }
-
-        def authorities = user.authorities.collect { it.authority }
-        if (authorities.isEmpty()) {
-            return [success: false, code: 2, message: "Usuario sin roles"]
-        }
-
-        return [success: true, user: user, authorities: authorities]
+    
+    def getUserAuthorities( Users username ){
+        def userRoles = UsersRoles.findAllByUser(username)
+       
+        def authorities = []
+        if(userRoles.size() > 0){
+            authorities = userRoles.role.authority
+        }        
+        return AuthorityUtils.createAuthorityList(authorities as String[])
     }
+    
+       def getToken( userDetails ){
+        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
+        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
+        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
+        return accessToken
+    }
+    
+
 
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {

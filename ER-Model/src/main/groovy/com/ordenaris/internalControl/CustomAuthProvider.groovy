@@ -51,32 +51,31 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
-      // def respuestaBusqueda = userService.buscarCuenta( auth )
       def respuestaBusqueda = userService.buscarCuenta(auth)
-      if( respuestaBusqueda.success ){
-        fnVerifyStatusUser( respuestaBusqueda.user )
+      println 'usuario: '+respuestaBusqueda
+      def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
+      println 'roles:'+getUserAuthorities
+     
+      if( respuestaBusqueda ){
+        
 
 
         def userDetails = new MyUserDetails(
-          respuestaBusqueda.user.username,
-          respuestaBusqueda.user.password,
-          respuestaBusqueda.user.enabled,
-          !respuestaBusqueda.user.accountExpired,
-          !respuestaBusqueda.user.passwordExpired,
-          !respuestaBusqueda.user.accountLocked,
-          respuestaBusqueda.autorities,          
-          respuestaBusqueda.user.id
+          respuestaBusqueda.username,
+          respuestaBusqueda.password,
+          respuestaBusqueda.enabled,
+          !respuestaBusqueda.accountExpired,
+          !respuestaBusqueda.passwordExpired,
+          !respuestaBusqueda.accountLocked,
+          getUserAuthorities,
+          respuestaBusqueda.id
+         
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
+        println auth
         return auth
       }else{
-        if( respuestaBusqueda.code == 1 ){
-          throw new BadCredentialsException("Usuario not found")
-        }else if( respuestaBusqueda.code == 2 ){
-          throw new BadCredentialsException("Usuario not role found")
-        }else if( respuestaBusqueda.code == 3 ){
-          throw new BadCredentialsException("Usuario loging block")
-        }
+          println 'Error'
       }
 
    	}

@@ -32,7 +32,6 @@ class MyUserDetailsService implements GrailsUserDetailsService {
 
       // or if you are using role groups:
       // def roles = user.authorities.collect { it.authorities }.flatten().unique()
-
       def authorities = roles.collect {
          new SimpleGrantedAuthority(it.authority)
       }
