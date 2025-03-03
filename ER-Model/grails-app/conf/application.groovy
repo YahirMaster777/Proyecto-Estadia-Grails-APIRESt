@@ -28,31 +28,12 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/serversApps/**', access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 ]
 
-    grails.plugin.springsecurity.filterChain.chainMap = [
+grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-<<<<<<< HEAD
-<<<<<<< HEAD
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
     [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-    [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
-=======
-=======
->>>>>>> 9daac4f (Correcciones dell app y de la configuracion del mapping)
-    [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-    [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
-    [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
-<<<<<<< HEAD
->>>>>>> b29b44b (Correcciones de usuario y apps)
-=======
-=======
-	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
-	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]	
->>>>>>> 0f1a266 (Correcciones dell app y de la configuracion del mapping)
->>>>>>> 9daac4f (Correcciones dell app y de la configuracion del mapping)
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
@@ -84,8 +65,6 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
 }
 grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
 grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
-<<<<<<< HEAD
-=======
 
 grails.plugin.springsecurity.useSecurityEventListener = true // Activar eventos
 
@@ -98,4 +77,7 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
         user.save(flush: true, failOnError: true)
     }
 }
->>>>>>> b29b44b (Correcciones de usuario y apps)
+
+grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
+grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
+

@@ -8,26 +8,15 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 class MyUserDetailsService implements GrailsUserDetailsService {
 
-//    /**
-//     * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
-//     * one role, so we give a user with no granted roles this one which gets
-//     * past that restriction but doesn't grant anything.
-//     */
-//    static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+   @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
+   UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-//    UserDetails loadUserByUsername(String username, boolean loadRoles)
-//          throws UsernameNotFoundException {
-//          	println "MyUserDetailsService -> $username"
-//       return loadUserByUsername(username)
-//    }
+      Users user = Users.findByUsername(username)
+      if (!user) throw new NoStackUsernameNotFoundException()
 
-//    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
-//    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+      def roles = user.authorities
 
-//       Users user = Users.findByUsername(username)
-//       if (!user) throw new NoStackUsernameNotFoundException()
 
-//       def roles = user.authorities
 
 
 //       def authorities = roles.collect {

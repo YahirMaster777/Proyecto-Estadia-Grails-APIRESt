@@ -1,21 +1,21 @@
-// package com.ordenaris.internalControl
+package com.ordenaris.internalControl
 
-// import grails.plugin.springsecurity.SpringSecurityService
-// import groovy.json.*
-// import javax.servlet.http.HttpServletResponse
-// import javax.servlet.ServletException
-// import javax.servlet.http.HttpServletRequest
-// import org.springframework.security.authentication.BadCredentialsException
-// import org.springframework.security.core.AuthenticationException
-// import org.springframework.security.authentication.LockedException
-// import org.springframework.security.authentication.DisabledException
-// import org.springframework.security.authentication.AccountExpiredException
-// import org.springframework.security.authentication.CredentialsExpiredException
-// import org.springframework.security.web.authentication.AuthenticationFailureHandler
+import grails.plugin.springsecurity.SpringSecurityService
+import groovy.json.*
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.ServletException
+import javax.servlet.http.HttpServletRequest
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.authentication.LockedException
+import org.springframework.security.authentication.DisabledException
+import org.springframework.security.authentication.AccountExpiredException
+import org.springframework.security.authentication.CredentialsExpiredException
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
 
-// class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHandler {
+class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-//     Integer statusCode
+    Integer statusCode
 
     void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.addHeader('WWW-Authenticate', 'X-Auth-Token')

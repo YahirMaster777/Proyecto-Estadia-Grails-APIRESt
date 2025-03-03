@@ -1,4 +1,4 @@
-// package com.ordenaris.internalControl
+package com.ordenaris.internalControl
 
 import java.util.Collection;
 
@@ -18,38 +18,38 @@ import org.springframework.util.Assert
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import grails.plugin.springsecurity.authentication.encoding.BCryptPasswordEncoder
 
-// import grails.util.Holders
+import grails.util.Holders
 
-// class CustomAuthProvider implements AuthenticationProvider{
+class CustomAuthProvider implements AuthenticationProvider{
 
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
 	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
 
-// 	Authentication authenticate(Authentication auth) throws AuthenticationException{
-// 		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
-// 		UserPassOrgAuthToken authentication = (UserPassOrgAuthToken) auth
-// 		return doAuthentication(authentication)
-// 	}
+	Authentication authenticate(Authentication auth) throws AuthenticationException{
+		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
+		UserPassOrgAuthToken authentication = (UserPassOrgAuthToken) auth
+		return doAuthentication(authentication)
+	}
 
-// 	@Override
-// 	boolean supports(Class authentication){
-// 		return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
-// 	}
+	@Override
+	boolean supports(Class authentication){
+		return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
+	}
 
-// 	def fnVerifyStatusUser( user ){
-// 		if (!user.enabled){
-// 			throw new DisabledException("Account disabled")
-// 		}
-// 		if (user.accountExpired){
-// 			throw new AccountExpiredException("Account expired")
-// 		}
-// 		if (user.accountLocked){
-// 			throw new LockedException("Account locked")
-// 		}
-// 	}
+	def fnVerifyStatusUser( user ){
+		if (!user.enabled){
+			throw new DisabledException("Account disabled")
+		}
+		if (user.accountExpired){
+			throw new AccountExpiredException("Account expired")
+		}
+		if (user.accountLocked){
+			throw new LockedException("Account locked")
+		}
+	}
 
-//     // our custom authorization logic
-//     def doAuthentication(UserPassOrgAuthToken auth){
+    // our custom authorization logic
+    def doAuthentication(UserPassOrgAuthToken auth){
 
       // def respuestaBusqueda = userService.buscarCuenta( auth )
       def respuestaBusqueda = userService.buscarCuenta(auth)

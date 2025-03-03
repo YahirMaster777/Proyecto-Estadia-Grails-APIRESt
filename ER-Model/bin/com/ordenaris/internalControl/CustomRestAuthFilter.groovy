@@ -5,6 +5,10 @@ import javax.servlet.ServletException
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
+<<<<<<< HEAD
+=======
+
+>>>>>>> 32e19a9 (implementacion de login dinamico)
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.security.core.Authentication
