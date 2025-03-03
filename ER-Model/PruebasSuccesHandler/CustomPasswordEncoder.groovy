@@ -1,4 +1,4 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
 
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder
 import org.springframework.security.authentication.encoding.PasswordEncoderUtils
@@ -61,7 +61,7 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         } else if ("SHA-256-1".equalsIgnoreCase(algorithm)) {
             return rawPass.encodeAsSHA256()
         } else {
-            // Other encryption methods using Users configurations
+            // Other encryption methods using user configurations
             return new String(Hex.encode(digest))
         }
     }
@@ -88,19 +88,19 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
     @Autowired
     SpringSecurityService springSecurityService
 
-    @Listener(Users)
+    @Listener(User)
     void onPreInsertEvent(PreInsertEvent event) {
         encodePasswordForEvent(event)
     }
 
-    @Listener(Users)
+    @Listener(User)
     void onPreUpdateEvent(PreUpdateEvent event) {
         encodePasswordForEvent(event)
     }
 
     private void encodePasswordForEvent(AbstractPersistenceEvent event) {
-        if (event.entityObject instanceof Users) {
-            Users u = event.entityObject as Users
+        if (event.entityObject instanceof User) {
+            User u = event.entityObject as User
             if (u.password && ((event instanceof  PreInsertEvent) || (event instanceof PreUpdateEvent && u.isDirty('password')))) {
                 event.getEntityAccess().setProperty('password', encodePasswordSpring(u.password))
             }

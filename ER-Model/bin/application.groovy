@@ -52,3 +52,6 @@ grails.plugin.springsecurity.rest.login.passwordPropertyName='password' // Param
 grails.plugin.springsecurity.rest.login.endpointUrl='/api/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 
+grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
+grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
+

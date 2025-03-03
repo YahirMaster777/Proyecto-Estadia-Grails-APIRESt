@@ -58,3 +58,6 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
         user.save(flush: true, failOnError: true)
     }
 }
+grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
+grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
+
