@@ -1,4 +1,6 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
+
+import com.ordenaris.recibeya.*
 
 import java.util.Collection;
 
@@ -21,7 +23,7 @@ import grails.util.Holders
 class CustomAuthProvider implements AuthenticationProvider{
 
 	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
-	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
+	def userService = Holders.grailsApplication.mainContext.getBean('userService')
 
 	Authentication authenticate(Authentication auth) throws AuthenticationException{
 		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")

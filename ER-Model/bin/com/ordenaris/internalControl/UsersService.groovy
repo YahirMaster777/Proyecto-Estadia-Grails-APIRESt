@@ -68,6 +68,23 @@ class UsersService {
         }
     }   
 
+
+      @Transactional(readOnly = true)
+    def buscarCuenta(UserPassOrgAuthToken auth) {
+        def username = auth.name
+        Users user = Users.findByUsername(username)
+        if (!user) {
+            return [success: false, code: 1, message: "Usuario no encontrado"]
+        }
+
+        def authorities = user.authorities.collect { it.authority }
+        if (authorities.isEmpty()) {
+            return [success: false, code: 2, message: "Usuario sin roles"]
+        }
+
+        return [success: true, user: user, authorities: authorities]
+    }
+
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {
         try {

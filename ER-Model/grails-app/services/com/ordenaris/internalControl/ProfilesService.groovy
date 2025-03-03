@@ -95,69 +95,57 @@ class ProfilesService {
             }
         }
     }
-    
-    def infoProfile(params, logId){
-        try{
-            new Logs("Informacion del perfil", "Procesando solicitud",logId, "INFO", true, [data:params.uuid])
-            Utils.logger(logId,"Informacion del perfil", "Procesando solicitud")
-            def permissions = TemplatePermissions.findAllByUuidTemplate(params.uuid).collect { permissions ->
-                return [  
-                    permiso: permissions.permissionId
-                ]
-            }
-            
-            // def permiso = Permissions.findByUuid(permissions.permissionId){permiso ->
-            //     return[
-            //         uuidSeccion: permiso.uuidSection
-            //     ]
-            
-            // }
-            
-            def secciones = Sections.findByUuid(){ seccion ->
-                return[
-                    nombre: seccion.name,
-                    permisos: permissions
-                ]
-                
-            }
-            
-            def section = TemplatePermissions.findAllByUuidTemplateAnd(params.uuid).collect{ section ->
-                return [
-                    seccion :section.sectionId,
-                    permisos: permissions
-                ]
-                
-            }
-            
-            
-          
-            def profile = Templates.findByUuid(params.uuid).collect { profile ->
-                return [
-                    uuid       : profile.uuid,
-                    name       : profile.name,
-                    description: profile.description,
-                    secciones: section
-                ]
-            }
-            
-            if (!profile) {
-                new Logs("Información del perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
-                Utils.logger(logId, "Información del perfil", "No se encontró la información solicitada")
-                return TypeError.informationNotFound(logId)
-            }
-            
+    def infoProfile(params, logId) {
+    try {
+        new Logs("Información del perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
+        Utils.logger(logId, "Información del perfil", "Procesando solicitud")
 
-            new Logs("Informacion del perfil", "Perfil Encontrado", logId, "INFO", true, [data:params.uuid])
-            Utils.logger(logId,"Informacion del perfil", "Perfil Encontrado")
-            return [data:[success:true,data:profile], status:200]
-            
-            
-        }catch(e){
-            new Logs("Informacion del perfil","Error en la solicitud", logId, e, [ : ])
-            Utils.logger(logId, "Informacion del perfil", "Error en la solicitud", "ERROR: ${e.getMessage()}")
-            return TypeError.internalError(logId)
+        def profile = Templates.findByUuid(params.uuid)
+        if (!profile) {
+            new Logs("Información del perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
+            Utils.logger(logId, "Información del perfil", "No se encontró la información solicitada")
+            return TypeError.informationNotFound(logId)
         }
+
+        def seccionesAgrupadas = [:]
+
+        TemplatePermissions.findAllByUuidTemplate(params.uuid).each { templatePermission ->
+            def permiso = templatePermission.permission 
+            def seccion = permiso?.section  
+
+            if (seccion && permiso) {
+                if (!seccionesAgrupadas.containsKey(seccion.name)) {
+                    seccionesAgrupadas[seccion.name] = [:]
+                }
+                seccionesAgrupadas[seccion.name][permiso.name] = permiso.description
+            }
+        }
+
+        def secciones = seccionesAgrupadas.collect { nombreSeccion, permisos ->
+            return [
+                seccion  : nombreSeccion,
+                permisos : permisos
+            ]
+        }
+
+        def response = [
+            uuid       : profile.uuid,
+            name       : profile.name,
+            description: profile.description,
+            secciones  : secciones
+        ]
+
+        new Logs("Información del perfil", "Perfil encontrado", logId, "INFO", true, [data: params.uuid])
+        Utils.logger(logId, "Información del perfil", "Perfil encontrado")
+
+        return [data: [success: true, data: response], status: 200]
+
+    } catch (Exception e) {
+        new Logs("Información del perfil", "Error en la solicitud", logId, "ERROR", false, [:])
+        Utils.logger(logId, "Información del perfil", "Error en la solicitud: ${e.getMessage()}")
+        return TypeError.internalError(logId)
     }
+}
 
 
 }

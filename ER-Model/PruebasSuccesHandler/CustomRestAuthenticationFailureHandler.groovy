@@ -1,4 +1,4 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
 
 import grails.plugin.springsecurity.SpringSecurityService
 import groovy.json.*

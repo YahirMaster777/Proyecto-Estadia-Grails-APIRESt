@@ -1,5 +1,4 @@
-package com.ordenaris.internalControl
-
+package com.ordenaris.recibeya
 
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import org.springframework.security.core.GrantedAuthority

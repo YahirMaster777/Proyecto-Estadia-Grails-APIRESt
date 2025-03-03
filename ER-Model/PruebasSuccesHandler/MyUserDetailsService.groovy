@@ -1,4 +1,5 @@
-package com.ordenaris.internalControl
+package com.ordenaris.recibeya
+
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.userdetails.GrailsUserDetailsService
 import grails.plugin.springsecurity.userdetails.NoStackUsernameNotFoundException
@@ -6,6 +7,7 @@ import grails.gorm.transactions.Transactional
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+
 class MyUserDetailsService implements GrailsUserDetailsService {
 
    /**
@@ -24,12 +26,13 @@ class MyUserDetailsService implements GrailsUserDetailsService {
    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-      Users user = Users.findByUsername(username)
+      User user = User.findByUsername(username)
       if (!user) throw new NoStackUsernameNotFoundException()
 
       def roles = user.authorities
 
-
+      // or if you are using role groups:
+      // def roles = user.authorities.collect { it.authorities }.flatten().unique()
 
       def authorities = roles.collect {
          new SimpleGrantedAuthority(it.authority)
