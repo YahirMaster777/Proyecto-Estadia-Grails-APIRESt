@@ -14,6 +14,7 @@ class UsersController {
         Utils.logger(logId,"Registrar usuario","Inicio de solicuitud")
         def isValidData = validFormatData("Registrar usuario", data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
+        
         def responseService= UsersService.createUser(data, logId)
         return respond(responseService.data, status:responseService.status)
     }

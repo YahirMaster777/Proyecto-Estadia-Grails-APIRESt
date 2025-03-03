@@ -13,8 +13,8 @@ class UsersService {
                 Utils.logger(logId,"Registrar usuario","Procesando Solicitud", "Nombre de usuario:${data.username}")
                 def employee = Employees.findByUuid(data.employeeUuid)
                 if (!employee) {
-                    new Logs( "Actualizar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
-                    Utils.logger(logId, "Actualizar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
+                    new Logs( "Registrar usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidEmployee:data.employeeUuid ] )
+                    Utils.logger(logId, "Registrar usuario", "No se encontró el registro", "Empleado:${data.employeeUuid}")
                     return TypeError.informationNotFound( logId )
                 }
                 def user = new Users()
@@ -67,6 +67,15 @@ class UsersService {
             }
         }
     }   
+    @Transactional(readOnly = true)
+    def buscarCuenta(UserPassOrgAuthToken auth){
+        def username = auth.name
+        Users user = Users.findByUsername(username)
+        
+        return [user:user, success:true,  authorities: authorities]
+        
+    }
+
 
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {

@@ -67,6 +67,15 @@ class UsersService {
             }
         }
     }   
+    @Transactional(readOnly = true)
+    def buscarCuenta(UserPassOrgAuthToken auth){
+        def username = auth.name
+        Users user = Users.findByUsername(username)
+        
+        return [user:user, success:true,  authorities: authorities]
+        
+    }
+
 
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {

@@ -16,19 +16,23 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/css/**',      access: ['permitAll']],
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']],
-    [pattern: '/create/**',      access: ['ROLE_ROOT', 'ROLE_ADMIN' ]],
-    [pattern: '/update/**',      access: ['ROLE_ROOT' ]],
-    [pattern: '/read/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM' ]],
-    [pattern: '/delete/**',      access: ['ROLE_ROOT' ]],
-    [pattern: '/list/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM' ]],
-    [pattern: '/all/**',         access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM' ]],
+    [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profiles/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    // [pattern: '/read/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/list/**',        access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']],
+    // [pattern: '/all/**',         access: ['ROLE_ROOT','ROLE_ADMIN', 'ROLE_CUSTOM']]
 ]
 
-grails.plugin.springsecurity.filterChain.chainMap = [
+    grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
     [pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
-    [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"],	
+    [pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"]
+    
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
@@ -47,3 +51,7 @@ grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username' // Par
 grails.plugin.springsecurity.rest.login.passwordPropertyName='password' // Parametro para el inicio de sesión.
 grails.plugin.springsecurity.rest.login.endpointUrl='/api/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
+
+grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
+grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
+

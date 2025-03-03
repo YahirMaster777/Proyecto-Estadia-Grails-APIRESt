@@ -12,17 +12,21 @@ public class Utils {
     }
 
     public static dataRequired(hashMapData, process, logId) {
-        for (data in hashMapData) {
-            def key = data.keySet().first()
-            def value = data.get(key)
+        for (validData in hashMapData) {
+            def key = validData.keySet().first()
+            def value = validData.get(key)
             if (!value) {
-                new Logs(process, "Es necesario enviar el dato", logId, "ERROR", false, [type:key])
+                new Logs(process, "Es necesario enviar el dato", logId, "ERROR", false, [key:value])
                 logger(logId, process, "Es necesario enviar el dato", key)
                 return TypeError.missingParameter(key, logId)
             }
         }
         return [data: [success: true], status: 200]
     }
+    
+    
+    
+    
 
     public static validFormatUuid(process, name, uuid, logId) {
         if(!uuid.uuidFormat()){
@@ -44,16 +48,16 @@ public class Utils {
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.max)
             return TypeError.incorrectFormat( "máximo", "número entero positivo", logId )
         }
-        if (params.sort && (hashMapFields.indexOf(params.sort) < 0)){
-            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.sort ] )
-            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.sort)
-            return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
-        }
         if (params.order && (['asc', 'desc'].indexOf(params.order.toLowerCase()) < 0)){
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.order ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.order)
             return TypeError.incorrectFormat("orden de lista","asc o desc", logId )
         }
+        if (params.sort && (hashMapFields.indexOf(params.sort) < 0)){
+            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.sort ] )
+            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.sort)
+            return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
+        }
         return [ data: [success: true], status:200]
-    }
+    }    
 }
