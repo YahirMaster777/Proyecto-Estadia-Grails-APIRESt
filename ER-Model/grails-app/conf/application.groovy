@@ -17,6 +17,11 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/images/**',   access: ['permitAll']],
 	[pattern: '/**/favicon.ico', access: ['permitAll']],
 	[pattern: '/recovery/**',    access: ['permitAll']],
+    [pattern: '/apps/**',        access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profiles/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/profilePermissions/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
+    [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
 	[pattern: '/apps/**',        access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/servers/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
@@ -60,4 +65,3 @@ grails.plugin.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appC
 }
 grails.plugin.springsecurity.userDetailsService = 'myUserDetailsService'
 grails.plugin.springsecurity.rest.token.rendering.jsonRenderer = 'com.ordenaris.internalControl.CustomAccessTokenJsonRenderer'
-

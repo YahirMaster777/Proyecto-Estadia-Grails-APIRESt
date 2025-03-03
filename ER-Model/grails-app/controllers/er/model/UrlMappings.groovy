@@ -7,7 +7,7 @@ class UrlMappings {
                 group "/create", {
                     post "/app"(controller:'apps', action: 'save')
                     post "/user"(controller:'users', action: 'create')
-                    post "/employee"(controller:'employees', action:'save')
+                    post "/employee"(controller:'employees', action:'create')
                     post "/profile"(controller:'profiles', action:'save')
                     post "/profile-permissions"(controller:'profilePermissions', action:'save')
                     post "/app-conections"(controller:'appConnections', action:'save')
@@ -42,13 +42,6 @@ class UrlMappings {
                     constraints {
                         uuid(matches: '^[a-fA-F0-9]{32}$')
                     }
-                }
-                group "/delete", {
-                    delete "/user"(controller:'users', action: 'delete')
-                    put "/employee"(controller:'employees', action:'delete')
-                }
-                constraints {
-                    uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
             group "/list", {

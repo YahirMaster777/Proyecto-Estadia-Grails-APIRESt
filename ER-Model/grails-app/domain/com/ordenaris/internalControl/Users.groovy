@@ -20,13 +20,12 @@ class Users implements Serializable {
     boolean accountLocked
     Employees employee
     boolean passwordExpired
-<<<<<<< HEAD
     String flag
     Date dateLocked
-=======
     Date lastLoginTime
     Date currentLoginDate
->>>>>>> 38cd9f8 (Correcciones de usuario y apps)
+    String flag
+    Date dateLocked
 
     Set<Roles> getAuthorities() {
         (UsersRoles.findAllByUser(this) as List<UsersRoles>)*.role as Set<Roles>
