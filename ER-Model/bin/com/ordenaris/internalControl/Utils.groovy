@@ -61,7 +61,6 @@ public class Utils {
             return TypeError.incorrectFormat("orden de lista","asc o desc", logId )
         }
         if (params.sort && (hashMapFields.indexOf(params.sort) < 0)){
-<<<<<<< HEAD
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ sort: params.sort ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", "Orden: ${params.sort}")
             return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
@@ -119,12 +118,4 @@ public class Utils {
             ]
         ]
     }
-=======
-            new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ data: params.sort ] )
-            logger(logId,"Páginado ${table}", "No coincide el formato esperado", params.sort)
-            return TypeError.incorrectFormat("orden", "${hashMapFields}", logId)
-        }
-        return [ data: [success: true], status:200]
-    }    
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 }

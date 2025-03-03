@@ -1,7 +1,5 @@
 package com.ordenaris.internalControl
 
-<<<<<<< HEAD
-=======
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder
 import org.springframework.security.authentication.encoding.PasswordEncoderUtils
 import org.springframework.security.crypto.codec.Hex
@@ -9,7 +7,6 @@ import org.springframework.util.Assert
 
 import java.security.MessageDigest
 
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 import grails.plugin.springsecurity.SpringSecurityService
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
 import org.grails.datastore.mapping.engine.event.PreInsertEvent
@@ -42,22 +39,12 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         this.algorithm = algorithm
     }
 
-<<<<<<< HEAD
-
-//     CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
-//         super()
-//         setEncodeHashAsBase64(encodeHashAsBase64);
-//         this.algorithm = algorithm;
-//         getMessageDigest();
-//     }
-=======
     CustomPasswordEncoder(String algorithm, boolean encodeHashAsBase64) throws IllegalArgumentException {
         super()
         setEncodeHashAsBase64(encodeHashAsBase64);
         this.algorithm = algorithm;
         getMessageDigest();
     }
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
 
     
     String encodePassword(String rawPass, Object salt) {
@@ -74,11 +61,7 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
         } else if ("SHA-256-1".equalsIgnoreCase(algorithm)) {
             return rawPass.encodeAsSHA256()
         } else {
-<<<<<<< HEAD
-            // Other encryption methods using Users configurations
-=======
             // Other encryption methods using user configurations
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
             return new String(Hex.encode(digest))
         }
     }
@@ -127,8 +110,4 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
     private String encodePasswordSpring(String password) {
         springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9

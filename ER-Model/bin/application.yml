@@ -126,4 +126,8 @@ appName: "erModel"
 
 #rootLogs: "C:/Users/ord-back08/Documents/proyectosGrails"
 # rootLogs: "C:/Users/ord-back7/Desktop/Logs"
+<<<<<<< HEAD
 # rootLogs: "C:/Users/marvi/Escritorio/Logs"
+=======
+rootLogs: "C:/Users/marvi/Escritorio/Logs"
+>>>>>>> b3d094ed72e530a5a9a125e6e8f6f1d70ff825f9
