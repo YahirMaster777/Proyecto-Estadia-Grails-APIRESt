@@ -57,7 +57,7 @@ class CustomAuthProvider implements AuthenticationProvider{
       println 'roles:'+getUserAuthorities
      
       if( respuestaBusqueda ){
-        
+        // fnVerifyStatusUser( respuestaBusqueda )
 
 
         def userDetails = new MyUserDetails(
