@@ -37,6 +37,8 @@ class CustomAuthProvider implements AuthenticationProvider{
 	}
 
 	def fnVerifyStatusUser( user ){
+    println "---"*100
+    println user
 		if (!user.enabled){
 			throw new DisabledException("Account disabled")
 		}
@@ -55,11 +57,9 @@ class CustomAuthProvider implements AuthenticationProvider{
       println 'usuario: '+respuestaBusqueda
       def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
       println 'roles:'+getUserAuthorities
-     
+      def respuestainfo = userService.infoUsers(respuestaBusqueda)
+      println "--> " + respuestainfo
       if( respuestaBusqueda ){
-        
-
-
         def userDetails = new MyUserDetails(
           respuestaBusqueda.username,
           respuestaBusqueda.password,
@@ -69,7 +69,6 @@ class CustomAuthProvider implements AuthenticationProvider{
           !respuestaBusqueda.accountLocked,
           getUserAuthorities,
           respuestaBusqueda.id
-         
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
         println auth
@@ -77,7 +76,5 @@ class CustomAuthProvider implements AuthenticationProvider{
       }else{
           println 'Error'
       }
-
    	}
-
 }
