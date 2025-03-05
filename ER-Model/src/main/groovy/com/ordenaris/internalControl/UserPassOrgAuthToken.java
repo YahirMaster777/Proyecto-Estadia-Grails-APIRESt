@@ -11,7 +11,6 @@ public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
     private final Object credentials;
     private final Object principal;
 
-
     public UserPassOrgAuthToken(Object principal, Object credentials) {
         super(null);
         this.principal = principal;

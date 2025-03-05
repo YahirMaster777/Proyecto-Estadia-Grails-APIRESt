@@ -13,7 +13,8 @@ import com.ordenaris.internalControl.Settings
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
-import com.ordenaris.internalControl.Settings;
+import com.ordenaris.internalControl.Templates;
+import com.ordenaris.internalControl.TemplatePermissions;
 
 class BootStrap {
     def init = { servletContext ->
@@ -51,20 +52,20 @@ class BootStrap {
             def section2 = new Sections(url:'internalControl.com', name:'Servidores', description:'Seccion que permite ver todo lo relacionado con los servidores').save(flush:true)
             def section3 = new Sections(url:'internalControl.com', name:'Empleados', description:'Seccion que permite ver todo lo relacionado con los empleados').save(flush:true)
             
-            def section1permission1 = new Permissions(alias:'create_app', section:section1,uuidSection:section1.uuid, name:'Crear Apps',description:'Permiso que permite crear apps').save(flush:true)
-            def section1permission2 = new Permissions(alias:'delete_app', section:section1,uuidSection:section1.uuid, name:'Eliminar Apps',description:'Permiso que permite eliminar apps').save(flush:true)
-            def section1permission3 = new Permissions(alias:'edit_app', section:section1,uuidSection:section1.uuid, name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
-            def section1permission4 = new Permissions(alias:'view_app', section:section1,uuidSection:section1.uuid, name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
+            def section1permission1 = new Permissions(alias:'create_app', section:section1, name:'Crear Apps',description:'Permiso que permite crear apps').save(flush:true)
+            def section1permission2 = new Permissions(alias:'delete_app', section:section1, name:'Eliminar Apps',description:'Permiso que permite eliminar apps').save(flush:true)
+            def section1permission3 = new Permissions(alias:'edit_app', section:section1, name:'Editar Apps',description:'Permiso que permite editar apps').save(flush:true)
+            def section1permission4 = new Permissions(alias:'view_app', section:section1, name:'Ver Apps',description:'Permiso que permite ver apps').save(flush:true)
             
-            def section2permission1 = new Permissions(alias:'create_server', section:section2,uuidSection:section2.uuid, name:'Crear servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission2 = new Permissions(alias:'edit_server', section:section2,uuidSection:section2.uuid, name:'Editar servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission3 = new Permissions(alias:'delete_server', section:section2,uuidSection:section2.uuid, name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
-            def section2permission4 = new Permissions(alias:'view_server', section:section2,uuidSection:section2.uuid, name:'Ver servidores',description:'Permiso que permite').save(flush:true)
+            def section2permission1 = new Permissions(alias:'create_server', section:section2, name:'Crear servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission2 = new Permissions(alias:'edit_server', section:section2, name:'Editar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission3 = new Permissions(alias:'delete_server', section:section2, name:'Eliminar servidor',description:'Permiso que permite').save(flush:true)
+            def section2permission4 = new Permissions(alias:'view_server', section:section2, name:'Ver servidores',description:'Permiso que permite').save(flush:true)
             
-            def section3permission1 = new Permissions(alias:'create_employee', section:section3,uuidSection:section3.uuid, name:'Crear Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission2 = new Permissions(alias:'delete_employee', section:section3,uuidSection:section3.uuid, name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission3 = new Permissions(alias:'edit_employee', section:section3,uuidSection:section3.uuid, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
-            def section3permission4 = new Permissions(alias:'view_employee', section:section3,uuidSection:section3.uuid, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission1 = new Permissions(alias:'create_employee', section:section3, name:'Crear Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission2 = new Permissions(alias:'delete_employee', section:section3, name:'Eliminar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission3 = new Permissions(alias:'edit_employee', section:section3, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
+            def section3permission4 = new Permissions(alias:'view_employee', section:section3, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
     
             def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
             def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
@@ -89,11 +90,20 @@ class BootStrap {
                 new UsersRoles(user: userCustom2, role: roleCustom).save(flush: true)
             }
             
+            def template1 = new Templates (name: "test1",description: "root").save(flush:true)
+            def template2 = new Templates (name: "test",description: "admin").save(flush:true)
+            def template3 = new Templates (name: "test2",description: "custom").save(flush:true)
+            def template4 = new Templates (name: "test3",description: "pruebas").save(flush:true)
+            
             def listUserPermission1 = new UserSectionPermission (section: section1, permission: section1permission1, user: userRoot1).save(flush:true)
             def listUserPermission2 = new UserSectionPermission (section: section1, permission: section1permission2, user: userRoot1).save(flush:true)
             def listUserPermission3 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
-            def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
+            def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission4, user: userRoot1).save(flush:true)
             
+            new TemplatePermissions (template: template1, description: "weqrtrt@gmail.com",permission: section1permission1).save(flush:true)
+            new TemplatePermissions (template: template2, description: "wretrytuyy@gmail.com",permission: section1permission2).save(flush:true)
+            new TemplatePermissions (template: template3, description: "esrytruytuuyi@gmail.com",permission: section1permission3).save(flush:true)
+            new TemplatePermissions (template: template4, description: "retreytruyuy@gmail.com",permission: section1permission4).save(flush:true)
         }
         def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
         servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)

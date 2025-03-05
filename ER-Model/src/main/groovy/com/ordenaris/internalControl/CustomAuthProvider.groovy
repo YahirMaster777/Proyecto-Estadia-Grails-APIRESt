@@ -35,30 +35,45 @@ class CustomAuthProvider implements AuthenticationProvider{
 	boolean supports(Class authentication){
 		return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
 	}
+  
 
 	def fnVerifyStatusUser( user ){
-    println "---"*100
-    println user
+		def code
+		if(!user){
+			code =  518
+			throw new BadCredentialsException("Account notFound")
+		}
 		if (!user.enabled){
-			throw new DisabledException("Account disabled")
-		}
-		if (user.accountExpired){
-			throw new AccountExpiredException("Account expired")
-		}
-		if (user.accountLocked){
-			throw new LockedException("Account locked")
-		}
+		     code = 'Cuenta Inhabilitada'
+			  throw new DisabledException("Account disabled")
+  		}
+  		if (user.accountExpired){
+  		    code = 'Cuenta Expirada'
+  			throw new AccountExpiredException("No Roles found from User")
+  			
+  		}
+  		if (user.accountLocked){
+  		   code ='Cuenta Bloqueada'
+  			throw new LockedException("Account locked")
+  			
+  		}
+  		
+  		if (user.passwordExpired){
+  		    code =  'Password Expirada'
+  			throw new LockedException("Account locked")
+  			
+  		}
 	}
-
+  
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
-
       def respuestaBusqueda = userService.buscarCuenta(auth)
-      println 'usuario: '+respuestaBusqueda
       def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
-      println 'roles:'+getUserAuthorities
-      def respuestainfo = userService.infoUsers(respuestaBusqueda)
-      println "--> " + respuestainfo
+      def permisos = userService.obtenerPermisos(respuestaBusqueda)
+    //   println getUserAuthorities
+      fnVerifyStatusUser(respuestaBusqueda)
+      
+      
       if( respuestaBusqueda ){
         def userDetails = new MyUserDetails(
           respuestaBusqueda.username,
@@ -71,10 +86,9 @@ class CustomAuthProvider implements AuthenticationProvider{
           respuestaBusqueda.id
         )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
-        println auth
         return auth
-      }else{
-          println 'Error'
+      } else {
+           code
       }
    	}
 }
