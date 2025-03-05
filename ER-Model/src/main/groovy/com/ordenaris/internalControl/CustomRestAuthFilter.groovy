@@ -24,12 +24,15 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import org.springframework.security.authentication.AuthenticationDetailsSource
 import grails.util.Holders
 
-class CustomRestAuthFilter extends RestAuthenticationFilter {
 
+
+class CustomRestAuthFilter extends RestAuthenticationFilter {
+	
 	AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource
 	
 	CustomRestAuthenticationFailureHandler authenticationFailureHandler = new CustomRestAuthenticationFailureHandler()
 	CustomRestAuthenticationSuccessHandler authenticationSuccessHandler = new CustomRestAuthenticationSuccessHandler()
+	
 
 	private UserPassOrgAuthToken extractCredentialsFromJsonPayload(HttpServletRequest httpServletRequest){
 		String username = httpServletRequest.JSON.username
@@ -48,10 +51,9 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
 		String endpointUrl =  "/api/login"
 		// authenticationFailureHandler.setStatusCode( HttpServletResponse.SC_UNAUTHORIZED )
-
+		
 		HttpServletRequest httpServletRequest = request as HttpServletRequest
 		HttpServletResponse httpServletResponse = response as HttpServletResponse
-
 		def actualUri =  httpServletRequest.requestURI - httpServletRequest.contextPath
 		if (actualUri == endpointUrl){
 

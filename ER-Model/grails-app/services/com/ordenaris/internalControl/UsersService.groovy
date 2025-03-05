@@ -77,13 +77,17 @@ def authenticationEventPublisher
     def buscarCuenta(UserPassOrgAuthToken auth){
         def username = auth.name
         Users user = Users.findByUsername(username)
-        println user.username
         return user
+    }
+    
+    def obtenerPermisos(Users username){
+        def permisos = UserSectionPermission.findAllByUser(username)
+        println permisos
+        return permisos
     }
     
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
-       
         def authorities = []
         if(userRoles.size() > 0){
             authorities = userRoles.role.authority

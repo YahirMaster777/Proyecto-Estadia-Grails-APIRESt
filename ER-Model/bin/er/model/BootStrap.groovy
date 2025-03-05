@@ -92,7 +92,7 @@ class BootStrap {
             def listUserPermission1 = new UserSectionPermission (section: section1, permission: section1permission1, user: userRoot1).save(flush:true)
             def listUserPermission2 = new UserSectionPermission (section: section1, permission: section1permission2, user: userRoot1).save(flush:true)
             def listUserPermission3 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
-            def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission3, user: userRoot1).save(flush:true)
+            def listUserPermission4 = new UserSectionPermission (section: section1, permission: section1permission4, user: userRoot1).save(flush:true)
             
         }
         def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')

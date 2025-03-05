@@ -28,7 +28,6 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
 
     // Encryption Number (Enhanced Security)
     private int iterations = 1;
-
     CustomPasswordEncoder() {
         // The default constructor of the current class, because the parent class has no empty constructor, so we must call the parent class parametric construct, where the incoming parameters must be the encryption rules of the parent class, otherwise the error will be reported.
         super("SHA-256")
