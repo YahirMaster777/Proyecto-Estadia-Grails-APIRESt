@@ -8,7 +8,6 @@ class Permissions {
     String alias
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     Sections section
-    String uuidSection
     
     static mapping ={
         version false

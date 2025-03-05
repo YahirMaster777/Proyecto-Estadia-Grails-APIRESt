@@ -6,30 +6,30 @@ class UrlMappings {
         group "/admin", {
             group "/create", {
                 post "/app"(controller:'apps', action: 'save')
-                post "/user"(controller:'users', action: 'create')
+                post "/app-conections"(controller:'appConnections', action:'save')
                 post "/employee"(controller:'employees', action:'save')
                 post "/profile"(controller:'profiles', action:'save')
                 post "/profile-permissions"(controller:'profilePermissions', action:'save')
-                post "/app-conections"(controller:'appConnections', action:'save')
                 post "/section"(controller:'sections', action:'save')
+                post "/user"(controller:'users', action: 'create')
             }
             
             group "/$uuid", {
                 group "/update",{
-                    put "/user"(controller:'users', action: 'update')
                     put "/employee"(controller:'employees', action: 'update')
                     put "/profile"(controller:'profiles', action:'update')
+                    put "/user"(controller:'users', action: 'update')
                 }
                 group "/read", {
-                    get "/user"(controller:'users', action: 'read')
-                    get "/profile"(controller:'profiles', action:'info')
                     get "/app"(controller:'apps', action:'info')
+                    get "/profile"(controller:'profiles', action:'info')
+                    get "/user"(controller:'users', action: 'read')
                 }
                 group "/delete", {
-                    delete "/user"(controller:'users', action: 'delete')
-                    put "/employee"(controller:'employees', action:'delete')
                     delete "/app"(controller:'apps', action:'delete')
+                    put "/employee"(controller:'employees', action:'delete')
                     delete "/profile"(controller:'profiles', action:'delete')
+                    delete "/user"(controller:'users', action: 'delete')
                 }
                 group "/activate",{
                    patch "/app"(controller:'apps', action:'activate')
@@ -49,8 +49,8 @@ class UrlMappings {
             
         }
         group "/all", {
-            get "/user"(controller:'users', action: 'all')
             get "/app"(controller:'apps', action:'all')
+            get "/user"(controller:'users', action: 'all')
         }
     
     group "/public", {

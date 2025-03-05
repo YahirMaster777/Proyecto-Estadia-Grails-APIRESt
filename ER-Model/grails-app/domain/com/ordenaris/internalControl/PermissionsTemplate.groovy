@@ -5,7 +5,6 @@ class TemplatePermissions {
     Date lastUpdated
     String description
     Permissions permission
-    String uuidTemplate
   
     static belongsTo=[template : Templates]
     
@@ -16,7 +15,6 @@ class TemplatePermissions {
     
     
     static constraints = {
-        uuidTemplate maxSize:32
         description maxSize:150
     }
 }
