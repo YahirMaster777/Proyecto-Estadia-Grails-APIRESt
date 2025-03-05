@@ -33,6 +33,59 @@ class ProfilesService {
             }
         }
     }
+    
+    def activateProfile(params, logId){
+        Templates.withTransaction { status ->
+            try{
+                new Logs("Activar Perfil", "Procesando solicitud", logId, "INFO", true , [data:[params.uuid]])
+                Utils.logger(logId,"Activar Perfil", "Procesando solicitud")
+                def profile = Templates.findByUuid(params.uuid)
+                
+                if(!profile){
+                    new Logs("Activar Perfil", "No se encontro la informacion solicitda",logId, "INFO",false,  [data:[para.uuid]])
+                    Utils.logger(logId,"Activar Perfil", "No se encontro la informacion solicitada")
+                    return TypeError.informationNotFound(logId)
+                }
+                profile.status ="Activo"
+                profile.save(failOnError:true, flush:true)
+                new Logs("Activar Perfil","Se activo el perfil", logId, "INFO", true, [data:[profile.name]])
+                Utils.logger(logId,"Activar Perfil", "Se activo el perfil", "Perfil:${profile.name}")
+                return [data:[success:true], status:200]
+            }catch(e){
+                new Logs("Activar Perfil","Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Activar Perfil", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
+    
+    
+    def deactivateProfile(params, logId){
+        Templates.withTransaction{status ->
+            try{
+                new Logs("Desactivar Perfil", "Procesando solicitud",logId, "INFO",true, [data:params.uuid])
+                Utils.logger(logId, "Desactivar Perfil", "Procesando solicitud")
+                def profile = Templates.findByUuid(params.uuid){
+                    new Logs("Desactivar Perfil", "No se encontro la informacion solicitada", logId, "INFO", false, [data:[params.uuid]])
+                    Utils.logger(logId, "Desactivar Perfil", "Nose encontro la informacion solicitada")
+                }
+                
+                profile.status = "Inactivo"
+                profile.save(failOnError:true, flush:true)
+                new Logs("Desactivar Perfil", "Se desactivo el perfil",logId, "INFO", true, [data:[profile.name]])
+                Utils.logger(logId,"Desactivar Perfil","Se desactivo el perfil", "Perfil:${profile.name}")
+                return [data:[success:true],status:200]
+            }catch(e){
+                new Logs("Desactivar Perfil","Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Desactivar Perfil", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
+    
+    
 
     def updateProfile(params, data, logId){
         Templates.withTransaction{ status ->
@@ -53,8 +106,6 @@ class ProfilesService {
                     return TypeError.existingRegister(logId)
                 }
                 profile.properties = data
-                // data.name?profile.name= data.name:profile.name
-                // data.description?profile.description= data.description:profile.description
                 profile.save(flush:true, failOnError:true)
 
                 new Logs("Editar Perfil", "Se actualizo el perfil", logId, "INFO", true, [data:params.uuid])
@@ -96,56 +147,84 @@ class ProfilesService {
         }
     }
     def infoProfile(params, logId) {
-    try {
-        new Logs("Información del perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
-        Utils.logger(logId, "Información del perfil", "Procesando solicitud")
-
-        def profile = Templates.findByUuid(params.uuid)
-        if (!profile) {
-            new Logs("Información del perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
-            Utils.logger(logId, "Información del perfil", "No se encontró la información solicitada")
-            return TypeError.informationNotFound(logId)
-        }
-
-        def seccionesAgrupadas = [:]
-
-        TemplatePermissions.findAllByUuidTemplate(params.uuid).each { templatePermission ->
-            def permiso = templatePermission.permission 
-            def seccion = permiso?.section  
-
-            if (seccion && permiso) {
-                if (!seccionesAgrupadas.containsKey(seccion.name)) {
-                    seccionesAgrupadas[seccion.name] = [:]
+        Templates.withTransaction{ status ->
+            try {
+                new Logs("Información del Perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
+                Utils.logger(logId, "Información del Perfil", "Procesando solicitud")
+        
+                def profile = Templates.findByUuid(params.uuid)
+                if (!profile) {
+                    new Logs("Información del Perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
+                    Utils.logger(logId, "Información del Perfil", "No se encontró la información solicitada")
+                    return TypeError.informationNotFound(logId)
                 }
-                seccionesAgrupadas[seccion.name][permiso.name] = permiso.description
+        
+                def seccionesAgrupadas = [:]
+                
+                TemplatePermissions.findAllByTemplate(profile).each { templatePermission ->
+                    def permiso = templatePermission.permission 
+                    def seccion = permiso?.section  
+        
+                    if (seccion && permiso) {
+                        if (!seccionesAgrupadas.containsKey(seccion.name)) {
+                            seccionesAgrupadas[seccion.name] = [:]
+                        }
+                        seccionesAgrupadas[seccion.name][permiso.alias] = permiso.description
+                    }
+                }
+        
+                def secciones = seccionesAgrupadas.collect { nombreSeccion, permisos ->
+                    return [
+                        seccion  : nombreSeccion,
+                        permisos : permisos
+                    ]
+                }
+        
+                def response = [
+                    uuid       : profile.uuid,
+                    name       : profile.name,
+                    description: profile.description,
+                    secciones  : secciones
+                ]
+        
+                new Logs("Información del Perfil", "Perfil encontrado", logId, "INFO", true, [data: profile.name])
+                Utils.logger(logId, "Información del Perfil", "Perfil encontrado", "Perfil: ${profile.name}")
+        
+                return [data: [success: true, data: response], status: 200]
+        
+            } catch (Exception e) {
+                new Logs("Información del Perfil", "Error en la solicitud", logId, "ERROR", false, [:])
+                Utils.logger(logId, "Información del Perfil", "Error en la solicitud: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
             }
         }
-
-        def secciones = seccionesAgrupadas.collect { nombreSeccion, permisos ->
-            return [
-                seccion  : nombreSeccion,
-                permisos : permisos
-            ]
-        }
-
-        def response = [
-            uuid       : profile.uuid,
-            name       : profile.name,
-            description: profile.description,
-            secciones  : secciones
-        ]
-
-        new Logs("Información del perfil", "Perfil encontrado", logId, "INFO", true, [data: params.uuid])
-        Utils.logger(logId, "Información del perfil", "Perfil encontrado")
-
-        return [data: [success: true, data: response], status: 200]
-
-    } catch (Exception e) {
-        new Logs("Información del perfil", "Error en la solicitud", logId, "ERROR", false, [:])
-        Utils.logger(logId, "Información del perfil", "Error en la solicitud: ${e.getMessage()}")
-        return TypeError.internalError(logId)
     }
-}
 
+    def allProfiles(logId){
+        Templates.withTransaction{status ->
+            try{
+                new Logs("Lista de Perfiles", "Procesando solicitud", logId, "INFO", true, [ : ])
+                Utils.logger(logId,"Lista de Perfiles", "Procesando solicitud")
+                def profiles = Templates.getAll().collect(){ profile ->
+                    return[
+                        nombre: profile.name,
+                        status: profile.status,
+                        uuid: profile.uuid
+                    ]
+                }
+                
+                def countProfiles = Templates.count()
+                new Logs("Lista de Perfiles", "Lista recuperada", logId, "INFO", true, [data:countProfiles])
+                Utils.logger(logId, "Lista de Perfiles", "Lista recuperada", "${countProfiles}")
+                return [data:[total:countProfiles, perfiles:profiles], status:200]
+            }catch(e){
+                new Logs("Lista de Perfiles", "Error en la solicitud", logId, "ERROR", false, [:])
+                Utils.logger(logId, "Lista de Perfiles", "Error en la solicitud: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
 
 }

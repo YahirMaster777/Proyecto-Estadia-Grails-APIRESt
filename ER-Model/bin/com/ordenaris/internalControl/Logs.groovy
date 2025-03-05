@@ -150,7 +150,7 @@ public class Logs {
             writer.write( "${logInfo}\n" )
             writer.close()
         }catch(e){  
-            println "${new Date().format('yyyy-MM-dd HH:mm:ss :::=>')} | Esim | Logs | Save Log File | Archivo de Log | ${e.getMessage()} "
+            println "${new Date().format('yyyy-MM-dd HH:mm:ss :::=>')} | erModel | Logs | Save Log File | Archivo de Log | ${e.getMessage()} "
         }
     }
 }

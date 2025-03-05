@@ -38,7 +38,6 @@ class CustomAuthProvider implements AuthenticationProvider{
   
 
 	def fnVerifyStatusUser( user ){
-		def code
 		if(!user){
 			code =  518
 			throw new BadCredentialsException("Account notFound")
@@ -63,17 +62,23 @@ class CustomAuthProvider implements AuthenticationProvider{
   			throw new LockedException("Account locked")
   			
   		}
+  		
+  		
 	}
   
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
       def respuestaBusqueda = userService.buscarCuenta(auth)
       def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
-      def permisos = userService.obtenerPermisos(respuestaBusqueda)
+      def infoUsers = userService.infoUsers(respuestaBusqueda)
     //   println getUserAuthorities
+    
+    
       fnVerifyStatusUser(respuestaBusqueda)
-      
-      
+      println '---'*30
+      println 'Nombre: ' + infoUsers.employee
+      println 'Usuario: ' + infoUsers.toPrettyString()
+      println '---'*30
       if( respuestaBusqueda ){
         def userDetails = new MyUserDetails(
           respuestaBusqueda.username,
@@ -84,7 +89,7 @@ class CustomAuthProvider implements AuthenticationProvider{
           !respuestaBusqueda.accountLocked,
           getUserAuthorities,
           respuestaBusqueda.id
-        )
+          )
         auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities)
         return auth
       } else {
