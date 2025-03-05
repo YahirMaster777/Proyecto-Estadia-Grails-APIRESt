@@ -1,0 +1,18 @@
+package com.ordenaris.internalControl
+
+import grails.testing.web.controllers.ControllerUnitTest
+import spock.lang.Specification
+
+class ServersAppsControllerSpec extends Specification implements ControllerUnitTest<ServersAppsController> {
+
+    def setup() {
+    }
+
+    def cleanup() {
+    }
+
+    void "test something"() {
+        expect:"fix me"
+        true == false
+    }
+}
