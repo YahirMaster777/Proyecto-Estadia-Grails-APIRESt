@@ -1,12 +1,13 @@
 package com.ordenaris.internalControl
 
 import grails.util.Holders
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
-import groovyx.net.http.RESTClient
 import groovyx.net.http.Method
-import groovy.json.JsonOutput
-
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.ContentType
+import static groovyx.net.http.Method.GET
+import static groovyx.net.http.Method.POST
+import static groovyx.net.http.ContentType.XML
+import static groovyx.net.http.ContentType.JSON
 
 public class Utils {
 	private static grailsApplication = Holders.grailsApplication
@@ -19,7 +20,8 @@ public class Utils {
     }
 
     public static dataRequired(hashMapData, process, logId) {
-        for (validData in hashMapData) {
+        for (validData in hashMapData) { 
+            // key, value ->
             def key = validData.keySet().first()
             def value = validData.get(key)
             if (!value) {
@@ -30,10 +32,6 @@ public class Utils {
         }
         return [data: [success: true], status: 200]
     }
-    
-    
-    
-    
 
     public static validFormatUuid(process, name, uuid, logId) {
         if(!uuid.uuidFormat()){
@@ -68,53 +66,67 @@ public class Utils {
         return [ data: [success: true], status:200]
     }   
 
-    public static sendMailExternal(String baseUrl, String path, Map requestHeaders=[:], Map _query=[:], method = Method.POST, logId) {
-        def result = null
+    public static sendApiRequest( host, path, data, headersList, method, type, logId ){
         try {
-            def http = new HTTPBuilder(baseUrl)
-            http.request(method, ContentType.JSON) { request -> // el request -> tambien es para un get
+            new Logs( 'Enviar Peticiones HTTP.', 'Envío de petición HTTP', logId, 'INFO', true, [host:host, path:path, data:data, headers:headersList, method:method, type: type] )
+            logger( logId, "Enviar Peticiones HTTP.", "Envío de petición HTTP", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type" )
+            def http = new HTTPBuilder( host )
+            method = Method."$method"
+            def _type = (type == "rest") ? JSON : XML
+            http.request( method, _type ) { request ->
+                requestContentType = ContentType.JSON
                 uri.path = path
-                body = (_query as grails.converters.JSON).toString() //Cuando es un post
-                // uri.query = _query // cuando es un get
-                headers.'Content-Type' = 'application/json'
-                requestHeaders.each { key, value ->
-                    headers."${key}" = "${value}"
+                if ( method == GET ) {
+                    uri.query = data
+                }
+                if ( method == POST ) {
+                	if( type == "rest" ) body = (data as grails.converters.JSON).toString()
+                	if( type == "soap" ){
+                		body = data
+                        headers.'Content-Type' = 'text/xml'
+                        headers.'Accept' = 'text/xml'
+                	} 
+                }
+                headersList.each { k, v ->
+                    headers."${k}" = v
                 }
                 response.success = { resp, reader ->
-                    result = reader.get(response)
+                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", logId, resp, reader )
+                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
+                    return reader
+                }
+                response.failure  = { resp, reader ->
+                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", logId, resp, reader )
+                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
+                    return reader
                 }
             }
-            new Logs( "Recuperar constraseña", "Correo enviado", logId, "INFO", true, [ : ] )
-            logger(logId, "Recuperar constraseña","Correo enviado" )
-            return [data: [success: true, data:result], status: 200]
-        } catch (Exception e) {
-            new Logs( "Recuperar constraseña", "Error en la solicitud al enviar el correo", logId, e, [ : ] )
-            logger(logId, "Recuperar constraseña", "Error en la solicitud al enviar el correo", "f: ${e.getMessage()}")
-            return TypeError.externalApiFailure(result.mensaje,  logId )
+        }catch(e) {
+            new Logs( "Enviar Peticiones HTTP.", "Ha ocurrido un error.", logId, e, [url: host + path, headers: headersList, method: method, type: type] )
+            logger( logId, "Enviar Peticiones HTTP.", "Ha ocurrido un error.", e.getMessage() ?: e.cause ?: e,  "url: $host$path, headers: $headersList, method: $method, type:$type")
+            return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
         }
     }
 
-    // final externalUrl = "https://notificaciones.ordenaris.com/ordenaris/api/public/email/send"
-    // public static sendMailRecovery(token, user) {
-    public static sendMailRecovery(name, typeService, code, value, fromMail, fromName, toMailArray, subject, text, campaign, html, typeTemplate, template, filesArray) {
+    public static contructorMail(name = "Onefa", typeService, code, user, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", body,tipeTemplate = 0, template = 0) {
         return [
             app: [nombre: name],
             tipoServicio: typeService, // 1- Único / 2- Múltiple
             data: [[
                 codigo: code,
-                valor: value
+                valor: user
             ]],
             request: [
                 fromMail: fromMail,
                 fromName: fromName,
-                to: [toMailArray],
+                to: user,
                 subject: subject,
-                text: text,
-                campaign: campaign,
-                html: html,
-                tipoTemplate: typeTemplate,
+                text: "esto es un texto",
+                campaign: "Pruebas",
+                html: body
+                tipoTemplate: tipeTemplate,
                 template: template,
-                files: [ filesArray] 
+                files: [files]
             ]
         ]
     }
