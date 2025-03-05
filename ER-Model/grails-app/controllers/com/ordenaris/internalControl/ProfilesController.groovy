@@ -20,6 +20,21 @@ class ProfilesController {
         
     }
     
+    def activate(){
+        def logId = new Logs("Activar Perfil", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Activar Perfil", "Inicio de solicitud")
+        def activateResponse = ProfilesService.activateProfile(params, logId)
+        return respond(activateResponse.data, status:activateResponse.status)
+    }
+    
+    def deactivate(){
+        def logId = new Logs("Desactivar Perfil", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Desactivar Perfil", "Inicio de solicitud")
+        def deactivateResponse = ProfilesService.deactivateProfile(params, logId)
+        return respond(deactivateResponse.data, status:deactivateResponse.status)
+    }
+    
+    
     def update(){
         def logId = new Logs("Editar Perfil", "Inicio de solicitud", request).getId()
         Utils.logger(logId,"Editar Perfil", "Inicio de solocitud")
@@ -44,10 +59,17 @@ class ProfilesController {
     }
     
     def info(){
-        def logId = new Logs("Informacion del perfil", "Inicio de solicitud", request).getId()
-        Utils.logger(logId,"Informacion del perfil", "Inicio de solicitud")
+        def logId = new Logs("Información del Perfil", "Inicio de solicitud", request).getId()
+        Utils.logger(logId,"Información del Perfil", "Inicio de solicitud")
         def infoProfileResponse = ProfilesService.infoProfile(params, logId)
         return respond(infoProfileResponse.data, status:infoProfileResponse.status)
+    }
+    
+    def all(){
+        def logId = new Logs("Lista de Perfiles", "Inicio de solicitud",request).getId()
+        Utils.logger(logId, "Lista de Perfiles", "Inicio de solicitud")
+        def allProfilesResponse = ProfilesService.allProfiles(logId)
+        return respond(allProfilesResponse.data, status:allProfilesResponse.status)
     }
     
     

@@ -81,12 +81,6 @@ def authenticationEventPublisher
         return user
     }
     
-    def obtenerPermisos(Users username){
-        def permisos = UserSectionPermission.findAllByUser(username)
-        println permisos
-        return permisos
-    }
-    
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
         def authorities = []

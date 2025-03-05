@@ -37,26 +37,19 @@ class AppsService {
     def activeApp(params, logId){
         Apps.withTransaction{ status ->
             try{
-                new Logs("Activar Aplicacion", "Procesando solicitud", logId, "INFO", true, [data:params.uuid])
+                new Logs("Activar Aplicacion", "Procesando solicitud", logId, "INFO", true, [ : ])
                 Utils.logger(logId,"Activar Aplicacion", "Procesando solicitud", "${params.uuid}")
                 def app = Apps.findByUuid(params.uuid)
                 
                 if(!app){
                     new Logs("Activar Aplicacion", "No se encontro la aplicacion", logId, "INFO", false, [data:params.uuid])
-                    Utils.logger(logId, "Activar Aplicacion","No se encontro la aplicacion", "${params.uuid}")
+                    Utils.logger(logId, "Activar Aplicacion","No se encontro la aplicacion")
                     return TypeError.informationNotFound(logId)
                 }
-                
-                if(app.status == "Activa"){
-                    new Logs("Activar Aplicacion", "Ya esta Activa", logId, "INFO", false, [data:params.uuid])
-                    Utils.logger(logId, "Activar Aplicacion","Ya esta Activa", "${params.uuid}")
-                    return TypeError.existingRegister(logId)
-                }
-                
                 app.status="Activa"
                 app.save(failOnError:true, flush:true)
-                new Logs("Activar Aplicacion", "Se Activo la Aplicacion", logId, "INFO", false, [data:params.uuid])
-                Utils.logger(logId, "Activar Aplicacion","Se Activo la Aplicacion", "${params.uuid}")
+                new Logs("Activar Aplicacion", "Se Activo la Aplicacion", logId, "INFO", false, [data:app.name])
+                Utils.logger(logId, "Activar Aplicacion","Se Activo la Aplicacion", "App: ${app.name}")
                 return [data:[success:true], status:200]
                 
             }catch(e){
@@ -196,7 +189,7 @@ class AppsService {
     def allApps(logId){
         Apps.withTransaction{ status ->
             try{
-                new Logs("Lista de todas las Aplicaciones", "Procesando solicitud", logId,"INFO", true, [ : ])
+                new Logs("Lista de Aplicaciones", "Procesando solicitud", logId,"INFO", true, [ : ])
                 Utils.logger(logId,"Lista de todas las Aplicaciones","procesando solicitud")
                 
                 def app = Apps.getAll().collect(){ app ->
@@ -213,12 +206,12 @@ class AppsService {
                 println(appTotal)
                 
                 
-                new Logs("Lista de todas las Aplicaciones","Apps recuperadas exitosamente", logId,"INFO",true, [data:appTotal])
-                Utils.logger(logId, "Lista de todas las Aplicaciones", "Apps recuperadas exitosamente")
+                new Logs("Lista de Aplicaciones","Apps recuperadas exitosamente", logId,"INFO",true, [data:appTotal])
+                Utils.logger(logId, "Lista de Aplicaciones", "Apps recuperadas exitosamente")
                 return [data:[success: true, data:[total:appTotal,list:app]], status:200]
             }catch(e){
-                new Logs("Lista de todas las Aplicaciones","Error en la solicitud", logId, e, [data:[success:false]])
-                Utils.logger(logId, "Lista de todas las Aplicaciones", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                new Logs("Lista de Aplicaciones","Error en la solicitud", logId, e, [data:[success:false]])
+                Utils.logger(logId, "Lista de Aplicaciones", "Error en la solicitud", "ERROR: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
         

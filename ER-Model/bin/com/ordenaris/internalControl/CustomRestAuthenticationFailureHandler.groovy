@@ -39,7 +39,7 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
                 mensaje = "El usuario no tiene un rol"
                 response.setStatus(515)
             }else{
-                mensaje = "Error al iniciar sesion"
+                mensaje = "La cuenta esta bloqueada"
                 response.setStatus(517)
             }
         } else if(exception instanceof BadCredentialsException){
