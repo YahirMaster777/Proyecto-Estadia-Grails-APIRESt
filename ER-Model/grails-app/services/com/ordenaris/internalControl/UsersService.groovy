@@ -31,7 +31,7 @@ def authenticationEventPublisher
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
-                return [ data: [ success: true], status: 200 ]
+                return [ data: [ success: true,data: [identifier: user.uuid] ], status: 200 ]
             }catch(e){
                 uStatus.setRollbackOnly()
                 new Logs("Registrar usuario","Error en la solicitud al crear un usuario", logId, e, [ : ])
@@ -147,7 +147,7 @@ def authenticationEventPublisher
             }
             new Logs( "Buscar usuario", "Usuario encontrado", logId, "INFO", true, [ data: uuid ] )
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
-            return [ data: [success: true, data:constructorUser(user) ], status: 200 ]
+            return [ data: [success: true, data:infoUsers(user) ], status: 200 ]
         }catch(Exception e) {
             new Logs("Buscar usuario","Error en la solicitud al buscar el usuario", logId, e, [ : ])
             Utils.logger(logId, "Buscar usuario", "Error en la solicitud al buscar el usuario", "f: ${e.getMessage()}")
@@ -229,49 +229,6 @@ def authenticationEventPublisher
             Utils.logger(logId, "Páginado usuario", "Error en la solicitud al mostrar los resultados", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
         }
-    }
-
-    // @Transactional(readOnly = true)
-    // def infoUser(username,logid) {
-    //     try {
-    //         new Logs("Información del usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
-    //         Utils.logger(logId,"Información del usuario","Procesando Solicitud", uuid)
-    //         def user = Users.findByUsername(username)
-    //         if (!user) {
-    //             new Logs( "Información del usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidUser:uuid ] )
-    //             Utils.logger(logId, "Información del usuario", "No se encontró el registro", "Usuario:${uuid}")
-    //             return TypeError.informationNotFound( logId )
-    //         }
-    //         def userInfo = Users.createCriteria().list(){
-    //             sqlRestriction()
-
-    //         }.collect{ constructorTemplatePermission(it) }
-    //         println user
-    //         new Logs( "Información del usuario", "Se muestra la inforrmación al inciar sesión", logId, "INFO", true, [ data: uuid ] )
-    //         Utils.logger(logId, "Información del usuario", "Se muestra la inforrmación al inciar sesión", uuid)
-    //         return [ data: [success: true, data:userInfo ], status: 200 ]
-    //     } catch(Exception e) {
-    //         new Logs("Información del usuario","Error en la solicitud de información", logId, e, [ : ])
-    //         Utils.logger(logId, "Información del usuario", "Error en la solicitud de información", "f: ${e.getMessage()}")
-    //         return TypeError.internalError( logId )
-    //     }
-    // }
-
-    def constructorTemplatePermission(templatePermission) {
-        def templates = templatePermission.template.collect{
-            constructorTemplate(it)
-        }
-        return [
-            seccion : templatePermission.seccion,
-            template : templates
-        ]
-    }
-
-    def constructorSeccion(section) {
-        return [
-            seccion: section.name,
-            permission: section.permission
-        ]
     }
 
     def constructorUser(user) {
