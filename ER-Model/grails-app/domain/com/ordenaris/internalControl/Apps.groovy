@@ -39,14 +39,13 @@ class Apps {
 
 class DeployDates{
     Date dateDeploy = new Date()
-    String uuidApp
     String typeEnvironment
     Apps app
     String version
     
     static mapping = {
         version false
-       typeEnvironment sqlType: "Enum('Pruebas', 'Desarrollo', 'Produccion')"
+        typeEnvironment sqlType: "Enum('Pruebas', 'Desarrollo', 'Produccion')"
     }
     
     static constraints = {
@@ -57,8 +56,7 @@ class DeployDates{
 class AppConnections{
     Apps app
     Apps service
-    String uuidApp
-    String uuidService
+    String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String description
     String portApp
     String portService
@@ -68,6 +66,7 @@ class AppConnections{
         version false
     }
     static constraints ={
+        uuid unique:true, maxSize:32
         description maxSize:150, nullable:true, blank:true
         portApp maxSize:5, nullable:true, blank:true
         portService maxSize:5, nullable:true, blank:true

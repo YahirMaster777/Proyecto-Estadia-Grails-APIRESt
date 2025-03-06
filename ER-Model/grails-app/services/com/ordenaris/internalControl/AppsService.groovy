@@ -10,6 +10,14 @@ class AppsService {
             try{
                 new Logs("Registrar Aplicacion", "Procesando solicitud",logId, "INFO", true, [data:data.name])
                 Utils.logger(logId, "Registrar Aplicacion", "Procesando solicitud")
+                
+                def appExists = Apps.findByNameAndType(data.name, data.type)
+                if(appExists){
+                    new Logs("Registrar Aplicacion", "Ya existe un registro", logId, "INFO", false, [data:appExists.uuid])
+                    Utils.logger(logId, "Registrar Aplicacion", "Ya existe un registro", "Regitro: ${appExists.uuid}" )
+                    return TypeError.existingRegister(logId)
+                }
+                
                 def aplication = new Apps()
                 aplication.port = data.port
                 aplication.criticality = data.criticality

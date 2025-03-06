@@ -27,6 +27,7 @@ class UrlMappings {
                 }
                 group "/delete", {
                     delete "/app"(controller:'apps', action:'delete')
+                    delete "/conection"(controller:'appConnections', action:'delete')
                     put "/employee"(controller:'employees', action:'delete')
                     delete "/profile"(controller:'profiles', action:'delete')
                     delete "/user"(controller:'users', action: 'delete')
