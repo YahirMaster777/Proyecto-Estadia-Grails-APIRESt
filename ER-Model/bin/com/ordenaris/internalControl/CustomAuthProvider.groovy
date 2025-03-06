@@ -1,12 +1,9 @@
 package com.ordenaris.internalControl
 
 import com.ordenaris.internalControl.*
-
-import java.util.Collection;
-
+import java.util.Collection
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-// import org.springframework.aop.aspectj.RuntimeTestWalker.ThisInstanceOfResidueTestVisitor
 import org.springframework.context.ApplicationEventPublisherAware
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.authentication.LockedException
@@ -17,25 +14,23 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.util.Assert
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import grails.plugin.springsecurity.authentication.encoding.BCryptPasswordEncoder
-
 import grails.util.Holders
 
-class CustomAuthProvider implements AuthenticationProvider{
+class CustomAuthProvider implements AuthenticationProvider {
 
-	def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
-	def userService = Holders.grailsApplication.mainContext.getBean('usersService')
+    def springSecurityService = Holders.grailsApplication.mainContext.getBean('springSecurityService')
+    def userService = Holders.grailsApplication.mainContext.getBean('usersService')
 
-	Authentication authenticate(Authentication auth) throws AuthenticationException{
-		Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
-		UserPassOrgAuthToken authentication = (UserPassOrgAuthToken) auth
-		return doAuthentication(authentication)
-	}
+    Authentication authenticate(Authentication auth) throws AuthenticationException {
+        Assert.isInstanceOf(UserPassOrgAuthToken.class, auth, "Only UserPassOrgAuthToken is supported")
+        UserPassOrgAuthToken authentication = (UserPassOrgAuthToken) auth
+        return doAuthentication(authentication)
+    }
 
-	@Override
-	boolean supports(Class authentication){
-		return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
-	}
-  
+    @Override
+    boolean supports(Class authentication) {
+        return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
+    }
 
 	def fnVerifyStatusUser( user ){
 	def code
