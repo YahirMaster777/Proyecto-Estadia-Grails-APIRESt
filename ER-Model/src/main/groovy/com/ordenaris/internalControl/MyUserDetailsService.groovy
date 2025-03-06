@@ -9,27 +9,29 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 class MyUserDetailsService implements GrailsUserDetailsService {
 
-   /**
-    * Some Spring Security classes (e.g. RoleHierarchyVoter) expect at least
-    * one role, so we give a user with no granted roles this one which gets
-    * past that restriction but doesn't grant anything.
-    */
-   static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
+    /**
+     * Algunas clases de Spring Security (por ejemplo, RoleHierarchyVoter) esperan al menos
+     * un rol, por lo que le damos a un usuario sin roles otorgados este que obtiene
+     * superado esa restricción pero no concede nada.
+     */
+    static final List NO_ROLES = [new SimpleGrantedAuthority(SpringSecurityUtils.NO_ROLE)]
 
-   UserDetails loadUserByUsername(String username, boolean loadRoles)
-         throws UsernameNotFoundException {
-         	println "MyUserDetailsService -> $username"
-      return loadUserByUsername(username)
-   }
+    UserDetails loadUserByUsername(String username, boolean loadRoles)
+            throws UsernameNotFoundException {
+        println "MyUserDetailsService -> $username"
+        return loadUserByUsername(username)
+    }
 
-   @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
-   UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-      Users user = Users.findByUsername(username)
-      if (!user) throw new NoStackUsernameNotFoundException()
+        Users user = Users.findByUsername(username)
+        if (!user) throw new NoStackUsernameNotFoundException()
 
-      return new MyUserDetails(user.username, user.password, user.enabled,
-            !user.accountExpired, !user.passwordExpired,
-            !user.accountLocked, authorities ?: NO_ROLES, user.id)
-   }
+        def infoUsers = userService.infoUsers(user) // Asegúrate de tener acceso a userService para obtener infoUsers
+
+        return new MyUserDetails(user.username, user.password, user.enabled,
+                !user.accountExpired, !user.passwordExpired,
+                !user.accountLocked, authorities ?: NO_ROLES, user.id, infoUsers)
+    }
 }
