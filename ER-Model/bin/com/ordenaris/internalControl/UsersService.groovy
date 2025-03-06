@@ -103,7 +103,7 @@ def authenticationEventPublisher
                     if (!seccionesAgrupadas.containsKey(seccion.name)) {
                         seccionesAgrupadas[seccion.name] = [:]
                     }
-                    seccionesAgrupadas[seccion.name][permiso.name] = permiso.description
+                    seccionesAgrupadas[seccion.name][permiso.alias] = permiso.description
                 }
             }
             def section = seccionesAgrupadas.collect { nombreSeccion, permisos ->

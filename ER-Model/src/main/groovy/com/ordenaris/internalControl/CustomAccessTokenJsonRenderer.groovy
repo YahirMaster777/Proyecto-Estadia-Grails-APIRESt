@@ -14,18 +14,18 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
     String generateJson(AccessToken accessToken) {
 
         Users user = Users.get accessToken.principal.id as Long
-        
+
+        def infoUsers = accessToken.principal.infoUsers
 
         def originalObject = [
             username         : user.username,
+            nombre           : infoUsers.employee,
+            secciones        : infoUsers.secctions,
             roles            : accessToken.principal.authorities.authority,
             access_token     : accessToken.accessToken,
             refresh_token    : accessToken.refreshToken,
-            expiration       : accessToken.expiration,
-            
-
+            expiration       : accessToken.expiration
         ]
         return new JsonBuilder(originalObject).toPrettyString()
     }
-
 }
