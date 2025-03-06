@@ -169,7 +169,7 @@ class ProfilesService {
                         if (!seccionesAgrupadas.containsKey(seccion.name)) {
                             seccionesAgrupadas[seccion.name] = [:]
                         }
-                        seccionesAgrupadas[seccion.name][permiso.alias] = permiso.description
+                        seccionesAgrupadas[seccion.name][permiso.name] = permiso.alias
                     }
                 }
         

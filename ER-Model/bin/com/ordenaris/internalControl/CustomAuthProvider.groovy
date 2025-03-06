@@ -38,6 +38,7 @@ class CustomAuthProvider implements AuthenticationProvider{
   
 
 	def fnVerifyStatusUser( user ){
+	def code
 		if(!user){
 			code =  518
 			throw new BadCredentialsException("Account notFound")
