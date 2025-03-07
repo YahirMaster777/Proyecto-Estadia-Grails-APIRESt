@@ -86,11 +86,11 @@ class ServersController {
             Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.macAddress)
             return TypeError.incorrectFormat( "dirección mac", "correo empresarial", logId )
         }
-        if (data.macAddress && data.macAddress.macAddress()) {
-            new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.macAddress ] )
-            Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.macAddress)
-            return TypeError.incorrectFormat( "dirección mac", "correo empresarial", logId )
-        }
+        // if (data.macAddress && data.macAddress.macAddress()) {
+        //     new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.macAddress ] )
+        //     Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.macAddress)
+        //     return TypeError.incorrectFormat( "dirección mac", "correo empresarial", logId )
+        // }
 
     }
 }
