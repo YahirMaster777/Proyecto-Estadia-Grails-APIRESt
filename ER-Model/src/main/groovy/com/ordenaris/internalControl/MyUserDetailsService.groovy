@@ -28,7 +28,7 @@ class MyUserDetailsService implements GrailsUserDetailsService {
         Users user = Users.findByUsername(username)
         if (!user) throw new NoStackUsernameNotFoundException()
 
-        def infoUsers = userService.infoUsers(user) // Asegúrate de tener acceso a userService para obtener infoUsers
+        def infoUsers = userService.infoUsers(user) 
 
         return new MyUserDetails(user.username, user.password, user.enabled,
                 !user.accountExpired, !user.passwordExpired,

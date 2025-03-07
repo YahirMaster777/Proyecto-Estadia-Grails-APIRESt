@@ -7,7 +7,10 @@ class AppsService {
 
     def createApp(data, logId){
         Apps.withTransaction{ status-> 
-            try{
+            try{    
+                def permiso = "create_app"
+                if(permiso )
+                
                 new Logs("Registrar Aplicacion", "Procesando solicitud",logId, "INFO", true, [data:data.name])
                 Utils.logger(logId, "Registrar Aplicacion", "Procesando solicitud")
                 

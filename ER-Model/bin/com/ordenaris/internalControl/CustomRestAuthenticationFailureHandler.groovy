@@ -23,7 +23,6 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
 
     void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.addHeader('WWW-Authenticate', 'X-Auth-Token')
-        println("Custom rest Auth")
         def mensaje
         if (exception instanceof AccountExpiredException) {
             mensaje =  "La cuenta expiro"
@@ -60,6 +59,8 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
         }
         response.setContentType("aplication/json")
         response.setCharacterEncoding("UTF-8");
+        
+        
         PrintWriter out = response.getWriter();
         HashMap resp = [ success:false, mensaje: mensaje]
         out.println(resp.toPrettyString());
