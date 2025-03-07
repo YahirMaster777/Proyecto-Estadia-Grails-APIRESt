@@ -33,8 +33,7 @@ public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
 
     // crear un constructor con un objeto adicional, para poder pasar la información
     // del usuario
-    public UserPassOrgAuthToken(Object principal, Object credentials, Collection<GrantedAuthority> authorities,
-            Object infoUsers) {
+    public UserPassOrgAuthToken(Object principal, Object credentials, Collection<GrantedAuthority> authorities, Object infoUsers) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;

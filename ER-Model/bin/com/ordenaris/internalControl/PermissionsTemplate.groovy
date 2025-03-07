@@ -3,19 +3,12 @@ package com.ordenaris.internalControl
 class TemplatePermissions {
     Date dateCreated
     Date lastUpdated
-    String description
     Permissions permission
   
     static belongsTo=[template : Templates]
     
-    
     static mapping = {
         version false
-    }
-    
-    
-    static constraints = {
-        description maxSize:150
     }
 }
 
