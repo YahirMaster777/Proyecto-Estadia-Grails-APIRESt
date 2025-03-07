@@ -179,9 +179,9 @@ class UsersService {
     }
     
     def obtenerPermisos(Users username){
-        def permisos = UserSectionPermission.findAllByUser(username)
-        println permisos
-        return permisos
+        def permiss = UserSectionPermission.findAllByUser(username)
+        println permiss
+        return permiss
     }
     
     def getUserAuthorities( Users username ){
@@ -198,27 +198,12 @@ class UsersService {
         try {
             def user = Users.findByUsername(username.username)
             def userSectionPermission = UserSectionPermission.findAllByUser(username)
-            def seccionesAgrupadas = [:]
-            UserSectionPermission.findAllByUser(username).each{templatePermission ->
-                def permiso = templatePermission.permission 
-                def seccion = permiso?.section  
-                if (seccion && permiso) {
-                    if (!seccionesAgrupadas.containsKey(seccion.name)) {
-                        seccionesAgrupadas[seccion.name] = [:]
-                    }
-                    seccionesAgrupadas[seccion.name][permiso.name] = permiso.description
-                }
-            }
-            def section = seccionesAgrupadas.collect { nombreSeccion, permisos ->
-                return [
-                    seccion  : nombreSeccion,
-                    permisos : permisos
-                ]
-            }
+            def section = sections(username)
             def uuidEmployee = user?.employee.uuid
             def employee = Employees.findByUuid(uuidEmployee)
             def response =[
                 uuid          : user.uuid,
+                username      : username.username,
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
                 lastLogin     : user.lastLoginTime,
                 currentLogin  : user.currentLoginDate,
@@ -229,12 +214,41 @@ class UsersService {
             println e.getMessage()
         }   
     }
+    def permissions(username) {
+        def sectionPermissionList = [:]
+        UserSectionPermission.findAllByUser(username).each { templatePermission ->
+            def permissionList = templatePermission.permission
+            sectionPermissionList[permissionList.name] = permissionList.alias
+        }
+        return [permissions: sectionPermissionList]
+    }
+    def sections(username) {
+        def sectionPermissionList = [:]
+        UserSectionPermission.findAllByUser(username).each { templatePermission ->
+            def section = templatePermission.permission.section
+            if (!sectionPermissionList.containsKey(section.name)) {
+                sectionPermissionList[section.name] = [:]
+            }
+            sectionPermissionList[section.name][templatePermission.permission.name] = templatePermission.permission.alias
+        }
+        def section = sectionPermissionList.collect { nameSection, permiss ->
+            return [section: nameSection, permiss: permiss]
+        }
+        return section
+    }
     
     def getToken( userDetails ){
         AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
         tokenStorageService.storeToken(accessToken.accessToken, userDetails)
         authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
         return accessToken
+    }
+
+    def createUrl(token, flag = null){
+        if (!flag) {
+            return "http://localhost:4200/auth/login?token=${token}"
+        }
+        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
     }
 
     def constructorUser(user) {

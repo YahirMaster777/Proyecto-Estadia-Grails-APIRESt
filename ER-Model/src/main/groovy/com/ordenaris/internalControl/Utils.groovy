@@ -108,7 +108,7 @@ public class Utils {
         }
     }
 
-    public static contructorMail(name = "Onefa", typeService, code, user, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", body,tipeTemplate = 0, template = 0) {
+    public static contructorMail(name = "Onefa", typeService, code, user, subject, text, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", campaign, body, tipeTemplate = 0, template = 0, files) {
         return [
             app: [nombre: name],
             tipoServicio: typeService, // 1- Único / 2- Múltiple
@@ -121,12 +121,12 @@ public class Utils {
                 fromName: fromName,
                 to: user,
                 subject: subject,
-                text: "esto es un texto",
-                campaign: "Pruebas",
-                html: body
+                text: text,
+                campaign: campaign,
+                html: body,
                 tipoTemplate: tipeTemplate,
                 template: template,
-                files: [files]
+                files: files
             ]
         ]
     }
