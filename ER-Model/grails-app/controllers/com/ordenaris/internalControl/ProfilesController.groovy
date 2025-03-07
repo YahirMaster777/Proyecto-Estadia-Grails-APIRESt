@@ -68,7 +68,7 @@ class ProfilesController {
     def all(){
         def logId = new Logs("Lista de Perfiles", "Inicio de solicitud",request).getId()
         Utils.logger(logId, "Lista de Perfiles", "Inicio de solicitud")
-        def allProfilesResponse = ProfilesService.allProfiles(logId)
+        def allProfilesResponse = ProfilesService.allProfiles(params, logId)
         return respond(allProfilesResponse.data, status:allProfilesResponse.status)
     }
     
