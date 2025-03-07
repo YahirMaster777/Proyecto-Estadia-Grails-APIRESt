@@ -42,7 +42,7 @@ class ProfilesService {
                 def profile = Templates.findByUuid(params.uuid)
                 
                 if(!profile){
-                    new Logs("Activar Perfil", "No se encontro la informacion solicitda",logId, "INFO",false,  [data:[para.uuid]])
+                    new Logs("Activar Perfil", "No se encontro la informacion solicitda",logId, "INFO",false,  [data:[params.uuid]])
                     Utils.logger(logId,"Activar Perfil", "No se encontro la informacion solicitada")
                     return TypeError.informationNotFound(logId)
                 }
@@ -127,13 +127,19 @@ class ProfilesService {
                 Utils.logger(logId,"Eliminar Perfil", "Procesanndo solicitud")
 
                 def profile = Templates.findByUuid(params.uuid)
+                
+                // if(profile.name == )
+                
                 if(!profile){
                     new Logs("Eliminar Perfil", "No se encontro la Informacion solicitada", logId,"INFO", false, [ : ])
                     Utils.logger(logId, "Eliminar Perfil", "No se encontro la Informacion solicitada")
                     return TypeError.informationNotFound(logId)
                 }
-
-                profile.delete(failOnError:true, flush:true)
+                
+                def dateDelete = new Date()
+                profile.uuid = '_delete_'+dateDelete.log()
+                profile.status = 'Eliminado'
+                profile.save(failOnError:true, flush:true)
                 new Logs("Eliminar Perfil", "Se elimino el Perfil", logId, "INFO", true, [data:params.uuid])
                 Utils.logger(logId, "Eliminar Perfil", "Se elimino el perfil")
                 return [data:[success:true], status:200]
@@ -146,13 +152,14 @@ class ProfilesService {
             }
         }
     }
+    
     def infoProfile(params, logId) {
         Templates.withTransaction{ status ->
             try {
                 new Logs("Información del Perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
                 Utils.logger(logId, "Información del Perfil", "Procesando solicitud")
         
-                def profile = Templates.findByUuid(params.uuid)
+                def profile = Templates.findByUuidAndStatus(params.uuid,'Activo')
                 if (!profile) {
                     new Logs("Información del Perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
                     Utils.logger(logId, "Información del Perfil", "No se encontró la información solicitada")
@@ -201,12 +208,15 @@ class ProfilesService {
         }
     }
 
-    def allProfiles(logId){
+    def allProfiles(params, logId){
         Templates.withTransaction{status ->
             try{
                 new Logs("Lista de Perfiles", "Procesando solicitud", logId, "INFO", true, [ : ])
                 Utils.logger(logId,"Lista de Perfiles", "Procesando solicitud")
-                def profiles = Templates.getAll().collect(){ profile ->
+                
+                int max = params.int('max') ?:10
+                
+                def profiles = Templates.list(max:max).collect(){ profile ->
                     return[
                         nombre: profile.name,
                         status: profile.status,

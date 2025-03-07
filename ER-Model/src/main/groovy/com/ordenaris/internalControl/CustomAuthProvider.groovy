@@ -44,7 +44,7 @@ class CustomAuthProvider implements AuthenticationProvider {
         }
         if (user.accountExpired) {
             code = 'Cuenta Expirada'
-            throw new AccountExpiredException("No Roles found from User")
+            throw new AccountExpiredException("Account Expired")
         }
         if (user.accountLocked) {
             code = 'Cuenta Bloqueada'
@@ -52,7 +52,7 @@ class CustomAuthProvider implements AuthenticationProvider {
         }
         if (user.passwordExpired) {
             code = 'Password Expirada'
-            throw new LockedException("Account locked")
+            throw new AccountExpiredException("Credentials Expired")
         }
     }
 
@@ -62,10 +62,7 @@ class CustomAuthProvider implements AuthenticationProvider {
         def infoUsers = userService.infoUsers(respuestaBusqueda)
 
         fnVerifyStatusUser(respuestaBusqueda)
-        println '---' * 30
-        println 'Nombre: ' + infoUsers.employee
-        println 'Usuario: ' + infoUsers.toPrettyString()
-        println '---' * 30
+        println infoUsers
         if (respuestaBusqueda) {
             def userDetails = new MyUserDetails(
                 respuestaBusqueda.username,

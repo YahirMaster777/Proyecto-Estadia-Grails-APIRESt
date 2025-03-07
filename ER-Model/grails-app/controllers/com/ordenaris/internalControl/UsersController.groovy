@@ -87,7 +87,7 @@ class UsersController {
             or{
                 ilike('username', data.username?:'')
                 ilike('businessEmail', data.businessEmail?:'')
-            }
+            }   
         }.collect()
         if (!userList.isEmpty()) {
             new Logs(process, "Daxos existentes, por favor utilice valores diferentes", logId, "INFO", false, [data: [success: false]])
