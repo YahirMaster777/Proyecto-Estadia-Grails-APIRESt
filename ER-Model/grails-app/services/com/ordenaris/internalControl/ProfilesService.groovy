@@ -214,8 +214,8 @@ class ProfilesService {
                 new Logs("Lista de Perfiles", "Procesando solicitud", logId, "INFO", true, [ : ])
                 Utils.logger(logId,"Lista de Perfiles", "Procesando solicitud")
                 
-                int max = params.int('max') ?:10
-                
+                int max = params.int('max') ?: 0
+       
                 def profiles = Templates.list(max:max).collect(){ profile ->
                     return[
                         nombre: profile.name,
@@ -224,7 +224,8 @@ class ProfilesService {
                     ]
                 }
                 
-                def countProfiles = Templates.count()
+                def countProfiles = max ?:  Templates.count()
+                
                 new Logs("Lista de Perfiles", "Lista recuperada", logId, "INFO", true, [data:countProfiles])
                 Utils.logger(logId, "Lista de Perfiles", "Lista recuperada", "${countProfiles}")
                 return [data:[total:countProfiles, perfiles:profiles], status:200]

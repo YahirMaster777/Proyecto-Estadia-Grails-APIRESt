@@ -19,6 +19,7 @@ class UrlMappings {
                     put "/employee"(controller:'employees', action: 'update')
                     put "/profile"(controller:'profiles', action:'update')
                     put "/user"(controller:'users', action: 'update')
+                    put "/section"(controller:'sections', action:'update')
                 }
                 group "/read", {
                     get "/app"(controller:'apps', action:'info')
