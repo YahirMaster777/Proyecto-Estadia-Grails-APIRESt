@@ -8,9 +8,9 @@ import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
 class UsersService {
-def tokenGenerator, tokenStorageService
-def springSecurityService
-def authenticationEventPublisher
+    def tokenGenerator, tokenStorageService
+    def springSecurityService
+    def authenticationEventPublisher
 
     def createUser(data, logId) {
         Users.withTransaction{uStatus ->
@@ -31,7 +31,7 @@ def authenticationEventPublisher
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
-                return [ data: [ success: true], status: 200 ]
+                return [ data: [ success: true,data: [identifier: user.uuid] ], status: 200 ]
             }catch(e){
                 uStatus.setRollbackOnly()
                 new Logs("Registrar usuario","Error en la solicitud al crear un usuario", logId, e, [ : ])
@@ -75,72 +75,6 @@ def authenticationEventPublisher
     }   
 
     @Transactional(readOnly = true)
-    def buscarCuenta(UserPassOrgAuthToken auth){
-        def username = auth.name
-        Users user = Users.findByUsername(username)
-        return user
-    }
-    
-    def obtenerPermisos(Users username){
-        def permisos = UserSectionPermission.findAllByUser(username)
-        println permisos
-        return permisos
-    }
-    
-    def getUserAuthorities( Users username ){
-        def userRoles = UsersRoles.findAllByUser(username)
-        def authorities = []
-        if(userRoles.size() > 0){
-            authorities = userRoles.role.authority
-        }        
-        return AuthorityUtils.createAuthorityList(authorities as String[])
-    }
-
-    @Transactional(readOnly = true)
-    def infoUsers( Users username ){
-        try {
-            def user = Users.findByUsername(username.username)
-            def userSectionPermission = UserSectionPermission.findAllByUser(username)
-            def seccionesAgrupadas = [:]
-            UserSectionPermission.findAllByUser(username).each{templatePermission ->
-                def permiso = templatePermission.permission 
-                def seccion = permiso?.section  
-                if (seccion && permiso) {
-                    if (!seccionesAgrupadas.containsKey(seccion.name)) {
-                        seccionesAgrupadas[seccion.name] = [:]
-                    }
-                    seccionesAgrupadas[seccion.name][permiso.name] = permiso.description
-                }
-            }
-            def section = seccionesAgrupadas.collect { nombreSeccion, permisos ->
-                return [
-                    seccion  : nombreSeccion,
-                    permisos : permisos
-                ]
-            }
-            def uuidEmployee = user?.employee.uuid
-            def employee = Employees.findByUuid(uuidEmployee)
-            def response =[
-                uuid          : user.uuid,
-                employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
-                lastLogin     : user.lastLoginTime,
-                currentLogin  : user.currentLoginDate,
-                secctions     : section,
-            ]
-            return  response
-        }catch(Exception e) {
-            println e.getMessage()
-        }   
-    }
-    
-    def getToken( userDetails ){
-        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
-        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
-        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
-        return accessToken
-    }
-
-    @Transactional(readOnly = true)
     def readUser(uuid, logId) {
         try {
             new Logs("Buscar usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
@@ -153,7 +87,7 @@ def authenticationEventPublisher
             }
             new Logs( "Buscar usuario", "Usuario encontrado", logId, "INFO", true, [ data: uuid ] )
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
-            return [ data: [success: true, data:constructorUser(user) ], status: 200 ]
+            return [ data: [success: true, data:infoUsers(user) ], status: 200 ]
         }catch(Exception e) {
             new Logs("Buscar usuario","Error en la solicitud al buscar el usuario", logId, e, [ : ])
             Utils.logger(logId, "Buscar usuario", "Error en la solicitud al buscar el usuario", "f: ${e.getMessage()}")
@@ -237,47 +171,87 @@ def authenticationEventPublisher
         }
     }
 
-    // @Transactional(readOnly = true)
-    // def infoUser(username,logid) {
-    //     try {
-    //         new Logs("Información del usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
-    //         Utils.logger(logId,"Información del usuario","Procesando Solicitud", uuid)
-    //         def user = Users.findByUsername(username)
-    //         if (!user) {
-    //             new Logs( "Información del usuario", "No se encontró el registro", logId, "ERROR", false, [ uuidUser:uuid ] )
-    //             Utils.logger(logId, "Información del usuario", "No se encontró el registro", "Usuario:${uuid}")
-    //             return TypeError.informationNotFound( logId )
-    //         }
-    //         def userInfo = Users.createCriteria().list(){
-    //             sqlRestriction()
-
-    //         }.collect{ constructorTemplatePermission(it) }
-    //         println user
-    //         new Logs( "Información del usuario", "Se muestra la inforrmación al inciar sesión", logId, "INFO", true, [ data: uuid ] )
-    //         Utils.logger(logId, "Información del usuario", "Se muestra la inforrmación al inciar sesión", uuid)
-    //         return [ data: [success: true, data:userInfo ], status: 200 ]
-    //     } catch(Exception e) {
-    //         new Logs("Información del usuario","Error en la solicitud de información", logId, e, [ : ])
-    //         Utils.logger(logId, "Información del usuario", "Error en la solicitud de información", "f: ${e.getMessage()}")
-    //         return TypeError.internalError( logId )
-    //     }
-    // }
-
-    def constructorTemplatePermission(templatePermission) {
-        def templates = templatePermission.template.collect{
-            constructorTemplate(it)
-        }
-        return [
-            seccion : templatePermission.seccion,
-            template : templates
-        ]
+    @Transactional(readOnly = true)
+    def buscarCuenta(UserPassOrgAuthToken auth){
+        def username = auth.name
+        Users user = Users.findByUsername(username)
+        return user
+    }
+    
+    def obtenerPermisos(Users username){
+        def permiss = UserSectionPermission.findAllByUser(username)
+        println permiss
+        return permiss
+    }
+    
+    def getUserAuthorities( Users username ){
+        def userRoles = UsersRoles.findAllByUser(username)
+        def authorities = []
+        if(userRoles.size() > 0){
+            authorities = userRoles.role.authority
+        }        
+        return AuthorityUtils.createAuthorityList(authorities as String[])
     }
 
-    def constructorSeccion(section) {
-        return [
-            seccion: section.name,
-            permission: section.permission
-        ]
+    @Transactional(readOnly = true)
+    def infoUsers( Users username ){
+        try {
+            def user = Users.findByUsername(username.username)
+            def userSectionPermission = UserSectionPermission.findAllByUser(username)
+            def section = sections(username) //regresa los permisos por seccion
+            def uuidEmployee = user?.employee.uuid
+           def permission = permissions(username) //regresa las lista de todos los permisos
+            def employee = Employees.findByUuid(uuidEmployee)
+            def response =[
+                uuid          : user.uuid,
+                username      : username.username,
+                employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
+                lastLogin     : user.lastLoginTime,
+                currentLogin  : user.currentLoginDate,
+                secctions     : permission,
+            ]
+            return  response
+        }catch(Exception e) {
+            println e.getMessage()
+        }   
+    }
+    
+    def permissions(username) {
+        def sectionPermissionList = [:]
+        UserSectionPermission.findAllByUser(username).each { templatePermission ->
+            def permissionList = templatePermission.permission
+            sectionPermissionList[permissionList.name] = permissionList.alias
+        }
+        return sectionPermissionList
+    }
+    
+    def sections(username) {
+        def sectionPermissionList = [:]
+        UserSectionPermission.findAllByUser(username).each { templatePermission ->
+            def section = templatePermission.permission.section
+            if (!sectionPermissionList.containsKey(section.name)) {
+                sectionPermissionList[section.name] = [:]
+            }
+            sectionPermissionList[section.name][templatePermission.permission.name] = templatePermission.permission.alias
+        }
+        def section = sectionPermissionList.collect { nameSection, permiss ->
+            return [section: nameSection, permiss: permiss]
+        }
+        return section
+    }
+    
+    def getToken( userDetails ){
+        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
+        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
+        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
+        return accessToken
+    }
+
+    def createUrl(token, flag = null){
+        if (!flag) {
+            return "http://localhost:4200/auth/login?token=${token}"
+        }
+        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
     }
 
     def constructorUser(user) {

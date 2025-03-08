@@ -3,19 +3,12 @@ package com.ordenaris.internalControl
 class TemplatePermissions {
     Date dateCreated
     Date lastUpdated
-    String description
     Permissions permission
   
     static belongsTo=[template : Templates]
     
-    
     static mapping = {
         version false
-    }
-    
-    
-    static constraints = {
-        description maxSize:150
     }
 }
 
@@ -31,11 +24,11 @@ class Templates {
     
     static mapping = {
         version false
-        status sqlType : "Enum('Activo', 'Inactivo')"
+        status sqlType : "Enum('Activo', 'Inactivo', 'Eliminado')"
         permissions cascade: 'all-delete-orphan'
     }
     static constraints = {
-        status inList:["Activo", "Inactivo"]
+        status inList:["Activo", "Inactivo", "Eliminado"]
         uuid unique:true, maxSize:32
         name maxSize:50, unique:true
         description maxSize:150

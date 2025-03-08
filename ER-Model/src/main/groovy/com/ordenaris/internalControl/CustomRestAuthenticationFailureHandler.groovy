@@ -23,7 +23,6 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
 
     void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.addHeader('WWW-Authenticate', 'X-Auth-Token')
-        println("Custom rest Auth")
         def mensaje
         if (exception instanceof AccountExpiredException) {
             mensaje =  "La cuenta expiro"
@@ -39,7 +38,7 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
                 mensaje = "El usuario no tiene un rol"
                 response.setStatus(515)
             }else{
-                mensaje = "Error al iniciar sesion"
+                mensaje = "La cuenta esta bloqueada"
                 response.setStatus(517)
             }
         } else if(exception instanceof BadCredentialsException){
@@ -60,6 +59,8 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
         }
         response.setContentType("aplication/json")
         response.setCharacterEncoding("UTF-8");
+        
+        
         PrintWriter out = response.getWriter();
         HashMap resp = [ success:false, mensaje: mensaje]
         out.println(resp.toPrettyString());

@@ -5,13 +5,24 @@ import org.springframework.security.core.GrantedAuthority
 
 class MyUserDetails extends GrailsUser {
 
-   MyUserDetails(String username, String password, boolean enabled,
-                 boolean accountNonExpired, boolean credentialsNonExpired,
-                 boolean accountNonLocked,
-                 Collection<GrantedAuthority> authorities,
-                 long id) {
-      super(username, password, enabled, accountNonExpired,
-            credentialsNonExpired, accountNonLocked, authorities, id)
+    def infoUsers
 
-   }
+    MyUserDetails(
+        String username,
+        String password,
+        boolean enabled,
+        boolean accountNonExpired,
+        boolean credentialsNonExpired,
+        boolean accountNonLocked,
+        Collection<GrantedAuthority> authorities,
+        long id,
+        def infoUsers
+    ) {
+        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities, id)
+        this.infoUsers = infoUsers
+    }
+
+    def getInfoUsers() {
+        return this.infoUsers
+    }
 }

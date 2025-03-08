@@ -2,7 +2,6 @@ package com.ordenaris.internalControl;
 
 import java.util.Arrays;
 import java.util.Collection;
-
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -10,11 +9,13 @@ public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
 
     private final Object credentials;
     private final Object principal;
+    private final Object infoUsers;
 
     public UserPassOrgAuthToken(Object principal, Object credentials) {
         super(null);
         this.principal = principal;
         this.credentials = credentials;
+        this.infoUsers = null;
         setAuthenticated(false);
     }
 
@@ -26,6 +27,17 @@ public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
+        this.infoUsers = null;
+        super.setAuthenticated(true);
+    }
+
+    // crear un constructor con un objeto adicional, para poder pasar la información
+    // del usuario
+    public UserPassOrgAuthToken(Object principal, Object credentials, Collection<GrantedAuthority> authorities, Object infoUsers) {
+        super(authorities);
+        this.principal = principal;
+        this.credentials = credentials;
+        this.infoUsers = infoUsers;
         super.setAuthenticated(true);
     }
 
@@ -37,7 +49,11 @@ public class UserPassOrgAuthToken extends AbstractAuthenticationToken {
         return this.principal;
     }
 
+    public Object getInfoUsers() {
+        return this.infoUsers;
+    }
+
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-        super.setAuthenticated(false);
+        super.setAuthenticated(isAuthenticated);
     }
 }

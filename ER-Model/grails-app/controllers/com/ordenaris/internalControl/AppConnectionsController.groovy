@@ -19,6 +19,27 @@ class AppConnectionsController {
         return respond(saveConectionResponse.data, status: saveConectionResponse.status)
     }
     
+    def update(){
+        def logId = new Logs("Editar Conexion APP", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Editar Conexion APP", "Inicio de solicitud")
+        def data = request.JSON
+        def isValidData = validFormatData("Editar Conexion APP", data, logId)
+        if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
+        
+        def updateConectionResponse = AppConnectionsService.updateConnection(params, data, logId)
+        return respond(updateConectionResponse.data, status: updateConectionResponse.status)
+    }
+    
+    
+    def delete(){
+        def logId = new Logs("Eliminar Conexion APP", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Eliminar Conexion APP", "Inicio de solicitud")
+        def deleteConectionResponse = AppConnectionsService.deleteConnection(params, logId)
+        return respond(deleteConectionResponse.data, status:deleteConectionResponse.status)
+    }
+    
+    
+    
     def validFormatData(process, data, logId){
         new Logs(process, "Validando los datos ingresados",logId, "INFO", true, [ : ])
         Utils.logger(logId,process, "Validando los datos ingresados")
@@ -45,4 +66,7 @@ class AppConnectionsController {
         return [data:[success:true], status:200]
         
     }
+    
+    
+    
 }

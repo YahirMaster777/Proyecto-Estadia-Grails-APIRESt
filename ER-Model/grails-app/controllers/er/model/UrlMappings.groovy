@@ -19,6 +19,7 @@ class UrlMappings {
                     put "/employee"(controller:'employees', action: 'update')
                     put "/profile"(controller:'profiles', action:'update')
                     put "/user"(controller:'users', action: 'update')
+                    put "/section"(controller:'sections', action:'update')
                 }
                 group "/read", {
                     get "/app"(controller:'apps', action:'info')
@@ -27,32 +28,38 @@ class UrlMappings {
                 }
                 group "/delete", {
                     delete "/app"(controller:'apps', action:'delete')
+                    delete "/conection"(controller:'appConnections', action:'delete')
                     put "/employee"(controller:'employees', action:'delete')
                     delete "/profile"(controller:'profiles', action:'delete')
                     delete "/user"(controller:'users', action: 'delete')
                 }
                 group "/activate",{
                    patch "/app"(controller:'apps', action:'activate')
+                   patch "/profile"(controller:'profiles', action:'activate')
                    patch "/section"(controller:'sections', action:'activate')
                 }
                 group "/deactivate",{
                     patch "/app"(controller:'apps', action:'deactivate')
+                    patch "/profile"(controller:'profiles', action:'deactivate')
                     patch "/section"(controller: 'sections', action:'deactivate')
                 }
                 constraints {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
-        }
-        group "/list", {
+            
+            group "/list", {
             get "/user"(controller:'users', action: 'list')
             
-        }
-        group "/all", {
-            get "/app"(controller:'apps', action:'all')
-            get "/user"(controller:'users', action: 'all')
-        }
+            }
+            group "/all", {
+                get "/app"(controller:'apps', action:'all')
+                get "/user"(controller:'users', action: 'all')
+                get "/profiles"(controller:'profiles', action:'all')
+            }
     
+        }
+        
     group "/public", {
         patch "/$uuid/reset-password"(controller: 'recovery', action: 'resetPassword')
         post "/token"(controller: 'recovery', action: 'createToken')

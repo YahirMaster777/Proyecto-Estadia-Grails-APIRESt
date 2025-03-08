@@ -15,37 +15,19 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
 
         Users user = Users.get accessToken.principal.id as Long
 
+        def infoUsers = accessToken.principal.infoUsers
+
         def originalObject = [
             username         : user.username,
-            role             : accessToken.principal.authorities[0].authority,
+            nombre           : infoUsers.employee,
+            uuid             : user.uuid,
+            permisos         : infoUsers.secctions,
+            roles            : accessToken.principal.authorities.authority,
+            token_type       : 'bearer',
             access_token     : accessToken.accessToken,
             refresh_token    : accessToken.refreshToken,
-            expiration       : accessToken.expiration,
-            
-
+            expiration       : accessToken.expiration
         ]
-
-        // if( accessToken.principal.authorities.size() == 1 ){
-        //     def newRole = Role.findByAuthority( accessToken.principal.authorities[0] )
-        //     // if(newRole.authority == "ROLE_ADMINISTRADOR"){
-        //     //     originalObject.path = "${newRole.path}"
-        //     // }else if(newRole.authority == "ROLE_SOPORTE"){
-        //     //     originalObject.path = "${newRole.path}"
-        //     // }else{
-        //     //     originalObject.path = "/control${newRole.path}"
-        //     // }
-        //     // originalObject.perfil = newRole.nombre
-        // }else{
-        //     // if(newRole.authority == "ROLE_ADMINISTRADOR"){
-        //     //     originalObject.path = "${newRole.path}"
-        //     // }else if(newRole.authority == "ROLE_SOPORTE"){
-        //     //     originalObject.path = "${newRole.path}"
-        //     // }else{
-        //     //     originalObject.path = "/control${newRole.path}"
-        //     // }
-        //     originalObject.perfil = newRole.nombre
-        // }
         return new JsonBuilder(originalObject).toPrettyString()
     }
-
 }
