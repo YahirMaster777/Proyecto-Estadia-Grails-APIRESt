@@ -22,7 +22,7 @@ class AppConnectionsController {
     def update(){
         def logId = new Logs("Editar Conexion APP", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Editar Conexion APP", "Inicio de solicitud")
-        
+        def data = request.JSON
         def isValidData = validFormatData("Editar Conexion APP", data, logId)
         if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
         

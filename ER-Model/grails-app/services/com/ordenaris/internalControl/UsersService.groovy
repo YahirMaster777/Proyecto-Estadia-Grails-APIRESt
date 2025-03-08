@@ -198,8 +198,9 @@ class UsersService {
         try {
             def user = Users.findByUsername(username.username)
             def userSectionPermission = UserSectionPermission.findAllByUser(username)
-            def section = sections(username)
+            def section = sections(username) //regresa los permisos por seccion
             def uuidEmployee = user?.employee.uuid
+           def permission = permissions(username) //regresa las lista de todos los permisos
             def employee = Employees.findByUuid(uuidEmployee)
             def response =[
                 uuid          : user.uuid,
@@ -207,21 +208,23 @@ class UsersService {
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
                 lastLogin     : user.lastLoginTime,
                 currentLogin  : user.currentLoginDate,
-                secctions     : section,
+                secctions     : permission,
             ]
             return  response
         }catch(Exception e) {
             println e.getMessage()
         }   
     }
+    
     def permissions(username) {
         def sectionPermissionList = [:]
         UserSectionPermission.findAllByUser(username).each { templatePermission ->
             def permissionList = templatePermission.permission
             sectionPermissionList[permissionList.name] = permissionList.alias
         }
-        return [permissions: sectionPermissionList]
+        return sectionPermissionList
     }
+    
     def sections(username) {
         def sectionPermissionList = [:]
         UserSectionPermission.findAllByUser(username).each { templatePermission ->

@@ -25,13 +25,53 @@ class SectionsService {
                 Utils.logger(logId,"Registrar Seccion","Se registro la seccion", "${data.name}")
                 return [data:[success:true], status:200]    
             }catch(e){
-                new Logs("Registrar Seccion","Error en la solicitud",logId,e, [data:[success:false]])
+                new Logs("Registrar Seccion","Error en la solicitud",logId,e, [ : ])
                 Utils.logger(logId,"Registrar Seccion","Error en la solicitud","ERROR: ${e.getMessage()}")
                 status.setRollbackOnly()
                 return TypeError.internalError(logId)
             }
     
         }
+    }
+    
+    def updateSection(params, data, logId){
+        Sections.withTransaction{ status -> 
+            try{
+                new Logs("Actualizar Seccion", "Procesando solicitud", logId,"INFO", true, [ : ])
+                Utils.logger(logId,"Actualizar Seccion", "Procesando solicitud")
+                
+                def section = Sections.findByUuid(params.uuid)
+                if(!section){
+                    new Logs("Actualizar Seccion", "No se encontro la informacion", logId, "INFO", false, [ : ])
+                    Utils.logger(logId, "Actualizar Seccion", "No se encontro la informacion")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                def sectionExists = Sections.findByName(data.name)
+                if(sectionExists){
+                    new Logs("Actualizar Seccion", "Ingrese otros Valores", logId, "INFO", false, [ : ])
+                    Utils.logger(logId, "Actualizar Seccion", "Ingrese otros Valores")
+                    return TypeError.existingRegister(logId)
+                }
+                
+                data.name?section.name = data.name:section.name
+                data.url?section.url = data.url:section.url
+                data.status?section.status= data.status:section.status
+                data.description?section.description = data.description:section.description
+                section.save(failOnError:true, flush:true)
+                
+                new Logs("Actualizar Seccion", "Se actualizo la seccion",logId, "INFO", true, [ data: params.uuid])
+                Utils.logger(logId, "Actualizar Seccion", "Se actualizo la seccion", "Seccion: ${params.uuid}")
+                return [data:[success:true], status:200]
+                
+            }catch(e){
+                new Logs("Actualizar Seccion", "Error en la solicitud", logId, e , [ : ])
+                Utils.logger(logId, "Actualizar Seccion","Error en la solicitud", "ERROR:${e.getMessage()}")
+                return TypeError.informationNotFound(logId)
+            
+            }
+        }
+        
     }
     
     def activateSection(params, logId){
@@ -53,7 +93,7 @@ class SectionsService {
                 Utils.logger(logId,"Activar Seccion", "Se activo la seccion", "Seccion :${params.uuid}")
                 return [data:[success:true], status:200]
             }catch(e){
-                new Logs("Activar Seccion", "Error en la solicitud", logId, e, [data:[success:false]])
+                new Logs("Activar Seccion", "Error en la solicitud", logId, e, [ : ])
                 Utils.logger(logId,"Activar Seccion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
                 status.setRollbackOnly()
                 return TypeError.internalError(logId)

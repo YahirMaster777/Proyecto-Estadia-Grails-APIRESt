@@ -21,7 +21,7 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
             username         : user.username,
             nombre           : infoUsers.employee,
             uuid             : user.uuid,
-            permisos         : infoUsers.secctions.permisos,
+            permisos         : infoUsers.secctions,
             roles            : accessToken.principal.authorities.authority,
             token_type       : 'bearer',
             access_token     : accessToken.accessToken,
