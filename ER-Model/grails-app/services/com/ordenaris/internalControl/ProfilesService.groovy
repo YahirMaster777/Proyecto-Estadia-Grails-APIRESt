@@ -34,6 +34,56 @@ class ProfilesService {
         }
     }
     
+    def registerProfileWhitPermission(data, logId){
+        Templates.withTransaction{ status -> 
+            try{
+                new Logs("Regisgro de perfil con permisos", "Procesando solicitud",logId, "INFO",true, [ : ])
+                Utils.logger(logId, "Registro del perfil con permisos", "Procesando solicitud")
+                
+                def profile = Templates.findByName(data.name)
+                if(profile){
+                    new Logs("Regisgro de perfil con permisos", "No es posible procesar la solicitud, por favor utilice valores diferentes.", logId,"INFO",false, [ : ])
+                    Utils.logger(logId, "Regisgro de perfil con permisos","No es posible procesar la solicitud, por favor utilice valores diferentes.")
+                    return TypeError.existingRegister(logId)
+                }
+                
+                // data.permisos= []
+                
+                def permission = Permissions.findByIdInList(data.permisos.permission)
+                if(!permission){
+                    new Logs( "Registrar Permisos Perfil", "No se encontró el registro del permiso", logId, "ERROR", false, [  :  ] )
+                    Utils.logger(logId, "Registrar Permisos Perfil", "No se encontró el registro del permiso")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                
+                def template = new Templates()
+                template.name = data.name
+                template.description = data.description
+                template.save(failOnError:true, flush:true)
+                                
+                def templatePerm = new  TemplatePermissions()
+                templatePerm.template = template
+                templatePerm.permission = data.permisos.permission
+                templatePerm.save(failOnError:true, flush:true)
+            
+                    
+                
+                new Logs("Regisgro de perfil con permisos", "Se registro el perfil", logId, "INFO", true, [ : ])
+                Utils.logger(logId, "Regisgro de perfil con permisos", "Se registro el perfil")
+                return [data:[success:true], status:200]
+                
+            }catch(e){
+                new Logs("Regisgro de perfil con permisos", "Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Regisgro de perfil con permisos", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
+    
+    
+    
     def activateProfile(params, logId){
         Templates.withTransaction { status ->
             try{
@@ -188,8 +238,9 @@ class ProfilesService {
                 }
         
                 def response = [
-                    uuid       : profile.uuid,
                     name       : profile.name,
+                    status     : profile.status,
+                    uuid       : profile.uuid,
                     description: profile.description,
                     secciones  : secciones
                 ]

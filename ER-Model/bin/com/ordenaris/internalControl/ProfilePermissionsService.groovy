@@ -34,7 +34,6 @@ class ProfilePermissionsService {
                 
                 def permissions = new TemplatePermissions()
                 permissions.template = template
-                permissions.description = data.description
                 permissions.permission = permission
                 
                 permissions.save(flush:true, failOnError:true)

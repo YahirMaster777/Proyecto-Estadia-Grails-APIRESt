@@ -20,6 +20,15 @@ class ProfilesController {
         
     }
     
+    def saveComplete(){
+        def logId = new Logs("Regisgro de perfil con permisos", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Regisgro de perfil con permisos", "Inicio de solicitud")
+        def data = request.JSON
+        
+        def saveProfileResponse = ProfilesService.registerProfileWhitPermission(data, logId)
+        return respond(saveProfileResponse.data, status: saveProfileResponse.status)
+    }
+    
     def activate(){
         def logId = new Logs("Activar Perfil", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Activar Perfil", "Inicio de solicitud")

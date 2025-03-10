@@ -12,6 +12,7 @@ class UrlMappings {
                 post "/profile-permissions"(controller:'profilePermissions', action:'save')
                 post "/section"(controller:'sections', action:'save')
                 post "/user"(controller:'users', action: 'create')
+                post "/profile-complete"(controller:'profiles', action:'saveComplete')
             }
             
             group "/$uuid", {
