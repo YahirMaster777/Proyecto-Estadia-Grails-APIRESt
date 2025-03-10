@@ -178,11 +178,6 @@ class UsersService {
         return user
     }
     
-    def obtenerPermisos(Users username){
-        def permiss = UserSectionPermission.findAllByUser(username)
-        println permiss
-        return permiss
-    }
     
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
@@ -200,7 +195,7 @@ class UsersService {
             def userSectionPermission = UserSectionPermission.findAllByUser(username)
             def section = sections(username) //regresa los permisos por seccion
             def uuidEmployee = user?.employee.uuid
-           def permission = permissions(username) //regresa las lista de todos los permisos
+            def permission = permissions(username) //regresa las lista de todos los permisos
             def employee = Employees.findByUuid(uuidEmployee)
             def response =[
                 uuid          : user.uuid,
@@ -208,7 +203,7 @@ class UsersService {
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
                 lastLogin     : user.lastLoginTime,
                 currentLogin  : user.currentLoginDate,
-                secctions     : permission,
+                secctions     : section,
             ]
             return  response
         }catch(Exception e) {
@@ -232,10 +227,12 @@ class UsersService {
             if (!sectionPermissionList.containsKey(section.name)) {
                 sectionPermissionList[section.name] = [:]
             }
+                
+            // sectionPermissionList[section.name] [templatePermission.permission.name] = templatePermission.permission.alias  
             sectionPermissionList[section.name][templatePermission.permission.name] = templatePermission.permission.alias
         }
         def section = sectionPermissionList.collect { nameSection, permiss ->
-            return [section: nameSection, permiss: permiss]
+            return [section: nameSection, permisos: permiss]
         }
         return section
     }
