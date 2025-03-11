@@ -10,6 +10,7 @@ import org.springframework.security.authentication.LockedException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.AccountExpiredException
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.CredentialsExpiredException
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.util.Assert
 import grails.plugin.springsecurity.userdetails.GrailsUser
@@ -33,32 +34,32 @@ class CustomAuthProvider implements AuthenticationProvider {
     }
 
     def fnVerifyStatusUser(user) {
-        def code
+        
+        
         if (!user) {
-            code = 518
             throw new BadCredentialsException("Account notFound")
         }
         if (!user.enabled) {
-            code = 'Cuenta Inhabilitada'
             throw new DisabledException("Account disabled")
         }
         if (user.accountExpired) {
-            code = 'Cuenta Expirada'
             throw new AccountExpiredException("Account Expired")
         }
         if (user.accountLocked) {
-            code = 'Cuenta Bloqueada'
             throw new LockedException("Account locked")
         }
         if (user.passwordExpired) {
-            code = 'Password Expirada'
-            throw new AccountExpiredException("Credentials Expired")
+            throw new CredentialsExpiredException("Credentials Expired")
         }
     }
 
     def doAuthentication(UserPassOrgAuthToken auth) {
         def respuestaBusqueda = userService.buscarCuenta(auth)
+        if (!respuestaBusqueda){
+            throw new BadCredentialsException("Account notFound")
+        }
         def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
+        
         def infoUsers = userService.infoUsers(respuestaBusqueda)
 
         fnVerifyStatusUser(respuestaBusqueda)

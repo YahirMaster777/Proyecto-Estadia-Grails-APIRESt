@@ -45,8 +45,12 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
             if (exception.getMessage() == "Authentication failed"){
                 mensaje = "Error Introduzca otras crendeciales"
                 response.setStatus(518)
-                
-            }else if (exception.getMessage() == "Usuario loging block"){
+            
+            }else if(exception.getMessage() == "Account notFound") {
+                mensaje = "No se encontro la informacion solicitada"
+                response.setStatus(412)
+            }
+            else if (exception.getMessage() == "Usuario loging block"){
                 mensaje = "Cuenta Bloqueada"
                 response.setStatus(519)
             }else{

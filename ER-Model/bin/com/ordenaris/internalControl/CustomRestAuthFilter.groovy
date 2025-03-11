@@ -37,7 +37,7 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 	private UserPassOrgAuthToken extractCredentialsFromJsonPayload(HttpServletRequest httpServletRequest){
 		String username = httpServletRequest.JSON.username
 		String password = httpServletRequest.JSON.password
-		
+
 		if( username && password ){
 			return new UserPassOrgAuthToken(username, password)
 		}else{
@@ -50,14 +50,12 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 	@Override
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
 		String endpointUrl =  "/api/login"
-		// authenticationFailureHandler.setStatusCode( HttpServletResponse.SC_UNAUTHORIZED )
+		authenticationFailureHandler.setStatusCode( HttpServletResponse.SC_UNAUTHORIZED )
 		
 		HttpServletRequest httpServletRequest = request as HttpServletRequest
 		HttpServletResponse httpServletResponse = response as HttpServletResponse
 		def actualUri =  httpServletRequest.requestURI - httpServletRequest.contextPath
 		if (actualUri == endpointUrl){
-
-
 			if (httpServletRequest.method != 'POST'){
 				println "${httpServletRequest.method} HTTP method is not supported. Setting status to ${HttpServletResponse.SC_METHOD_NOT_ALLOWED}"
 				httpServletResponse.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
@@ -70,9 +68,7 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 			Authentication authenticationResult
 
 			UserPassOrgAuthToken authenticationRequest = this.extractCredentialsFromJsonPayload(httpServletRequest)
-
 			if( authenticationRequest ){
-				
 				boolean authenticationRequestIsCorrect = (
 					authenticationRequest?.principal && 
 					authenticationRequest?.credentials
