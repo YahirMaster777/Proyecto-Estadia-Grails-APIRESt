@@ -21,12 +21,12 @@ class BootStrap {
 
     def init = { servletContext ->
         def HashMap<String, String> dataMapGlobal = [:]
-        // servletContext.setAttribute(userDomainClassName)
         // SettingsService.initializeDefaults()
-        // Settings.initializeDefaults()
+        println "ya se inicializo, tratando de refrescar la varialbe global"
+        // servletContext.setAttribute("map", dataMapGlobal)
         // SettingsService.refreshData()
-        // println "Intentando acceder al setting"
-        // println dataMapGlobal
+        println "Intentando acceder al setting"
+        println dataMapGlobal
         // static Map<String, String> dataMapGlobal = [:]
 
         // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
@@ -82,13 +82,13 @@ class BootStrap {
             def section3permission3 = new Permissions(alias:'edit_employee', section:section3, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission4 = new Permissions(alias:'view_employee', section:section3, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
     
-            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
-            def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
+            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1, enabled:true)
+            def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2, enabled:true)
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002', businessEmail:'yairA@gmail.com', employee:employee3)
             def userAdmin2 =  new Users(username: 'emilioA', password: '1a2b3c4d', businessEmail:'emilioA@gmail.com', employee:employee4)
             def userCustom1 =  new Users(username: 'yairC', password: 'Yair141002',  businessEmail:'yairC@gmail.com', employee:employee5)
             def userCustom2 =  new Users(username: 'emilioC', password: '1a2b3c4d', businessEmail:'emilioC@gmail.com', employee:employee6)
-            new Users(username: 'emilio.mendoza@ordenaris.com', password: '1a2b3c4d', businessEmail:'emilioT@gmail.com', employee:employee2).save(flush:true)
+            new Users(username: 'emilio.mendoza@ordenaris.com', password: '1a2b3c4d', businessEmail:'emilioT@gmail.com', employee:employee2, enabled:true).save(flush:true)
             if (!userRoot1.save(flush: true) || !userRoot2.save(flush: true) || !userAdmin1.save(flush: true) || !userAdmin2.save(flush: true) || !userCustom1.save(flush: true) || !userCustom2.save(flush: true)) {
                 userRoot1.errors.allErrors.each { println it }
                 userRoot2.errors.allErrors.each { println it }

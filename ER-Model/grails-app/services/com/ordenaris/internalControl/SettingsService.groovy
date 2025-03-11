@@ -35,7 +35,11 @@ class SettingsService {
         println "Estoy en el setting la variable global"
         // BootStrap.dataMapGlobal = dataMapGlobal
     }
-    void initializeDefaults() {
-        Settings.initializeDefaults()
-    }
+    // def initializeDefaults() {
+    //     Map<String, String> dataMapGlobal = [:]
+    //     Settings.list().each { setting ->
+    //         dataMapGlobal[setting.identifier] = setting.data
+    //     }
+    //     BootStrap.dataMapGlobal = dataMapGlobal
+    // }
 }
