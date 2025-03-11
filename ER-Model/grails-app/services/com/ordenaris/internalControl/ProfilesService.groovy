@@ -107,11 +107,12 @@ class ProfilesService {
     
     
     def deactivateProfile(params, logId){
-        Templates.withTransaction{status ->
+        Templates.withTransaction{ status ->
             try{
                 new Logs("Desactivar Perfil", "Procesando solicitud",logId, "INFO",true, [data:params.uuid])
                 Utils.logger(logId, "Desactivar Perfil", "Procesando solicitud")
-                def profile = Templates.findByUuid(params.uuid){
+                def profile = Templates.findByUuid(params.uuid)
+                if(!profile){
                     new Logs("Desactivar Perfil", "No se encontro la informacion solicitada", logId, "INFO", false, [data:[params.uuid]])
                     Utils.logger(logId, "Desactivar Perfil", "Nose encontro la informacion solicitada")
                 }

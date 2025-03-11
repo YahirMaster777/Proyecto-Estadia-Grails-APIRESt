@@ -184,10 +184,10 @@ class UsersService {
         }
         if (user.password == springSecurityService.encodePassword(password)){
             return user
-        }
-        if (user.password != springSecurityService.encodePassword(password)){
+        }else {
             throw new BadCredentialsException("Authentication failed")
         }
+        
         return
     }
     
