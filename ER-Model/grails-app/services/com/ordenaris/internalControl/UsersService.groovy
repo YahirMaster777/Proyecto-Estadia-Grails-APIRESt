@@ -180,11 +180,13 @@ class UsersService {
         Users user = Users.findByUsername(username)
         
         if (!user){
-           throw new BadCredentialsException("Account notFound")
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
+            throw new BadCredentialsException("Account notFound")
         }
         if (user.password == springSecurityService.encodePassword(password)){
             return user
         }else {
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
             throw new BadCredentialsException("Authentication failed")
         }
         
