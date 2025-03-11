@@ -11,7 +11,7 @@ class Settings {
         version false
     }
 
-    private static initializeDefaults() {
+    public static initializeDefaults() {
         def registers = [
             new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS'),
             new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE')
