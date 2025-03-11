@@ -72,10 +72,10 @@ class RecoveryService {
     def resetPassword(password, uuid, flag, numberIntents, logId) {
         Users.withTransaction{uStatus->
             try{
-                if (flag){
-
-                }
                 def intent = IntentRecovery.findByUuid(uuid)
+                if (flag && !intent){
+                    def user = Users.findByUsername(username)
+                }
                 if(!intent){
                     new Logs( "Recuperar constraseña", "No se encontró el registro", logId, "ERROR", false, [ uuid:uuid ] )
                     Utils.logger(logId, "Recuperar constraseña", "No se encontró el registro", uuid)

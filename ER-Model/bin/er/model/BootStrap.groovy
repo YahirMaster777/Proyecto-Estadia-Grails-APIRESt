@@ -21,13 +21,14 @@ class BootStrap {
 
     def init = { servletContext ->
         def HashMap<String, String> dataMapGlobal = [:]
-        // SettingsService.initializeDefaults()
+        Settings.initializeDefaults()
         println "ya se inicializo, tratando de refrescar la varialbe global"
         // servletContext.setAttribute("map", dataMapGlobal)
         // SettingsService.refreshData()
         println "Intentando acceder al setting"
         println dataMapGlobal
-        // static Map<String, String> dataMapGlobal = [:]
+        // ServletContext dataMapGlobal = request.getServletContext()
+        // dataMapGlobal.setAttribute("map", Settings.singletonMap(Settings.refreshData()))
 
         // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
         // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)

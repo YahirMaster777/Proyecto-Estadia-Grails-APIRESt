@@ -234,15 +234,15 @@ class UsersService {
     
     def sections(username) {
         def sectionPermissionList = [:]
-        def user= UserSectionPermission.findAllByUser(username).each { templatePermission ->
+        def user = UserSectionPermission.findAllByUser(username).each { templatePermission ->
             def section = templatePermission.permission.section
             if (!sectionPermissionList.containsKey(section.name)) {
-                sectionPermissionList[section.name] = [:]
+                sectionPermissionList[section.name] = []
             }
-            sectionPermissionList[section.name]
+            sectionPermissionList[section.name] << templatePermission.permission.alias
         }
         def section = sectionPermissionList.collect { nameSection, permiss ->
-            return [section: nameSection, permisos: user?.permission.alias ]
+            return [section: nameSection, permisos: permiss]
         }
         return section
     }
