@@ -20,7 +20,7 @@ class Users implements Serializable {
     boolean accountLocked
     Employees employee
     boolean passwordExpired
-    String flag
+    // boolean flag = true
     Date dateLocked
     Date lastLoginTime
     Date currentLoginDate
@@ -37,7 +37,6 @@ class Users implements Serializable {
         password password: true
         username nullable: false, blank: false, unique: true, maxSize:80
         businessEmail unique:true, maxSize:100, email:true, nullable: true, blank:true
-        flag nullable:true, blank:true, maxSize:32
         dateLocked nullable:true, blank:true
         lastLoginTime nullable:true, blank:true
         currentLoginDate nullable:true, blank:true

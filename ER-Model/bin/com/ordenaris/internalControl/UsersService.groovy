@@ -209,7 +209,6 @@ class UsersService {
             def userSectionPermission = UserSectionPermission.findAllByUser(username)
             def section = sections(username) //regresa los permisos por seccion
             def uuidEmployee = user?.employee.uuid
-            def permission = permissions(username) //regresa las lista de todos los permisos
             def employee = Employees.findByUuid(uuidEmployee)
             def response =[
                 uuid          : user.uuid,
@@ -226,12 +225,9 @@ class UsersService {
     }
     
     def permissions(username) {
-        def sectionPermissionList = [:]
-        UserSectionPermission.findAllByUser(username).each { templatePermission ->
-            def permissionList = templatePermission.permission
-            sectionPermissionList[permissionList.name] = permissionList.alias
-        }
-        return sectionPermissionList
+        def user = UserSectionPermission.findAllByUser(username)
+        println user?.permission.alias
+        return [permission:user?.permission.alias ]
     }
     
     def sections(username) {
@@ -256,13 +252,6 @@ class UsersService {
         tokenStorageService.storeToken(accessToken.accessToken, userDetails)
         authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
         return accessToken
-    }
-
-    def createUrl(token, flag = null){
-        if (!flag) {
-            return "http://localhost:4200/auth/login?token=${token}"
-        }
-        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
     }
 
     def constructorUser(user) {

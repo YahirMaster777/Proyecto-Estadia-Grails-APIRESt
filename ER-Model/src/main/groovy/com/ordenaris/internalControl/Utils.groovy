@@ -4,10 +4,10 @@ import grails.util.Holders
 import groovyx.net.http.Method
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ContentType
-import static groovyx.net.http.Method.GET
-import static groovyx.net.http.Method.POST
 import static groovyx.net.http.ContentType.XML
 import static groovyx.net.http.ContentType.JSON
+import static groovyx.net.http.Method.GET
+import static groovyx.net.http.Method.POST
 
 public class Utils {
 	private static grailsApplication = Holders.grailsApplication
@@ -102,19 +102,27 @@ public class Utils {
                 }
             }
         }catch(e) {
+            println "hay un error" 
             new Logs( "Enviar Peticiones HTTP.", "Ha ocurrido un error.", logId, e, [url: host + path, headers: headersList, method: method, type: type] )
             logger( logId, "Enviar Peticiones HTTP.", "Ha ocurrido un error.", e.getMessage() ?: e.cause ?: e,  "url: $host$path, headers: $headersList, method: $method, type:$type")
             return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
         }
     }
 
-    public static contructorMail(name = "Onefa", typeService, code, user, subject, text, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", campaign, body, tipeTemplate = 0, template = 0, files) {
+    public static createUrl(token, flag = null){
+        if (!flag) {
+            return "http://localhost:4200/auth/login?token=${token}"
+        }
+        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
+    }
+
+    public static contructorMail(name = "Onefa", typeService, code, user, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", subject, text, campaign, body, tipeTemplate = 0, template = 0, files = [:]) {
         return [
             app: [nombre: name],
             tipoServicio: typeService, // 1- Único / 2- Múltiple
             data: [[
                 codigo: code,
-                valor: user
+                valor: user //TODO cambiar por el nombre
             ]],
             request: [
                 fromMail: fromMail,
