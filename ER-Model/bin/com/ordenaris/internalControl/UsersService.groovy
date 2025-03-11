@@ -77,6 +77,64 @@ class UsersService {
     }   
 
     @Transactional(readOnly = true)
+    def buscarCuenta(UserPassOrgAuthToken auth){
+        def username = auth.name
+        Users user = Users.findByUsername(username)
+        return user
+    }
+    
+    def getUserAuthorities( Users username ){
+        def userRoles = UsersRoles.findAllByUser(username)
+        def authorities = []
+        if(userRoles.size() > 0){
+            authorities = userRoles.role.authority
+        }        
+        return AuthorityUtils.createAuthorityList(authorities as String[])
+    }
+
+    @Transactional(readOnly = true)
+    def infoUsers( Users username ){
+        try {
+            def user = Users.findByUsername(username.username)
+            def userSectionPermission = UserSectionPermission.findAllByUser(username)
+            def seccionesAgrupadas = [:]
+            UserSectionPermission.findAllByUser(username).each{templatePermission ->
+                def permiso = templatePermission.permission 
+                def seccion = permiso?.section  
+                if (seccion && permiso) {
+                    if (!seccionesAgrupadas.containsKey(seccion.name)) {
+                        seccionesAgrupadas[seccion.name] = [:]
+                    }
+                    seccionesAgrupadas[seccion.name][permiso.name] = permiso.alias
+                }
+            }
+            def section = seccionesAgrupadas.collect { nombreSeccion, permisos ->
+                return [
+                    seccion  : nombreSeccion,
+                    permisos : permisos
+                ]
+            }
+            def uuidEmployee = user?.employee.uuid
+            def employee = Employees.findByUuid(uuidEmployee)
+            def response =[
+                uuid          : user.uuid,
+                employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
+                secctions     : section,
+            ]
+            return  response
+        }catch(Exception e) {
+            println e.getMessage()
+        }   
+    }
+    
+    def getToken( userDetails ){
+        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
+        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
+        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
+        return accessToken
+    }
+
+    @Transactional(readOnly = true)
     def readUser(uuid, logId) {
         try {
             new Logs("Buscar usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:uuid])
