@@ -69,9 +69,10 @@ class CustomPasswordEncoder extends MessageDigestPasswordEncoder {
     boolean isPasswordValid(String encPass, String rawPass, Object salt) {
         String password1 = "" + encPass
         String password2 = encodePassword(rawPass, salt)
-        return PasswordEncoderUtils.equals(password1, password2)
         password1 = ""
         password2 = ""
+        return PasswordEncoderUtils.equals(password1, password2)
+        
     }
 
     String getAlgorithm() {

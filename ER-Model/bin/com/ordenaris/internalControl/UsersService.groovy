@@ -4,6 +4,8 @@ import grails.gorm.transactions.Transactional
 import grails.gorm.CriteriaBuilder
 import org.springframework.security.core.authority.AuthorityUtils
 import grails.plugin.springsecurity.rest.token.AccessToken
+import org.springframework.security.authentication.BadCredentialsException
+
 import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
@@ -232,9 +234,21 @@ class UsersService {
     @Transactional(readOnly = true)
     def buscarCuenta(UserPassOrgAuthToken auth){
         def username = auth.name
+        def password = auth.credentials
         Users user = Users.findByUsername(username)
-        return user
+        
+        if (!user){
+           throw new BadCredentialsException("Account notFound")
+        }
+        if (user.password == springSecurityService.encodePassword(password)){
+            return user
+        }
+        if (user.password != springSecurityService.encodePassword(password)){
+            throw new BadCredentialsException("Authentication failed")
+        }
+        return
     }
+    
     
     
     def getUserAuthorities( Users username ){
