@@ -78,7 +78,7 @@ class CustomAuthProvider implements AuthenticationProvider {
             auth = new UserPassOrgAuthToken(userDetails, auth.credentials, userDetails.authorities, infoUsers)
             return auth
         } else {
-            return null
+            return 
         }
     }
 }

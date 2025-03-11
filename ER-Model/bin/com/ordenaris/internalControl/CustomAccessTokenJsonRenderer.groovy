@@ -16,12 +16,12 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
         Users user = Users.get accessToken.principal.id as Long
 
         def infoUsers = accessToken.principal.infoUsers
-
+    
         def originalObject = [
             username         : user.username,
             nombre           : infoUsers.employee,
             uuid             : user.uuid,
-            permisos         : infoUsers.secctions,
+            secciones        : infoUsers.secctions,
             roles            : accessToken.principal.authorities.authority,
             token_type       : 'bearer',
             access_token     : accessToken.accessToken,

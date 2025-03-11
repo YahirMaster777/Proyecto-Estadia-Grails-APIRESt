@@ -34,6 +34,51 @@ class ProfilesService {
         }
     }
     
+    def registerProfileWhitPermission(data, logId) {
+        Templates.withTransaction { status ->
+            try {
+                new Logs("Registro de perfil con permisos", "Procesando solicitud", logId, "INFO", true, [:])
+                Utils.logger(logId, "Registro del perfil con permisos", "Procesando solicitud")
+
+                def profile = Templates.findByName(data.name)
+                if (profile) {
+                    new Logs("Registro de perfil con permisos", "No es posible procesar la solicitud, por favor utilice valores diferentes.", logId, "INFO", false, [:])
+                    Utils.logger(logId, "Registro de perfil con permisos", "No es posible procesar la solicitud, por favor utilice valores diferentes.")
+                    return TypeError.existingRegister(logId)
+                }
+
+                def template = new Templates()
+                template.name = data.name
+                template.description = data.description
+                template.save(failOnError: true, flush: true)
+
+                data.permisos.each { permiso ->
+                    def permission = Permissions.findByAlias(permiso.permission)
+                    if (!permission) {
+                        new Logs("Registrar Permisos Perfil", "No se encontró el registro del permiso", logId, "ERROR", false, [:])
+                        Utils.logger(logId, "Registrar Permisos Perfil", "No se encontró el registro del permiso")
+                        return TypeError.informationNotFound(logId)
+                    }
+
+                    def templatePerm = new TemplatePermissions()
+                    templatePerm.template = template
+                    templatePerm.permission = permission
+                    templatePerm.save(failOnError: true, flush: true)
+                }
+
+                new Logs("Registro de perfil con permisos", "Se registró el perfil", logId, "INFO", true, [:])
+                Utils.logger(logId, "Registro de perfil con permisos", "Se registró el perfil")
+                return [data: [success: true], status: 200]
+
+            } catch (e) {
+                new Logs("Registro de perfil con permisos", "Error en la solicitud", logId, e, [:])
+                Utils.logger(logId, "Registro de perfil con permisos", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+}
+
     def activateProfile(params, logId){
         Templates.withTransaction { status ->
             try{
@@ -128,7 +173,6 @@ class ProfilesService {
 
                 def profile = Templates.findByUuid(params.uuid)
                 
-                // if(profile.name == )
                 
                 if(!profile){
                     new Logs("Eliminar Perfil", "No se encontro la Informacion solicitada", logId,"INFO", false, [ : ])
@@ -153,60 +197,63 @@ class ProfilesService {
         }
     }
     
-    def infoProfile(params, logId) {
-        Templates.withTransaction{ status ->
-            try {
-                new Logs("Información del Perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
-                Utils.logger(logId, "Información del Perfil", "Procesando solicitud")
-        
-                def profile = Templates.findByUuidAndStatus(params.uuid,'Activo')
-                if (!profile) {
-                    new Logs("Información del Perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
-                    Utils.logger(logId, "Información del Perfil", "No se encontró la información solicitada")
-                    return TypeError.informationNotFound(logId)
-                }
-        
-                def seccionesAgrupadas = [:]
-                
-                TemplatePermissions.findAllByTemplate(profile).each { templatePermission ->
-                    def permiso = templatePermission.permission 
-                    def seccion = permiso?.section  
-        
-                    if (seccion && permiso) {
-                        if (!seccionesAgrupadas.containsKey(seccion.name)) {
-                            seccionesAgrupadas[seccion.name] = [:]
-                        }
-                        seccionesAgrupadas[seccion.name][permiso.name] = permiso.alias
-                    }
-                }
-        
-                def secciones = seccionesAgrupadas.collect { nombreSeccion, permisos ->
-                    return [
-                        seccion  : nombreSeccion,
-                        permisos : permisos
-                    ]
-                }
-        
-                def response = [
-                    uuid       : profile.uuid,
-                    name       : profile.name,
-                    description: profile.description,
-                    secciones  : secciones
-                ]
-        
-                new Logs("Información del Perfil", "Perfil encontrado", logId, "INFO", true, [data: profile.name])
-                Utils.logger(logId, "Información del Perfil", "Perfil encontrado", "Perfil: ${profile.name}")
-        
-                return [data: [success: true, data: response], status: 200]
-        
-            } catch (Exception e) {
-                new Logs("Información del Perfil", "Error en la solicitud", logId, "ERROR", false, [:])
-                Utils.logger(logId, "Información del Perfil", "Error en la solicitud: ${e.getMessage()}")
-                status.setRollbackOnly()
-                return TypeError.internalError(logId)
+def infoProfile(params, logId) {
+    Templates.withTransaction { status ->
+        try {
+            new Logs("Información del Perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
+            Utils.logger(logId, "Información del Perfil", "Procesando solicitud")
+
+            def profile = Templates.findByUuidAndStatus(params.uuid, "Activo")
+            println profile
+            if (!profile) {
+                new Logs("Información del Perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])
+                Utils.logger(logId, "Información del Perfil", "No se encontró la información solicitada")
+                return TypeError.informationNotFound(logId)
             }
+
+            def seccionesAgrupadas = [:]
+
+            TemplatePermissions.findAllByTemplate(profile).each { templatePermission ->
+                def permiso = templatePermission.permission
+                def seccion = permiso?.section
+
+                if (seccion && permiso) {
+                    if (!seccionesAgrupadas.containsKey(seccion.name)) {
+                        seccionesAgrupadas[seccion.name] = []
+                    }
+                    seccionesAgrupadas[seccion.name] << permiso.alias
+                }
+            }
+
+            def secciones = seccionesAgrupadas.collect { nombreSeccion, permisos ->
+                return [
+                    seccion  : nombreSeccion,
+                    permisos : permisos
+                ]
+            }
+
+            def response = [
+                name       : profile.name,
+                status     : profile.status,
+                uuid       : profile.uuid,
+                description: profile.description,
+                secciones  : secciones
+            ]
+
+            new Logs("Información del Perfil", "Perfil encontrado", logId, "INFO", true, [data: profile.name])
+            Utils.logger(logId, "Información del Perfil", "Perfil encontrado", "Perfil: ${profile.name}")
+
+            return [data: [success: true, data: response], status: 200]
+
+        } catch (Exception e) {
+            new Logs("Información del Perfil", "Error en la solicitud", logId, "ERROR", false, [:])
+            Utils.logger(logId, "Información del Perfil", "Error en la solicitud: ${e.getMessage()}")
+            status.setRollbackOnly()
+            return TypeError.internalError(logId)
         }
     }
+}
+
 
     def allProfiles(params, logId){
         Templates.withTransaction{status ->
