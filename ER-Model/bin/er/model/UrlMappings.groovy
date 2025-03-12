@@ -34,20 +34,23 @@ class UrlMappings {
                     delete "/profile"(controller:'profiles', action:'delete')
                     delete "/user"(controller:'users', action: 'delete')
                 }
-                group "/activate",{
-                   patch "/app"(controller:'apps', action:'activate')
-                   patch "/profile"(controller:'profiles', action:'activate')
-                   patch "/section"(controller:'sections', action:'activate')
-                }
-                group "/deactivate",{
-                    patch "/app"(controller:'apps', action:'deactivate')
-                    patch "/profile"(controller:'profiles', action:'deactivate')
-                    patch "/section"(controller: 'sections', action:'deactivate')
+                group "/$actionService",{
+                    patch "/app"(controller:'apps', action:'status')
+                //    patch "/app"(controller:'apps', action:'activate')
+                //    patch "/app"(controller:'apps', action:'deactivate')
+                   
+                //    patch "/profile"(controller:'profiles', action:'deactivate')
+                //    patch "/profile"(controller:'profiles', action:'activate')
+                   
+                //    patch "/section"(controller:'sections', action:'activate')
+                //     patch "/section"(controller: 'sections', action:'deactivate')
                 }
                 constraints {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
+            
+            
             
             group "/list", {
             get "/user"(controller:'users', action: 'list')

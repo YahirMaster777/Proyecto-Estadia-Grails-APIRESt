@@ -209,7 +209,6 @@ class BootStrap {
             return matcher.matches()
         }
         String.metaClass.validarPathImg = {
-            // delegate.matches(/^\/.*\.webp$/)
             def pageExpression = '/^\\/.*\\.webp$/'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)

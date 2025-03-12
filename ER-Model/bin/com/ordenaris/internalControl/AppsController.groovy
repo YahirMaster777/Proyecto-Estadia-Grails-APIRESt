@@ -26,19 +26,26 @@ class AppsController {
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }
     
-    def activate(){
-        def logId = new Logs("Activar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Activar Aplicacion", "Inicio de solicitud")
-        def activeAppResponse = AppsService.activeApp(params, logId)
+    def status(){
+        def logId = new Logs("Status Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Status Aplicacion", "Inicio de solicitud")
+        def activeAppResponse = AppsService.statusManagement(params, logId)
         return respond(activeAppResponse.data, status:activeAppResponse.status)
     }
     
-    def deactivate(){
-        def logId = new Logs("Desactivar Aplicacion","Inicio de solicitud", request).getId()
-        Utils.logger(logId,"Desactivar Aplicacion", "Inicio de solicitud")
-        def deactivateAppResponse = AppsService.deactivateApp(params, logId)
-        return respond(deactivateAppResponse.data, status:deactivateAppResponse.status)
-    }
+    // def activate(){
+    //     def logId = new Logs("Activar Aplicacion", "Inicio de solicitud", request).getId()
+    //     Utils.logger(logId, "Activar Aplicacion", "Inicio de solicitud")
+    //     def activeAppResponse = AppsService.activeApp(params, logId)
+    //     return respond(activeAppResponse.data, status:activeAppResponse.status)
+    // }
+    
+    // def deactivate(){
+    //     def logId = new Logs("Desactivar Aplicacion","Inicio de solicitud", request).getId()
+    //     Utils.logger(logId,"Desactivar Aplicacion", "Inicio de solicitud")
+    //     def deactivateAppResponse = AppsService.deactivateApp(params, logId)
+    //     return respond(deactivateAppResponse.data, status:deactivateAppResponse.status)
+    // }
     
     
     def info(){

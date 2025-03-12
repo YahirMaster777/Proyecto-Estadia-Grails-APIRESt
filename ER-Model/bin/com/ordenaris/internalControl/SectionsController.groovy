@@ -17,7 +17,9 @@ class SectionsController {
             ['Descripcion':data.description],
             ['Url':data.url]
         ]
-	    
+	    def isArrayExist = Utils.dataRequired(validDataExist,"Registrar Seccion",logId)
+        if(isArrayExist.status != 200) return respond(isArrayExist.data, status:isArrayExist.status)
+        
 	    def isValidData = validFormatData("Registrar Seccion", data, logId)
         if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
         
@@ -30,6 +32,7 @@ class SectionsController {
 		def logId = new Logs("Actualizar Seccion", "Inicio de solicitud", request).getId()
 		Utils.logger(logId, "Actualizar Seccion", "Inicio de solicitud")
 		def data = request.JSON
+		
 		def isValidData = validFormatData("Actualizar usuario",data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status )
 		
@@ -55,7 +58,7 @@ class SectionsController {
 	def validFormatData(process, data, logId){
         new Logs(process, "Validando los datos ingresados",logId, "INFO", true, [ : ])
         Utils.logger(logId,process, "Validando los datos ingresados")
-        
+     
     
         def listStatus  = ['Activa','Inactiva','Mantenimiento','Pruebas']
         if(data.status && ((listStatus.indexOf(data.status) < 0))){
@@ -70,8 +73,6 @@ class SectionsController {
             return TypeError.incorrectFormat( "'Nombre'", "Un valor numerico", logId)
         }
         
-        def isArrayExist = Utils.dataRequired(validDataExist,process,logId)
-        if(isArrayExist.status != 200) return isArrayExist
         return [data:[success:true], status:200]
     }
 }
