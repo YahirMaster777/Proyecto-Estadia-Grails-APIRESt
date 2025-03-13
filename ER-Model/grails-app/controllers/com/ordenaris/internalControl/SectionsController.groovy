@@ -41,19 +41,15 @@ class SectionsController {
 		
 	}
 	
-	def activate(){
-	    def logId = new Logs("Activar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Activar Seccion", "Inicio de solicitud")
-	    def activeResponse = SectionsService.activateSection(params, logId)
-	    return respond(activeResponse.data, status: activeResponse.status)
+	
+	def changeStatus(){
+		def logId = new Logs("Actualizar status", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Actualizar status", "Inicio de solicitud")
+		def changeStatusResponse = SectionsService.updateStatus(params, logId)
+		return respond(changeStatusResponse.data, status:changeStatusResponse.status)
 	}
 	
-	def deactivate(){
-	    def logId = new Logs("Desactivar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Desactivar Seccion", "Inicio de solicitud")
-	    def deactivateResponse = SectionsService.deactivateSection(params, logId)
-	    return respond(deactivateResponse.data, status:deactivateResponse.status)
-	}
+
 	
 	def validFormatData(process, data, logId){
         new Logs(process, "Validando los datos ingresados",logId, "INFO", true, [ : ])

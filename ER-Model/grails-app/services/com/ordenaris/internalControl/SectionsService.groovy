@@ -74,6 +74,42 @@ class SectionsService {
         
     }
     
+    def changeStatus(params, logId){
+        Sections.withTransaction{
+            try{
+                new Logs("Cambiar status seccion", "Procesando solicitud", logId, "INFO", true, [ : ])
+                Utils.logger(logId, "Cambiar status seccion", "Procesando solicitud")
+                def section = Sections.findByUuidAndStatus(params.uuid, !"Deprecada")
+                if(!section){
+                    new Logs("Cambiar status seccion", "No se encontro la informacion solicitada", logId, "INFO", false, [ : ])
+                    Utils.logger(logId, "Cambiar status seccion", "No se encontro la informacion solicitada")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                if(params.actionService == 'activate'){
+                    new Logs("Cambiar status seccion", "Activar seccion", logId,"INFO", true, [ : ])
+                    Utils.logger(logId, "Cambiar status seccion", "Activar seccion")
+                    section.status='Activa'
+                    section.save(failOnError:true, flush:true)
+                }
+                
+                if(params.actionService == 'deactivate'){
+                    new Logs("Cambiar status seccion","Desactivar seccion", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Cambiar status seccion", "Desactivar seccion")
+                    section.status='Inactiva'
+                    section.save(failOnError:true, flush:true)
+                }
+                
+                
+                
+                
+                
+            }catch(e){
+                
+            }
+        }
+    }
+    
     def activateSection(params, logId){
        Sections.withTransaction{ status ->
             try{
