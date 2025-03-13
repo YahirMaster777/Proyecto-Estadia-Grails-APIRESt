@@ -20,7 +20,6 @@ class Users implements Serializable {
     boolean accountLocked
     Employees employee
     boolean passwordExpired
-    // boolean flag = true
     Date dateLocked
     Date lastLoginTime
     Date currentLoginDate

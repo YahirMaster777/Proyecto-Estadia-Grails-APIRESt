@@ -6,12 +6,12 @@ import grails.converters.*
 class UsersController {
 	static responseFormats = ['json', 'xml']
     def UsersService
-    def responseHeader = request.getHeader("x-request-id")
     
     def create() { 
         def data = request.JSON
-        def logId = new Logs("Registrar usuario","Inicio de solicitud", request, responseHeader).getId()
-        Utils.logger(logId,"Registrar usuario","Inicio de solicuitud")
+        def logId = new Logs("Registrar usuario","Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
+        // TODO agregar mensaje del utils
         def validDataExist = [
             ['nombre de usuario':data.username],
             ['contraseña':data.password],
@@ -19,12 +19,6 @@ class UsersController {
         ]
         def isDataExist = Utils.dataRequired(validDataExist, "Registrar usuario" , logId)
         if (isDataExist.status != 200) return respond(isDataExist.data, status:isDataExist.status)
-        if(!data.password.validPassword()) {
-            new Logs( "Registrar usuario", "La contraseña no coincide con el formato esperado ", logId, "ERROR", false, [  data: data.password ] )
-            Utils.logger(logId, "Registrar usuario", "La contraseña no coincide con el formato esperado", data.password)
-            def validPasswordResponse = TypeError.incorrectFormat( "contraseña", "minimo 8 de caracteres, al menos una letra mayúscula, una letra minucula, un número, sin espacios y un caracter especial", logId )
-            return respond(validPasswordResponse.data, status:validPasswordResponse.status)
-        }
         def isValidData = validFormatData("Registrar usuario", data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
         def responseService= UsersService.createUser(data, logId)
@@ -81,6 +75,12 @@ class UsersController {
             new Logs( process, "El correo electronico no coincide con el formato esperado", logId, "ERROR", false, [ data: data.businessEmail])
             Utils.logger(logId, process, "El correo electronico no coincide con el formato esperado", data.businessEmail)
             return TypeError.incorrectFormat("correo electronico", "correo electronico valido", logId)
+        }
+        if(data.password && !data.password.validPassword()) {
+            new Logs( "Registrar usuario", "La contraseña no coincide con el formato esperado ", logId, "ERROR", false, [  data: data.password ] )
+            Utils.logger(logId, "Registrar usuario", "La contraseña no coincide con el formato esperado", data.password)
+            def validPasswordResponse = TypeError.incorrectFormat( "contraseña", "minimo 8 de caracteres, al menos una letra mayúscula, una letra minucula, un número, sin espacios y un caracter especial", logId )
+            return respond(validPasswordResponse.data, status:validPasswordResponse.status)
         }
         def userList = Users.createCriteria().list() {
             or{
