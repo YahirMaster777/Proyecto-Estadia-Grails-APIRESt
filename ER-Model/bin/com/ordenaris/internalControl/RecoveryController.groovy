@@ -8,8 +8,10 @@ class RecoveryController {
 	static responseFormats = ['json', 'xml']
     def RecoveryService
     def responseHeader = request.getHeader("x-request-id")
-    def minExpired = servletContext.getAttribute('MINUTES_OF_VALIDITY_CODE').toInteger()
-    def numberIntents = servletContext.getAttribute('NUMBER_OF_RECOVERY_ATTEMPTS').toInteger()
+    def minExpired = dataMapGlobal.MINUTES_OF_VALIDITY_CODE
+    def numberIntents = dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
+    // def minExpired = servletContext.getAttribute('MINUTES_OF_VALIDITY_CODE').toInteger()
+    // def numberIntents = servletContext.getAttribute('NUMBER_OF_RECOVERY_ATTEMPTS').toInteger()
 	
     def createToken() {
         def data = request.JSON

@@ -19,6 +19,75 @@ public class Utils {
         println log
     }
 
+    public static Boolean validateAccessProject( wikiService ){
+        def grailsApplication = Holders.config
+        return wikiService == grailsApplication.id
+    }
+
+    public static sendApiRequest( host, path, data, headersList, method, type, logId ){
+        try {
+            new Logs( 'Enviar Peticiones HTTP.', 'Envío de petición HTTP', logId, 'INFO', true, [host:host, path:path, data:data, headers:headersList, method:method, type: type] )
+            logger( logId, "Enviar Peticiones HTTP.", "Envío de petición HTTP", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type" )
+            def http = new HTTPBuilder( host )
+            method = Method."$method"
+            def _type = (type == "rest") ? JSON : XML
+            http.request( method, _type ) { request ->
+                requestContentType = ContentType.JSON
+                uri.path = path
+                if ( method == GET ) {
+                    uri.query = data
+                }
+                if ( method == POST ) {
+                	if( type == "rest" ) body = (data as grails.converters.JSON).toString()
+                	if( type == "soap" ){
+                		body = data
+                        headers.'Content-Type' = 'text/xml'
+                        headers.'Accept' = 'text/xml'
+                	} 
+                }
+                headersList.each { k, v ->
+                    headers."${k}" = v
+                }
+                response.success = { resp, reader ->
+                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", logId, resp, reader )
+                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
+                    return reader
+                }
+                response.failure  = { resp, reader ->
+                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", logId, resp, reader )
+                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
+                    return reader
+                }
+            }
+        }catch(e) {
+            println "hay un error" 
+            new Logs( "Enviar Peticiones HTTP.", "Ha ocurrido un error.", logId, e, [url: host + path, headers: headersList, method: method, type: type] )
+            logger( logId, "Enviar Peticiones HTTP.", "Ha ocurrido un error.", e.getMessage() ?: e.cause ?: e,  "url: $host$path, headers: $headersList, method: $method, type:$type")
+            return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
+        }
+    }
+
+    public static separateUrl( _url, logId ){
+        try{
+            new Logs( "Separación URL", "Inicio de separación de URL", logId, 'INFO', true, [url: _url] )
+            logger( logId, "Separación URL", "Inicio de separación de URL", "url:$_url" )
+            URL url = new URL( _url )
+        
+            def base = "${url.protocol}://${url.host}"   
+
+            if(url.getPort() && url.getPort() > 0) base = base + ":${url.port}"
+
+            return [
+                host: base,
+                path: url.getPath(),
+            ]
+        }catch(e) {
+            new Logs( "Separación URL", "Error al separar la URL", logId, e, [url: _url] )
+            logger( logId, "Separación URL", "Error al separar la URL", e.getMessage() )
+            return null
+        }
+    }
+
     public static dataRequired(hashMapData, process, logId) {
         for (validData in hashMapData) { 
             // key, value ->
@@ -66,49 +135,6 @@ public class Utils {
         return [ data: [success: true], status:200]
     }   
 
-    public static sendApiRequest( host, path, data, headersList, method, type, logId ){
-        try {
-            new Logs( 'Enviar Peticiones HTTP.', 'Envío de petición HTTP', logId, 'INFO', true, [host:host, path:path, data:data, headers:headersList, method:method, type: type] )
-            logger( logId, "Enviar Peticiones HTTP.", "Envío de petición HTTP", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type" )
-            def http = new HTTPBuilder( host )
-            method = Method."$method"
-            def _type = (type == "rest") ? JSON : XML
-            http.request( method, _type ) { request ->
-                requestContentType = ContentType.JSON
-                uri.path = path
-                if ( method == GET ) {
-                    uri.query = data
-                }
-                if ( method == POST ) {
-                	if( type == "rest" ) body = (data as grails.converters.JSON).toString()
-                	if( type == "soap" ){
-                		body = data
-                        headers.'Content-Type' = 'text/xml'
-                        headers.'Accept' = 'text/xml'
-                	} 
-                }
-                headersList.each { k, v ->
-                    headers."${k}" = v
-                }
-                response.success = { resp, reader ->
-                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", logId, resp, reader )
-                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - success.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
-                    return reader
-                }
-                response.failure  = { resp, reader ->
-                    new Logs( "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", logId, resp, reader )
-                    logger( logId, "Enviar Peticiones HTTP.", "Respuesta de servidor - failure.", "host:$host, path:$path, data:$data, headers:$headersList, method:$method, type:$type", "$reader" )
-                    return reader
-                }
-            }
-        }catch(e) {
-            println "hay un error" 
-            new Logs( "Enviar Peticiones HTTP.", "Ha ocurrido un error.", logId, e, [url: host + path, headers: headersList, method: method, type: type] )
-            logger( logId, "Enviar Peticiones HTTP.", "Ha ocurrido un error.", e.getMessage() ?: e.cause ?: e,  "url: $host$path, headers: $headersList, method: $method, type:$type")
-            return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
-        }
-    }
-
     public static createUrl(token, flag = null){
         if (!flag) {
             return "http://localhost:4200/auth/login?token=${token}"
@@ -137,5 +163,41 @@ public class Utils {
                 files: files
             ]
         ]
+    }
+
+    def sendEmailApi( logId, to, subject, body, campaign, files ){
+        try{
+            new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
+            logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
+            def nRequest = [
+                app: [nombre: "Onefa"],
+                tipoServicio: 1,
+                data: [],
+                request: [
+                    fromMail: Constants.EMAIL_PROJECT,
+                    fromName: Constants.EMAIL_NAME,
+                    to: to,
+                    subject: subject,
+                    campaign: campaign,
+                    text: "",
+                    html: body,
+                    tipoTemplate: 0,
+                    template: 0,
+                    files: files
+                ]
+            ]
+            def headers = [
+                'ordServicio': grailsApplication.config.ordServicio,
+                'ordCliente': grailsApplication.config.ordCliente
+            ]
+            def responseApi = sendHTTPRequest( logId, grailsApplication.config.url, "/ordenaris/api/public/email/send", nRequest, headers, "POST" )
+            logger( logId, "Envío de correo", "Respuesta del envío de correo", "correo: $to, campaign: $campaign", "response: $responseApi" )
+            new Logs( "Envío de correo", "Respuesta del envío de correo", logId, 'INFO', true, [response: responseApi as HashMap, correo: to, campaign: campaign ] )
+            return responseApi.success
+        }catch(e){
+            logger( logId, "Envío de correo", "Algo salió mal al intentar enviar el correo.", "Algo salió mal al enviar el correo." ,e.getMessage() )
+            new Logs( "Envío de correo ", "Algo salió mal al intentar enviar el correo.", logId, e, [ correo: to, campaign: campaign ] )
+            return false
+        }
     }
 }
