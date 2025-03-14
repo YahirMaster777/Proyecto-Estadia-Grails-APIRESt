@@ -10,11 +10,18 @@ import org.jsoup.nodes.Document
 
 @Transactional
 class RecoveryService {
+    def grailsApplication
     def bodyHtml
+    def globalSettings = servletContext.getAttribute("dataMapGlobal")
+    def minExpired = globalSettings.MINUTES_OF_VALIDITY_CODE.toInteger()
+    def numberIntents = globalSettings.NUMBER_OF_RECOVERY_ATTEMPTS.toInteger()
+    // def recoveryAttempts = settingsService.getSetting('NUMBER_OF_RECOVERY_ATTEMPTS')
+    // println "Número de intentos de recuperación: $recoveryAttempts"
 
-    def createToken(username, flag = false, minExpired, numberIntents, logId) {
+    def createToken(username, flag = false, logId) {
         Users.withTransaction{ uStatus->
             try {
+                println "esta en el servicio"
                 def user = Users.findByUsername(username)
                 def intent = IntentRecovery.findByUser(user)
                 if (user && user.dateLocked) {
@@ -36,6 +43,8 @@ class RecoveryService {
                 } else {
                     intent.uuid=UUID.randomUUID().toString().replaceAll('\\-', '')
                 }
+                println "---"*100
+                println "los minutos de expiración" + minExpired
                 use(TimeCategory) { 
                     intent.dateExpired = new Date() + minExpired.minutes
                     intent.intents -= 1
@@ -50,9 +59,10 @@ class RecoveryService {
                     "ordCliente": '6597e01c2cd04dd999dee26bdea097f5',
                 ]
                 def subjectMail = flag?"Correo de activación de cuenta":"Correo de recuperación de contraseña" 
-                def dataMail = Utils.contructorMail("Onefa", 1, "USUARIO", user?user.username:username, "contacto@WikiControl.com", "WikiControl",subjectMail,"", "Pruebas", getbody(intent.uuid, flag), 0, 0, [:] )
+                // def dataMail = Utils.contructorMail("Onefa", 1, "USUARIO", user?user.username:username, "contacto@WikiControl.com", "WikiControl",subjectMail,"", "Pruebas", getbody(intent.uuid, flag), 0, 0, [:] )
+                def dataMail = Utils.sendEmailApi(logId, user?user.username:username, subjectMail, getbody(intent.uuid, flag), "Pruebas", [:])
                 println "--> el html"
-                println dataMail.request
+                println dataMail
                 println "---"*10
                 def responserMail = Utils.sendApiRequest("https://notificaciones.ordenaris.com", "/ordenaris/api/public/email/send",dataMail, headers, Method.POST,"rest", logId)
                 user?user.save(flush:true, failOnError:true):null
@@ -69,7 +79,7 @@ class RecoveryService {
         }
     }
 
-    def resetPassword(password, uuid, flag, numberIntents, logId) {
+    def resetPassword(password, uuid, flag, logId) {
         Users.withTransaction{uStatus->
             try{
                 def intent = IntentRecovery.findByUuid(uuid)

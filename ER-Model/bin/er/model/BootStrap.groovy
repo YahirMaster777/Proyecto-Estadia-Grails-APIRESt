@@ -20,15 +20,30 @@ class BootStrap {
     def SettingsService
 
     def init = { servletContext ->
-        def HashMap<String, String> dataMapGlobal = [:]
-        Settings.initializeDefaults()
+        def dataMapGlobal = [
+            'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
+            'MINUTES_OF_VALIDITY_CODE':'30',  
+        ]
+        println "Mi arreglo" + dataMapGlobal
+        if(Settings.count() == 0) {
+            dataMapGlobal.each{ register ->
+                new Settings(identifier:register.key, data:register.value).save()
+            }
+        }
         println "ya se inicializo, tratando de refrescar la varialbe global"
+        // servletContext.setAttribute(null)
+
+        // settingsService.refreshData()
+        // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
+        // println dataMapGlobal.MINUTES_OF_VALIDITY_CODE
+        // println grailsApplication.servletContext.mainContext.getAttribute.("dataMapGlobal")
+
+
         // servletContext.setAttribute("map", dataMapGlobal)
         // SettingsService.refreshData()
-        println "Intentando acceder al setting"
-        println dataMapGlobal
-        // ServletContext dataMapGlobal = request.getServletContext()
-        // dataMapGlobal.setAttribute("map", Settings.singletonMap(Settings.refreshData()))
+        // servletContext.setAttribute("map", dataMapGlobal)
+        // println "Intentando acceder al setting"
+        // println servletContext
 
         // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
         // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)

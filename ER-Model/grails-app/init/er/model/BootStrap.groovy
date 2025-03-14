@@ -31,7 +31,7 @@ class BootStrap {
             }
         }
         println "ya se inicializo, tratando de refrescar la varialbe global"
-        servletContext.setAttribute(null)
+        // servletContext.setAttribute(null)
 
         // settingsService.refreshData()
         // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS

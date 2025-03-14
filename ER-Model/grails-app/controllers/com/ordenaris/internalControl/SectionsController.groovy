@@ -43,12 +43,26 @@ class SectionsController {
 	
 	
 	def changeStatus(){
-		def logId = new Logs("Actualizar status", "Inicio de solicitud", request).getId()
-		Utils.logger(logId, "Actualizar status", "Inicio de solicitud")
+		def logId = new Logs("Actualizar status de seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Actualizar status de seccion", "Inicio de solicitud")
 		def changeStatusResponse = SectionsService.updateStatus(params, logId)
 		return respond(changeStatusResponse.data, status:changeStatusResponse.status)
 	}
 	
+	def delete(){
+		def logId = new Logs("Eliminar Seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Eliminar Seccion", "inicio de solicitud")
+		def deleteSectionResponse = SectionsService.deleteSection(params, logId)
+		return respond(deleteSectionResponse.data, status:deleteSectionResponse.status)
+	}
+	
+	
+	def all(){
+		def logId = new Logs("Lista de secciones", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Lista de secciones", "Inicio de solicitud")
+		def allSectionsResponse = SectionsService.allSections(logId)
+		return respond(allSectionsResponse.data, status:allSectionsResponse.status)
+	}
 
 	
 	def validFormatData(process, data, logId){

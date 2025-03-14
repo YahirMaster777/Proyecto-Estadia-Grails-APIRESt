@@ -41,19 +41,29 @@ class SectionsController {
 		
 	}
 	
-	def activate(){
-	    def logId = new Logs("Activar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Activar Seccion", "Inicio de solicitud")
-	    def activeResponse = SectionsService.activateSection(params, logId)
-	    return respond(activeResponse.data, status: activeResponse.status)
+	
+	def changeStatus(){
+		def logId = new Logs("Actualizar status de seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Actualizar status de seccion", "Inicio de solicitud")
+		def changeStatusResponse = SectionsService.updateStatus(params, logId)
+		return respond(changeStatusResponse.data, status:changeStatusResponse.status)
 	}
 	
-	def deactivate(){
-	    def logId = new Logs("Desactivar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Desactivar Seccion", "Inicio de solicitud")
-	    def deactivateResponse = SectionsService.deactivateSection(params, logId)
-	    return respond(deactivateResponse.data, status:deactivateResponse.status)
+	def delete(){
+		def logId = new Logs("Eliminar Seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Eliminar Seccion", "inicio de solicitud")
+		def deleteSectionResponse = SectionsService.deleteSection(params, logId)
+		return respond(deleteSectionResponse.data, status:deleteSectionResponse.status)
 	}
+	
+	
+	def all(){
+		def logId = new Logs("Lista de secciones", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Lista de secciones", "Inicio de solicitud")
+		def allSectionsResponse = SectionsService.allSections(logId)
+		return respond(allSectionsResponse.data, status:allSectionsResponse.status)
+	}
+
 	
 	def validFormatData(process, data, logId){
         new Logs(process, "Validando los datos ingresados",logId, "INFO", true, [ : ])

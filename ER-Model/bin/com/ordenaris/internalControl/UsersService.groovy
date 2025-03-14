@@ -33,7 +33,7 @@ class UsersService {
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
-                return [ data: [ success: true,data: [identifier: user.uuid] ], status: 200 ]
+                return [ data: [success: true], status: 200 ]
             }catch(e){
                 uStatus.setRollbackOnly()
                 new Logs("Registrar usuario","Error en la solicitud al crear un usuario", logId, e, [ : ])
@@ -193,8 +193,6 @@ class UsersService {
         return
     }
     
-    
-    
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
         def authorities = []
@@ -241,10 +239,9 @@ class UsersService {
             }
             sectionPermissionList[section.name] << templatePermission.permission.alias
         }
-        def section = sectionPermissionList.collect { nameSection, permiss ->
+        return sectionPermissionList.collect { nameSection, permiss ->
             return [section: nameSection, permisos: permiss]
         }
-        return section
     }
     
     def getToken( userDetails ){

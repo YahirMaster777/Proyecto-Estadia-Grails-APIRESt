@@ -13,6 +13,7 @@ class UrlMappings {
                 post "/section"(controller:'sections', action:'save')
                 post "/user"(controller:'users', action: 'create')
                 post "/profile-complete"(controller:'profiles', action:'saveComplete')
+                post "/permission"(controller:'permissions', action:'save')
             }
             
             group "/$uuid", {
@@ -30,27 +31,20 @@ class UrlMappings {
                 group "/delete", {
                     delete "/app"(controller:'apps', action:'delete')
                     delete "/conection"(controller:'appConnections', action:'delete')
-                    put "/employee"(controller:'employees', action:'delete')
+                    delete "/employee"(controller:'employees', action:'delete')
                     delete "/profile"(controller:'profiles', action:'delete')
                     delete "/user"(controller:'users', action: 'delete')
-                }
-                group "/$actionService",{
-                    patch "/app"(controller:'apps', action:'status')
-                //    patch "/app"(controller:'apps', action:'activate')
-                //    patch "/app"(controller:'apps', action:'deactivate')
-                   
-                //    patch "/profile"(controller:'profiles', action:'deactivate')
-                //    patch "/profile"(controller:'profiles', action:'activate')
-                   
-                //    patch "/section"(controller:'sections', action:'activate')
-                //     patch "/section"(controller: 'sections', action:'deactivate')
+                    delete "/section"(controller:'sections', action:'delete')
                 }
                 constraints {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
+                group "/$actionService",{
+                    patch "/app"(controller:'apps', action:'changeStatus')
+                    patch "/section"(controller:'sections', action:'changeStatus')
+                }
+                
             }
-            
-            
             
             group "/list", {
             get "/user"(controller:'users', action: 'list')
@@ -60,6 +54,7 @@ class UrlMappings {
                 get "/app"(controller:'apps', action:'all')
                 get "/user"(controller:'users', action: 'all')
                 get "/profiles"(controller:'profiles', action:'all')
+                get "/sections"(controller:'sections', action: 'all')
             }
     
         }

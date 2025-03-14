@@ -29,7 +29,7 @@ class SubSections{
     Date lastUpdated
     String uuid =  UUID.randomUUID().toString().replaceAll('\\-', '')
     Sections section
-    Sections subSections
+    Sections subSection
     
     static mapping = {
         version false
