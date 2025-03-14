@@ -10,8 +10,8 @@ class UsersController {
     def create() { 
         def data = request.JSON
         def logId = new Logs("Registrar usuario","Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
+        Utils.logger(logId, "Registrar usuario","Inicio de solicitud")
         if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
-        // TODO agregar mensaje del utils
         def validDataExist = [
             ['nombre de usuario':data.username],
             ['contraseña':data.password],
@@ -27,8 +27,9 @@ class UsersController {
 
     def  update() {
         def data = request.JSON
-        def logId = new Logs("Actualizar usuario", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Actualizar usuario", "Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId, "Actualizar usuario", "Inicio de solicitud", params.uuid)
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
         def isValidData = validFormatData("Actualizar usuario",data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status )
         def responseService = UsersService.updateUser(data, params.uuid, logId)
@@ -36,22 +37,25 @@ class UsersController {
     }
 
     def read() {
-        def logId = new Logs("Buscar usuario", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Buscar usuario", "Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId, "Buscar usuario", "Inicio de solicitud", params.uuid)
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
         def responseService = UsersService.readUser(params.uuid, logId)
         return respond(responseService.data, status: responseService.status)
     }
 
     def delete() {
-        def logId = new Logs("Eliminar usuario", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Eliminar usuario", "Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId, "Eliminar usuario", "Inicio de solicitud", params.uuid)
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
         def responseService = UsersService.deleteUser(params.uuid, logId)
         return respond(responseService.data, status: responseService.status)
     }
 
     def list() {
-        def logId = new Logs("Páginado usuario", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Páginado usuario", "Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId, "Páginado usuario","Inicio de solicitud")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
         def isValidParams = Utils.validFormatParams(params, "usuario", ["username", "businessEmail"] , logId)
         if (isValidParams.status != 200) return respond(isValidParams.data, status: isValidParams.status )
         def responseService = UsersService.listUser(params, logId)
@@ -59,8 +63,9 @@ class UsersController {
     }
     
     def all() {
-        def logId = new Logs("Lista de usuarios", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Lista de usuarios", "Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId,"Lista de usuarios", "Inicio de solicitud")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_WIKI_API))) return respond(TypeError.noPermissions(logId))
         def responseService = UsersService.allUser( logId)
         return respond(responseService.data, status: responseService.status)
     }

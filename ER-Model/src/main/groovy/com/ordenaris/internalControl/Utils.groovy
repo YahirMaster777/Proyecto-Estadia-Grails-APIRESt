@@ -169,6 +169,7 @@ public class Utils {
         try{
             new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
             logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
+            println "adentro del send email api"
             def nRequest = [
                 app: [nombre: "Onefa"],
                 tipoServicio: 1,
@@ -190,7 +191,8 @@ public class Utils {
                 'ordServicio': grailsApplication.config.ordServicio,
                 'ordCliente': grailsApplication.config.ordCliente
             ]
-            def responseApi = sendHTTPRequest( logId, grailsApplication.config.url, "/ordenaris/api/public/email/send", nRequest, headers, "POST" )
+            def responseApi = yu
+            ( logId, grailsApplication.config.url, "/ordenaris/api/public/email/send", nRequest, headers, "POST" )
             logger( logId, "Envío de correo", "Respuesta del envío de correo", "correo: $to, campaign: $campaign", "response: $responseApi" )
             new Logs( "Envío de correo", "Respuesta del envío de correo", logId, 'INFO', true, [response: responseApi as HashMap, correo: to, campaign: campaign ] )
             return responseApi.success

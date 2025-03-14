@@ -4,6 +4,12 @@ class UrlMappings {
 
     static mappings = {
         group "/admin", {
+            patch "/refresh/setting"(controller:'settings', action:'refresh')
+            group "/$identifier", {
+                patch "/update/setting"(controller:'settings', action:'update')
+                delegate "/delete/setting"(controller:'settings', action:'delete')
+            }
+            
             group "/create", {
                 post "/app"(controller:'apps', action: 'save')
                 post "/app-conections"(controller:'appConnections', action:'save')
@@ -11,6 +17,7 @@ class UrlMappings {
                 post "/profile"(controller:'profiles', action:'save')
                 post "/profile-permissions"(controller:'profilePermissions', action:'save')
                 post "/section"(controller:'sections', action:'save')
+                post "/setting"(controller:'settings', action:'save')
                 post "/user"(controller:'users', action: 'create')
                 post "/profile-complete"(controller:'profiles', action:'saveComplete')
             }

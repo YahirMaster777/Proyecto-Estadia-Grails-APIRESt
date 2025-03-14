@@ -30,20 +30,8 @@ class BootStrap {
                 new Settings(identifier:register.key, data:register.value).save()
             }
         }
+        servletContext.setAttribute("setting", [:])
         println "ya se inicializo, tratando de refrescar la varialbe global"
-        servletContext.setAttribute(null)
-
-        // settingsService.refreshData()
-        // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
-        // println dataMapGlobal.MINUTES_OF_VALIDITY_CODE
-        // println grailsApplication.servletContext.mainContext.getAttribute.("dataMapGlobal")
-
-
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // SettingsService.refreshData()
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // println "Intentando acceder al setting"
-        // println servletContext
 
         // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
         // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
