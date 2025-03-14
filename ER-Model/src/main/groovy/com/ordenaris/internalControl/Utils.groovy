@@ -66,17 +66,54 @@ public class Utils {
             return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
         }
     }
+    
+    public static sendEmailApi( logId, to, subject, body, campaign, files=[:]){
+        try{
+            println "adentro del send email api"
+            new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
+            logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
+            def nRequest = [
+                app: [nombre: "Onefa"],
+                tipoServicio: 1,
+                data: [],
+                request: [
+                    fromMail: grailsApplication.config.apiMail.EMAIL_PROJECT,
+                    fromName: grailsApplication.config.apiMail.EMAIL_NAME,
+                    to: to,
+                    subject: subject,
+                    campaign: campaign,
+                    text: "",
+                    html: body,
+                    tipoTemplate: 0,
+                    template: 0,
+                    files: files
+                ]
+            ]
+            println "Imprimiendo el ordServicio" +  grailsApplication.config.apiMail.external.ordServicio
+            println "Imprimiendo el ordCliennte" + grailsApplication.config.apiMail.external.ordCliente
+            def headers = [
+                'ordServicio': grailsApplication.config.apiMail.external.ordServicio,
+                'ordCliente': grailsApplication.config.apiMail.external.ordCliente
+            ]
+            println "Imprimiendo el url" + grailsApplication.config.apiMail.external.url
+            def responseApi = sendApiRequest( grailsApplication.config.apiMail.external.url, "/ordenaris/api/public/email/send", nRequest, headers, Method.POST, "rest", logId )
+            logger( logId, "Envío de correo", "Respuesta del envío de correo", "correo: $to, campaign: $campaign", "response: $responseApi" )
+            new Logs( "Envío de correo", "Respuesta del envío de correo", logId, 'INFO', true, [response: responseApi as HashMap, correo: to, campaign: campaign ] )
+            return responseApi.success
+        }catch(e){
+            logger( logId, "Envío de correo", "Algo salió mal al intentar enviar el correo.", "Algo salió mal al enviar el correo." ,e.getMessage() )
+            new Logs( "Envío de correo ", "Algo salió mal al intentar enviar el correo.", logId, e, [ correo: to, campaign: campaign ] )
+            return false
+        }
+    }
 
     public static separateUrl( _url, logId ){
         try{
             new Logs( "Separación URL", "Inicio de separación de URL", logId, 'INFO', true, [url: _url] )
             logger( logId, "Separación URL", "Inicio de separación de URL", "url:$_url" )
             URL url = new URL( _url )
-        
             def base = "${url.protocol}://${url.host}"   
-
             if(url.getPort() && url.getPort() > 0) base = base + ":${url.port}"
-
             return [
                 host: base,
                 path: url.getPath(),
@@ -90,7 +127,6 @@ public class Utils {
 
     public static dataRequired(hashMapData, process, logId) {
         for (validData in hashMapData) { 
-            // key, value ->
             def key = validData.keySet().first()
             def value = validData.get(key)
             if (!value) {
@@ -111,7 +147,7 @@ public class Utils {
         return [ data: [success: true], status:200]
     }
 
-    public static validFormatParams(params, table, hashMapFields , logId) {
+    public static validPaginationFormat(params, table, hashMapFields , logId) {
         if (params.page && (!params.page.onlyInt())){
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ page: params.page ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", "Página: ${params.page}")
@@ -137,69 +173,8 @@ public class Utils {
 
     public static createUrl(token, flag = null){
         if (!flag) {
-            return "http://localhost:4200/auth/login?token=${token}"
+            return "${grailsApplication.config.apiMail.link}/auth/password-recovery?token=${token}"
         }
-        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
-    }
-
-    public static contructorMail(name = "Onefa", typeService, code, user, fromMail= "contacto@WikiControl.com",fromName = "WikiControl", subject, text, campaign, body, tipeTemplate = 0, template = 0, files = [:]) {
-        return [
-            app: [nombre: name],
-            tipoServicio: typeService, // 1- Único / 2- Múltiple
-            data: [[
-                codigo: code,
-                valor: user //TODO cambiar por el nombre
-            ]],
-            request: [
-                fromMail: fromMail,
-                fromName: fromName,
-                to: user,
-                subject: subject,
-                text: text,
-                campaign: campaign,
-                html: body,
-                tipoTemplate: tipeTemplate,
-                template: template,
-                files: files
-            ]
-        ]
-    }
-
-    def sendEmailApi( logId, to, subject, body, campaign, files ){
-        try{
-            new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
-            logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
-            println "adentro del send email api"
-            def nRequest = [
-                app: [nombre: "Onefa"],
-                tipoServicio: 1,
-                data: [],
-                request: [
-                    fromMail: Constants.EMAIL_PROJECT,
-                    fromName: Constants.EMAIL_NAME,
-                    to: to,
-                    subject: subject,
-                    campaign: campaign,
-                    text: "",
-                    html: body,
-                    tipoTemplate: 0,
-                    template: 0,
-                    files: files
-                ]
-            ]
-            def headers = [
-                'ordServicio': grailsApplication.config.ordServicio,
-                'ordCliente': grailsApplication.config.ordCliente
-            ]
-            def responseApi = yu
-            ( logId, grailsApplication.config.url, "/ordenaris/api/public/email/send", nRequest, headers, "POST" )
-            logger( logId, "Envío de correo", "Respuesta del envío de correo", "correo: $to, campaign: $campaign", "response: $responseApi" )
-            new Logs( "Envío de correo", "Respuesta del envío de correo", logId, 'INFO', true, [response: responseApi as HashMap, correo: to, campaign: campaign ] )
-            return responseApi.success
-        }catch(e){
-            logger( logId, "Envío de correo", "Algo salió mal al intentar enviar el correo.", "Algo salió mal al enviar el correo." ,e.getMessage() )
-            new Logs( "Envío de correo ", "Algo salió mal al intentar enviar el correo.", logId, e, [ correo: to, campaign: campaign ] )
-            return false
-        }
+        return "${grailsApplication.config.apiMail.link}/auth/password-update?token=${token}&flag=${flag}"    
     }
 }

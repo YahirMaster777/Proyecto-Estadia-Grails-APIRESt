@@ -4,7 +4,6 @@ import grails.gorm.transactions.Transactional
 
 @Transactional
 class SettingsService {
-    def servletContext
     def createSetting(logId, String identifier, String data  ) {
         Settings.withTransaction { sStatus ->
             try {
@@ -12,14 +11,7 @@ class SettingsService {
                 Utils.logger(logId, "Crear valor parametrizable", "Procesando Solicitud")
                 def setting = new Settings(identifier: identifier, data: data)
                 setting.save(flush: true, failOnError: true)
-                Setting.refreshData(logId)
-                def configuration = Setting.findSetting(Setting.NUMBER_RECOVERY_ATTEMPTS)
-                def configuration2 = Setting.findSetting(Setting.MINUTES_VALIDITY_CODE)
-                def externo = Setting.findSetting("TACO")
-                println "---"*100
-                println "Numero de recuperaciones " + configuration
-                println "Minutos de validación" + configuration2
-                println "EL externo " + externo
+                refreshSetting(logId)
                 new Logs("Crear valor parametrizable", "Se registró el usuario", logId, "INFO", true, [:])
                 Utils.logger(logId, "Crear valor parametrizable", "Se registró el usuario")
                 return [data: [success: true], status: 200]
@@ -45,7 +37,7 @@ class SettingsService {
                 }
                 setting.data = data
                 setting.save(flush: true, failOnError: true)
-                Setting.refreshData(logId)
+                refreshSetting(logId)
                 new Logs("Actualizar valor parametrizable", "Se actualizó el valor", logId, "INFO", true, [:])
                 Utils.logger(logId, "Actualizar valor parametrizable", "Se actualizó el valor")
                 return [data: [success: true], status: 200]
@@ -70,8 +62,7 @@ class SettingsService {
                     return TypeError.informationNotFound(logId)
                 }
                 setting.delete()
-                Setting.refreshData(logId)
-                // println "el sevlet GLOBAL: " + servletContext.getAttribute("setting")
+                refreshSetting(logId)
                 new Logs("Eliminar valor parametrizable", "Se elimino el valor", logId, "INFO", true, [:])
                 Utils.logger(logId, "Eliminar valor parametrizable", "Se elimino el valor")
                 return [data: [success: true], status: 200]
@@ -83,4 +74,23 @@ class SettingsService {
             }
         }
     }
+
+    def refreshSetting(logId) {
+        try {
+            new Logs("Refrscar datos parametrizables", "Procesando Solicitud", logId, "INFO", true, [:])
+            Utils.logger(logId, "Refrscar datos parametrizables", "Procesando Solicitud")
+            def listSetting = [:]
+            Settings.list().each { setting ->
+                listSetting[setting.identifier] = setting.data
+            }
+            Setting.set(listSetting)
+            new Logs("Refrscar datos parametrizables", "Valores actualizados", logId, "INFO", true, [:])
+            Utils.logger(logId, "Refrscar datos parametrizables", "Valores actualizados")
+            return [data: [success: true], status: 200]
+        } catch (Exception e) {
+            new Logs("Refrscar datos parametrizables", "Error en la solicitud al refrescar los datos", null, e, [:])
+            Utils.logger(logId, "Refrscar datos parametrizables", "Error en la solicitud al refrescar los datos", "f: ${e.message}")
+            throw new RuntimeException(e)
+        }
+    }  
 }

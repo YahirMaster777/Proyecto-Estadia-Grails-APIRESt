@@ -7,12 +7,12 @@ import grails.converters.*
 class RecoveryController {
 	static responseFormats = ['json', 'xml']
     def RecoveryService
-    def responseHeader = request.getHeader("x-request-id")
 	
     def createToken() {
         def data = request.JSON
-        def logId = new Logs("Crear token", "Inicio de solicitud", request, responseHeader).getId()
+        def logId = new Logs("Crear token", "Inicio de solicitud", request,  request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId,"Crear token", "Inicio de solicitud")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
         def isDataExist = Utils.dataRequired( [['nombre de usuario': data.username]], "Crear token" , logId)
         if (isDataExist.status != 200) return respond(isDataExist.data, status:isDataExist.status)
         if (!data.username.institutionalEmail()) {
@@ -27,8 +27,9 @@ class RecoveryController {
 
     def resetPassword(){
         def data = request.JSON
-        def logId = new Logs("Recuperar constraseña", "Obteniendo la nueva contraseña", request, responseHeader).getId()
+        def logId = new Logs("Recuperar constraseña", "Obteniendo la nueva contraseña", request,  request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId,"Recuperar constraseña", "Obteniendo la nueva contraseña")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
         def isDataExist = Utils.dataRequired( [['contraseña': data.password]], "Recuperar constraseña", logId)
         if (isDataExist.status != 200) return respond(isDataExist.data, status:isDataExist.status)
         if(!data.password.validPassword()) {
@@ -43,8 +44,9 @@ class RecoveryController {
 
     def activateAccount() {
         def data = request.JSON
-        def logId = new Logs("Activar cuenta", "Obteniendo la nueva contraseña", request, responseHeader).getId()
+        def logId = new Logs("Activar cuenta", "Obteniendo la nueva contraseña", request,  request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId,"Activar cuenta", "Obteniendo la nueva contraseña")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
         def validDataExist = [
             ['nombre de usuario':data.username],
             ['contraseña':data.password]

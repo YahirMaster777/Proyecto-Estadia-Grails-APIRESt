@@ -9,7 +9,8 @@ import com.ordenaris.internalControl.Roles;
 import com.ordenaris.internalControl.PositionEmployees;
 import com.ordenaris.internalControl.Employees;
 import com.ordenaris.internalControl.Enterprises;
-import com.ordenaris.internalControl.Settings
+import com.ordenaris.internalControl.Settings;
+import com.ordenaris.internalControl.Setting;
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
@@ -20,26 +21,17 @@ class BootStrap {
     def SettingsService
 
     def init = { servletContext ->
-        def dataMapGlobal = [
+        def listSetting = [
             'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
             'MINUTES_OF_VALIDITY_CODE':'30',  
         ]
-        println "Mi arreglo" + dataMapGlobal
         if(Settings.count() == 0) {
-            dataMapGlobal.each{ register ->
+            listSetting.each{ register ->
                 new Settings(identifier:register.key, data:register.value).save()
             }
+            Setting.set(listSetting)
         }
-        servletContext.setAttribute("setting", [:])
-        println "ya se inicializo, tratando de refrescar la varialbe global"
-
-        // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
-        // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
-        // def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
-        // servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
         if (PositionEmployees.count() == 0) {
-            // new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
-            // new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
             def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
             def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
             def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
@@ -124,14 +116,6 @@ class BootStrap {
             new TemplatePermissions (template: template3, description: "esrytruytuuyi@gmail.com",permission: section1permission3).save(flush:true)
             new TemplatePermissions (template: template4, description: "retreytruyuy@gmail.com",permission: section1permission4).save(flush:true)
         }
-
-        // Set<Settings> getSettings(){
-        //     (Settings.findAll() as List<Settings>)*.setting as Set<Settings>
-        // }
-        // ServletContext ctx = request.getServletContext()
-        // ctx.setAttribute("map", Settings.singletonMap(Settings.refreshData()))
-        // println Settings.refreshData()
-
 
         String.metaClass.formatHour = {
             def horaCodeExpression = '^([0-1][1-9]|[2][0-3])(:)([0-5][0-9])(:)([0-5][0-9])$'
@@ -228,8 +212,7 @@ class BootStrap {
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        
-        
+         
         Object.metaClass.toPrettyString = {
             try {
                 return new JsonBuilder(delegate).toPrettyString().replaceAll('\n', '').replaceAll('    ', '')
@@ -237,6 +220,8 @@ class BootStrap {
                 return '{ERROR-AL-GENERAL-JSON}'
             }
         }
+
+        SettingsService.refreshSetting("6f468ad65bfe45608e8ea69388198adb")
     }
     def destroy = {
     }

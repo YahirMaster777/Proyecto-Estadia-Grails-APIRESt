@@ -11,17 +11,12 @@ import org.jsoup.nodes.Document
 @Transactional
 class RecoveryService {
     def grailsApplication
-    def bodyHtml
-    // def globalSettings = servletContext.getAttribute("dataMapGlobal")
-    def minExpired = Setting.findSetting(Setting.MINUTES_VALIDITY_CODE)
-    def numberIntents = Setting.findSetting(Setting.NUMBER_RECOVERY_ATTEMPTS)
-    // def recoveryAttempts = settingsService.getSetting('NUMBER_OF_RECOVERY_ATTEMPTS')
-    // println "Número de intentos de recuperación: $recoveryAttempts"
+    def minExpired = Setting.get(Setting.MINUTES_VALIDITY_CODE)
+    def numberIntents = Setting.get(Setting.NUMBER_RECOVERY_ATTEMPTS)
 
     def createToken(username, flag = false, logId) {
         Users.withTransaction{ uStatus->
             try {
-                println "esta en el servicio"
                 def user = Users.findByUsername(username)
                 def intent = IntentRecovery.findByUser(user)
                 if (user && user.dateLocked) {
@@ -43,8 +38,6 @@ class RecoveryService {
                 } else {
                     intent.uuid=UUID.randomUUID().toString().replaceAll('\\-', '')
                 }
-                println "---"*100
-                println "--> los minutos de expiración" + minExpired.toInteger()
                 use(TimeCategory) { 
                     intent.dateExpired = new Date() + minExpired.toInteger().minutes
                     intent.intents -= 1
@@ -54,23 +47,15 @@ class RecoveryService {
                         user.dateLocked = new Date() + minExpired.toInteger().minutes 
                     }
                 }
-                // def headers = [
-                //     "ordServicio": 'a5abc9caf1034669bd157643cbdb4536',
-                //     "ordCliente": '6597e01c2cd04dd999dee26bdea097f5',
-                // ]
-                def subjectMail = flag?"Correo de activación de cuenta":"Correo de recuperación de contraseña" 
-                println "---"*100
-                println "${getbody(intent.uuid, flag)}"
-                // def dataMail = Utils.contructorMail("Onefa", 1, "USUARIO", user?user.username:username, "contacto@WikiControl.com", "WikiControl",subjectMail,"", "Pruebas", getbody(intent.uuid, flag), 0, 0, [:] )
-                def dataMail = Utils.sendEmailApi(logId, user?user.username:username, subjectMail, "${getbody(intent.uuid, flag)}", "Pruebas", [:])
-                println "--> el html"
-                println dataMail
-                def responserMail = Utils.sendApiRequest("https://notificaciones.ordenaris.com", "/ordenaris/api/public/email/send",dataMail, headers, Method.POST,"rest", logId)
+                def to = user?user.username:username
+                def subject = flag?"Correo de activación de cuenta":"Correo de recuperación de contraseña" 
+                def _body = getbody(intent.uuid, flag)
+                def dataMail = Utils.sendEmailApi(logId, to, subject , _body, "Pruebas", [:])
                 user?user.save(flush:true, failOnError:true):null
                 intent.user?intent.save(flush:true, failOnError:true):null
                 new Logs( "Crear token", "Token genereado", logId, "INFO", true, [ username:username ] )
                 Utils.logger(logId, "Crear token","Token genereado", username )
-                return [data: responserMail, status: 200]
+                return [data: [success: dataMail], status: 200]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
                 new Logs( "Crear token", "Error en la solicitud al crear el Token", logId, e, [ : ] )
@@ -126,10 +111,10 @@ class RecoveryService {
         String link
         String templatePath
         if (!flag) {
-            templatePath = 'grails-app/views/Mails/recovery.html'
+            templatePath = "${Utils.grailsApplication.config.files}/recovery.html"
             link = Utils.createUrl(token)
         } else {
-            templatePath = 'grails-app/views/Mails/activate.html'
+            templatePath = "${Utils.grailsApplication.config.files}/activate.html"
             link = Utils.createUrl(token, flag)
         }
         File file = new File(templatePath)
@@ -138,19 +123,6 @@ class RecoveryService {
         }
         Document htmlContent = Jsoup.parse(file, "UTF-8")
         htmlContent.getElementById("link").attr("href", link)
-        return htmlContent.html().replaceAll('  ', '').replaceAll('\n','')
+        return htmlContent.html().replaceAll('  ', '').replaceAll('\n','').replaceAll('"',"'")
     }
-
-    // def createSetting(key, value) {
-        
-    // }
-    // def updateSetting(key, value) {
-
-    // }
-    // def refreshSetting() {
-
-    // }
-    // def deleteSetting(key) {
-
-    // }
 }
