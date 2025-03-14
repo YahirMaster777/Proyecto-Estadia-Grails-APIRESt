@@ -60,7 +60,6 @@ public class Utils {
                 }
             }
         }catch(e) {
-            println "hay un error" 
             new Logs( "Enviar Peticiones HTTP.", "Ha ocurrido un error.", logId, e, [url: host + path, headers: headersList, method: method, type: type] )
             logger( logId, "Enviar Peticiones HTTP.", "Ha ocurrido un error.", e.getMessage() ?: e.cause ?: e,  "url: $host$path, headers: $headersList, method: $method, type:$type")
             return [success:false, code: TypeError.internalError(logId), message: e.getMessage() ?: e.cause ?: TypeError.internalError(logId), fromException: true]
@@ -69,7 +68,6 @@ public class Utils {
     
     public static sendEmailApi( logId, to, subject, body, campaign, files=[:]){
         try{
-            println "adentro del send email api"
             new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
             logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
             def nRequest = [
@@ -89,13 +87,10 @@ public class Utils {
                     files: files
                 ]
             ]
-            println "Imprimiendo el ordServicio" +  grailsApplication.config.apiMail.external.ordServicio
-            println "Imprimiendo el ordCliennte" + grailsApplication.config.apiMail.external.ordCliente
             def headers = [
                 'ordServicio': grailsApplication.config.apiMail.external.ordServicio,
                 'ordCliente': grailsApplication.config.apiMail.external.ordCliente
             ]
-            println "Imprimiendo el url" + grailsApplication.config.apiMail.external.url
             def responseApi = sendApiRequest( grailsApplication.config.apiMail.external.url, "/ordenaris/api/public/email/send", nRequest, headers, Method.POST, "rest", logId )
             logger( logId, "Envío de correo", "Respuesta del envío de correo", "correo: $to, campaign: $campaign", "response: $responseApi" )
             new Logs( "Envío de correo", "Respuesta del envío de correo", logId, 'INFO', true, [response: responseApi as HashMap, correo: to, campaign: campaign ] )
