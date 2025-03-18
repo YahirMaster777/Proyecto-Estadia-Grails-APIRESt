@@ -8,6 +8,7 @@ class AppsController {
 	static responseFormats = ['json', 'xml']
     def AppsService
     
+    @PermissionRequired("create_app")
     def save(){
         def logId = new Logs("Registrar Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Registrar Aplicacion", "Inicio de solicitud")
