@@ -8,10 +8,6 @@ class RecoveryController {
 	static responseFormats = ['json', 'xml']
     def RecoveryService
     def responseHeader = request.getHeader("x-request-id")
-    def minExpired = dataMapGlobal.MINUTES_OF_VALIDITY_CODE
-    def numberIntents = dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
-    // def minExpired = servletContext.getAttribute('MINUTES_OF_VALIDITY_CODE').toInteger()
-    // def numberIntents = servletContext.getAttribute('NUMBER_OF_RECOVERY_ATTEMPTS').toInteger()
 	
     def createToken() {
         def data = request.JSON
@@ -25,7 +21,7 @@ class RecoveryController {
             def validUsernameResponse = TypeError.incorrectFormat( "nombre de usuario", "correo empresarial", logId )
             return respond(validUsernameResponse.data, status:validUsernameResponse.status)
         }
-        def responseService = RecoveryService.createToken(data.username, minExpired, numberIntents, logId)
+        def responseService = RecoveryService.createToken(data.username, params.flag, logId)
         return respond(responseService.data, status: responseService.status)
     }
 
@@ -41,7 +37,7 @@ class RecoveryController {
             def validPasswordResponse = TypeError.incorrectFormat( "contraseña", "minimo 8 de caracteres, al menos una letra mayúscula, una letra minucula, un número, sin espacios y un caracter especial", logId )
             return respond(validPasswordResponse.data, status:validPasswordResponse.status)
         }
-        def responseService = RecoveryService.resetPassword(data.password, params.uuid, numberIntents, logId)
+        def responseService = RecoveryService.resetPassword(data.password, params.uuid,params.flag, logId)
         return respond(responseService.data, status: responseService.status)
     }
 

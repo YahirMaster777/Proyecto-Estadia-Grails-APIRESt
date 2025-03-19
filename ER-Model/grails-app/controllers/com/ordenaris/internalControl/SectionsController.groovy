@@ -17,7 +17,9 @@ class SectionsController {
             ['Descripcion':data.description],
             ['Url':data.url]
         ]
-	    
+	    def isArrayExist = Utils.dataRequired(validDataExist,"Registrar Seccion",logId)
+        if(isArrayExist.status != 200) return respond(isArrayExist.data, status:isArrayExist.status)
+        
 	    def isValidData = validFormatData("Registrar Seccion", data, logId)
         if(isValidData.status != 200) return respond(isValidData.data, status:isValidData.status)
         
@@ -30,6 +32,7 @@ class SectionsController {
 		def logId = new Logs("Actualizar Seccion", "Inicio de solicitud", request).getId()
 		Utils.logger(logId, "Actualizar Seccion", "Inicio de solicitud")
 		def data = request.JSON
+		
 		def isValidData = validFormatData("Actualizar usuario",data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status )
 		
@@ -38,24 +41,34 @@ class SectionsController {
 		
 	}
 	
-	def activate(){
-	    def logId = new Logs("Activar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Activar Seccion", "Inicio de solicitud")
-	    def activeResponse = SectionsService.activateSection(params, logId)
-	    return respond(activeResponse.data, status: activeResponse.status)
+	
+	def changeStatus(){
+		def logId = new Logs("Actualizar status de seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Actualizar status de seccion", "Inicio de solicitud")
+		def changeStatusResponse = SectionsService.updateStatus(params, logId)
+		return respond(changeStatusResponse.data, status:changeStatusResponse.status)
 	}
 	
-	def deactivate(){
-	    def logId = new Logs("Desactivar Seccion", "Inicio de solicitud", request).getId()
-	    Utils.logger(logId, "Desactivar Seccion", "Inicio de solicitud")
-	    def deactivateResponse = SectionsService.deactivateSection(params, logId)
-	    return respond(deactivateResponse.data, status:deactivateResponse.status)
+	def delete(){
+		def logId = new Logs("Eliminar Seccion", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Eliminar Seccion", "inicio de solicitud")
+		def deleteSectionResponse = SectionsService.deleteSection(params, logId)
+		return respond(deleteSectionResponse.data, status:deleteSectionResponse.status)
 	}
+	
+	
+	def all(){
+		def logId = new Logs("Lista de secciones", "Inicio de solicitud", request).getId()
+		Utils.logger(logId, "Lista de secciones", "Inicio de solicitud")
+		def allSectionsResponse = SectionsService.allSections(logId)
+		return respond(allSectionsResponse.data, status:allSectionsResponse.status)
+	}
+
 	
 	def validFormatData(process, data, logId){
         new Logs(process, "Validando los datos ingresados",logId, "INFO", true, [ : ])
         Utils.logger(logId,process, "Validando los datos ingresados")
-        
+     
     
         def listStatus  = ['Activa','Inactiva','Mantenimiento','Pruebas']
         if(data.status && ((listStatus.indexOf(data.status) < 0))){
@@ -70,8 +83,6 @@ class SectionsController {
             return TypeError.incorrectFormat( "'Nombre'", "Un valor numerico", logId)
         }
         
-        def isArrayExist = Utils.dataRequired(validDataExist,process,logId)
-        if(isArrayExist.status != 200) return isArrayExist
         return [data:[success:true], status:200]
     }
 }

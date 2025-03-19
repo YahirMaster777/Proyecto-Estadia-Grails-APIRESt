@@ -16,6 +16,7 @@ class CustomAccessTokenJsonRenderer implements AccessTokenJsonRenderer {
         Users user = Users.get accessToken.principal.id as Long
 
         def infoUsers = accessToken.principal.infoUsers
+        println infoUsers
     
         def originalObject = [
             username         : user.username,

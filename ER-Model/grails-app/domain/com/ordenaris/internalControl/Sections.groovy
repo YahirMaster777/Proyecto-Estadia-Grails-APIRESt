@@ -12,14 +12,14 @@ class Sections {
     
     static mapping = {
         version false
-        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+        status sqlType:"Enum('Activa','Inactiva', 'Mantenimiento', 'Pruebas')"
     }
     static constraints = {
         lastUpdated nullable:true, blank:true
         uuid nullable: false, blank: false, unique: true, maxSize:32
         url nullable: false, blank: false
         name nullable: false, blank: false, maxSize:50
-        status nullable: false, inList:["Activa","Inactiva", "Matenimiento", "Pruebas"]
+        status nullable: false, inList:["Activa","Inactiva", "Mantenimiento", "Pruebas"]
         description nullable:false, maxSize:150
     }
 }
@@ -29,7 +29,7 @@ class SubSections{
     Date lastUpdated
     String uuid =  UUID.randomUUID().toString().replaceAll('\\-', '')
     Sections section
-    Sections subSections
+    Sections subSection
     
     static mapping = {
         version false

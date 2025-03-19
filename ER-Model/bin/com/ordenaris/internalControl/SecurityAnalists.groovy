@@ -1,7 +1,7 @@
 package com.ordenaris.internalControl
 import java.util.UUID
 
-class SecurityAnalists {
+    class SecurityAnalists {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String incumbency
     Employees responsible

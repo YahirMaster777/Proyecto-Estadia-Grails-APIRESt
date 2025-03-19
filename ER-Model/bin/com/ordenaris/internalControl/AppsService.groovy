@@ -8,8 +8,7 @@ class AppsService {
     def createApp(data, logId){
         Apps.withTransaction{ status-> 
             try{    
-                def permiso = "create_app"
-                if(permiso )
+                
                 
                 new Logs("Registrar Aplicacion", "Procesando solicitud",logId, "INFO", true, [data:data.name])
                 Utils.logger(logId, "Registrar Aplicacion", "Procesando solicitud")
@@ -22,14 +21,11 @@ class AppsService {
                 }
                 
                 def aplication = new Apps()
-                aplication.port = data.port
                 aplication.criticality = data.criticality
-                aplication.versionApp = data.versionApp
                 aplication.dateUndeploy = data.dateUndeploy
                 aplication.name = data.name
                 aplication.type = data.type
                 aplication.urlRepository = data.urlRepository
-                aplication.domain= data.domain
                 aplication.description = data.description
                 data.status?aplication.status= data.status:aplication.status
                 aplication.save(failOnError:true, flush:true)
@@ -45,60 +41,46 @@ class AppsService {
         } 
     }
     
-    def activeApp(params, logId){
-        Apps.withTransaction{ status ->
-            try{
-                new Logs("Activar Aplicacion", "Procesando solicitud", logId, "INFO", true, [ : ])
-                Utils.logger(logId,"Activar Aplicacion", "Procesando solicitud", "${params.uuid}")
-                def app = Apps.findByUuid(params.uuid)
-                
-                if(!app){
-                    new Logs("Activar Aplicacion", "No se encontro la aplicacion", logId, "INFO", false, [data:params.uuid])
-                    Utils.logger(logId, "Activar Aplicacion","No se encontro la aplicacion")
-                    return TypeError.informationNotFound(logId)
-                }
-                app.status="Activa"
-                app.save(failOnError:true, flush:true)
-                new Logs("Activar Aplicacion", "Se Activo la Aplicacion", logId, "INFO", false, [data:app.name])
-                Utils.logger(logId, "Activar Aplicacion","Se Activo la Aplicacion", "App: ${app.name}")
-                return [data:[success:true], status:200]
-                
-            }catch(e){
-                new Logs("Activar Aplicacion","Error en la solicitud", logId, e, [data:[success:false]])
-                Utils.logger(logId, "Activar Aplicacion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
-                status.setRollbackOnly()
-                return TypeError.internalError(logId)
-            }
-        }
-    }
     
-    def deactivateApp(params, logId){
-        Apps.withTransaction{ status ->
+    def statusManagement(params, logId){
+        Apps.withTransaction{ status -> 
             try{
-                new Logs("Desactivar Apliacion","Procesando solicitud", logId, "INFO", true,[data:params.uuid])
-                Utils.logger(logId, "Desactivar Aplicacion", "Procesando solicitud", "${params.uuid}")
-                def app = Apps.findByUuid(params.uuid)
+                new Logs("Cambio de status", "Procesando solicitud", logId, "INFO", true, [ : ])
+                Utils.logger(logId,"Cambio de status", "Procesando solicitud")
                 
+                def app = Apps.findByUuid(params.uuid)
+                println app.status
                 if(!app){
-                    new Logs("Desactivar Aplicacion","No se encontro la aplicacion", logId, "INFO", false, [data:params.uuid])
-                    Utils.logger(logId,"Desactivar Aplicacion", "No se encontro la apliacion", "${params.uuid}")
+                    new Logs("Cambio de status","No se encontro la informacion solicitada",logId, "INFO", false, [ : ])
+                    Utils.logger(logId,"Cambio de status", "No se encontro la informacion solicitda")
                     return TypeError.informationNotFound(logId)
                 }
+                println "action: " + params.actionService
                 
-                if(app.status == "Deprecada"){
-                    new Logs("Desactivar Aplicacion", "La aplicacion ya esta desactivada", logId, "INFO", false, [data:params.uuid])
-                    Utils.logger(logId,"Desactivar Aplicacion", "La aplicacion ya esta desactivada", "${params.uuid}")
-                    return TypeError.existingRegister(logId)
+                if(params.actionService == "activate"){
+                    new Logs("Cambio de status", "Activar App", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Cambio de status", "Activar App")
+                    app.status = "Activa"
+                    app.save(flush:true, failOnError:true)
+                    new Logs("Cambio de status", "Se activo la app", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Cambio de status", "Se activo la app")
+                   
                 }
-                app.status ="Deprecada"
-                app.save(failOnError:true, flush:true)
-                new Logs("Desactivar Aplicacion", "Se desactivo la aplicacion", logId, "INFO", true, [data:params.uuid])
-                Utils.logger(logId, "Desactivar Aplicacion", "Se desactivo la aplicacion", "${params.uuid}")
+                
+                if(params.actionService == "deactivate"){
+                    new Logs("Cambio de status", "Se desactivo la App", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Cambio de status", "Se desactivo la App")
+                    app.status = "Deprecada"
+                    app.save(flush:true, failOnError:true)
+                    new Logs("Cambio de status", "Se desactivo la App", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Cambio de status", "Se desactivo la App")
+                }
+                
                 return [data:[success:true], status:200]
-            
+                
             }catch(e){
-                new Logs("Desactivar Aplicacion", "Error en la solicitud", logId, e , [data:[success:false]])
-                Utils.logger(logId,"Desactivar Aplicacion", "Error en la solicitud")
+                new Logs("Cambio de status", "Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Cambio de status", "Error en la solicitud", "ERROR: ${e.getMessage()}")
                 status.setRollbackOnly()
                 return TypeError.internalError(logId)
             }
@@ -110,15 +92,16 @@ class AppsService {
             try{
                 new Logs("Eliminar Aplicacion", "Procesando solicitud", logId,"INFO",true, [data:params.uuid])
                 Utils.logger(logId, "Eliminar Aplicacion", "Procesando solicitud", "${params.uuid}")
-                def app = Apps.findByStatusAndUuid("Pendiente", params.uuid)
+                def app = Apps.findByUuid(params.uuid)
                 
                 if(!app){
                     new Logs("Eliminar Aplicacion","No se encontro la aplicacion", logId, "INFO",false, [data:params.uuid])
                     Utils.logger(logId, "Eliminar Aplicacion", "No se encontro la aplicacion", "${params.uuid}")
                     return TypeError.informationNotFound(logId)
                 }
-                // app.status = "Deprecada"
-                app.delete(failOnError:true,flush:true)
+                app.uuid = "_delete_"+new Date().log()
+                app.status = "Deprecada"
+                app.save(failOnError:true,flush:true)
                 new Logs("Eliminar Aplicacion", "Se elimino la aplicacion", logId, "INFO", true, [data:params.uuid])
                 Utils.logger(logId, "Eliminar Aplicacion", "Se elimino la aplicacion", "${params.uuid}")
                 return [data:[success:true], status:200]
@@ -138,45 +121,31 @@ class AppsService {
             try {
                 new Logs("Informacion de Aplicacion", "Procesando solicitud", logId,"INFO", true, [data:params.uuid])
                 Utils.logger(logId, "Informacion de Aplicacion","Procesando solicitud")
-                
-                // def service = findBy 
-                
-                def services = AppConnections.findAllByUuidApp(params.uuid).collect{service ->
+                def app2 = Apps.findByUuid(params.uuid)
+                def services = AppConnections.findAllByApp(app2).collect{service ->
                     return[
-                        servicio: service.uuidService
+                        servicio: service
                     ]
                 }
+                def app1 = services[0]
                 
+                println app1
+                println app1.name
                 
-                
-                  
-                // def nameService = Apps.findByUuid(services.uuidService).collect{ app->
-                //     return[
-                //         servicio: app.name
-                //     ]
-                // }
-                
-                println(services)
-                
+                def service = AppConnections.findByApp(app1)                            
+                println service
                 def app = Apps.findByUuid(params.uuid).collect{ app ->
                     return[
                         nombre: app.name,
                         descripcion: app.description,
                         criticidad: app.criticality,
-                        puerto: app.port,
-                        version: app.versionApp,
                         tipo: app.type,
                         status: app.status,
-                        dominio: app.domain,
                         repositorio: app.urlRepository,
                         fechaDep : app.dateUndeploy,
-                        uuid: app.uuid,
-                        servicios: services
+                        uuid: app.uuid
                     ]                
-                }
-                
-                // def informationDetails = [aplicacion:app, servicios:services]
-                
+                }                
                 
                 if(!app){
                     new Logs("Informacion de Aplicacion","No se encontro la informacion", logId, "INFO", false, [data:params.uuid])

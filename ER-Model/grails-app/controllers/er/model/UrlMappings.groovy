@@ -20,6 +20,7 @@ class UrlMappings {
                 post "/setting"(controller:'settings', action:'save')
                 post "/user"(controller:'users', action: 'create')
                 post "/profile-complete"(controller:'profiles', action:'saveComplete')
+                post "/permission"(controller:'permissions', action:'save')
             }
             
             group "/$uuid", {
@@ -33,37 +34,38 @@ class UrlMappings {
                     get "/app"(controller:'apps', action:'info')
                     get "/profile"(controller:'profiles', action:'info')
                     get "/user"(controller:'users', action: 'read')
+                    get "/permission"(controller:'permissions', action:'info')
                 }
                 group "/delete", {
                     delete "/app"(controller:'apps', action:'delete')
                     delete "/conection"(controller:'appConnections', action:'delete')
-                    put "/employee"(controller:'employees', action:'delete')
+                    delete "/employee"(controller:'employees', action:'delete')
                     delete "/profile"(controller:'profiles', action:'delete')
+                    delete "/permission"(controller:'permissions', action:'delete')
                     delete "/user"(controller:'users', action: 'delete')
-                }
-                group "/activate",{
-                   patch "/app"(controller:'apps', action:'activate')
-                   patch "/profile"(controller:'profiles', action:'activate')
-                   patch "/section"(controller:'sections', action:'activate')
-                }
-                group "/deactivate",{
-                    patch "/app"(controller:'apps', action:'deactivate')
-                    patch "/profile"(controller:'profiles', action:'deactivate')
-                    patch "/section"(controller: 'sections', action:'deactivate')
+                    delete "/section"(controller:'sections', action:'delete')
                 }
                 constraints {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
+                group "/$actionService",{
+                    patch "/app"(controller:'apps', action:'changeStatus')
+                    patch "/section"(controller:'sections', action:'changeStatus')
+                    patch "/permission"(controller:'permissions', action:'changeStatus')
+                }
+                
             }
             
             group "/list", {
-            get "/user"(controller:'users', action: 'list')
+                get "/user"(controller:'users', action: 'list')
             
             }
             group "/all", {
                 get "/app"(controller:'apps', action:'all')
                 get "/user"(controller:'users', action: 'all')
+                get "/permissions"(controller:'permissions', action:'all')
                 get "/profiles"(controller:'profiles', action:'all')
+                get "/sections"(controller:'sections', action: 'all')
             }
     
         }

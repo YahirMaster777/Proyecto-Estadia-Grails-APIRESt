@@ -32,13 +32,10 @@ class CustomAuthProvider implements AuthenticationProvider {
     boolean supports(Class authentication) {
         return UserPassOrgAuthToken.class.isAssignableFrom(authentication)
     }
-
+    
     def fnVerifyStatusUser(user) {
+        println "Inicio de sesion | Procesando solicitud | ${user.username}"
         
-        
-        if (!user) {
-            throw new BadCredentialsException("Account notFound")
-        }
         if (!user.enabled) {
             throw new DisabledException("Account disabled")
         }
@@ -54,16 +51,14 @@ class CustomAuthProvider implements AuthenticationProvider {
     }
 
     def doAuthentication(UserPassOrgAuthToken auth) {
+        println "Inicio de sesion | Inciando Solicitud | User: ${auth.principal}"
         def respuestaBusqueda = userService.buscarCuenta(auth)
-        if (!respuestaBusqueda){
-            throw new BadCredentialsException("Account notFound")
-        }
         def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
-        
         def infoUsers = userService.infoUsers(respuestaBusqueda)
 
         fnVerifyStatusUser(respuestaBusqueda)
-        println infoUsers
+        println "Inicio de sesion | Inicio de sesion Exitoso | User: ${respuestaBusqueda.username}"
+        // println infoUsers
         if (respuestaBusqueda) {
             def userDetails = new MyUserDetails(
                 respuestaBusqueda.username,

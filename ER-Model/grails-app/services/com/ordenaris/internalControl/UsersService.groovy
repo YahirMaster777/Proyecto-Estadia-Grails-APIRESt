@@ -6,6 +6,10 @@ import org.springframework.security.core.authority.AuthorityUtils
 import grails.plugin.springsecurity.rest.token.AccessToken
 import org.springframework.security.authentication.BadCredentialsException
 
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Before
+import org.springframework.stereotype.Component
+
 import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
@@ -180,14 +184,16 @@ class UsersService {
         Users user = Users.findByUsername(username)
         
         if (!user){
-           throw new BadCredentialsException("Account notFound")
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
+            throw new BadCredentialsException("Account notFound")
         }
         if (user.password == springSecurityService.encodePassword(password)){
             return user
-        }
-        if (user.password != springSecurityService.encodePassword(password)){
+        }else {
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
             throw new BadCredentialsException("Authentication failed")
         }
+        
         return
     }
     
@@ -212,8 +218,6 @@ class UsersService {
                 uuid          : user.uuid,
                 username      : username.username,
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
-                lastLogin     : user.lastLoginTime,
-                currentLogin  : user.currentLoginDate,
                 secctions     : section,
             ]
             return  response
@@ -238,9 +242,24 @@ class UsersService {
             sectionPermissionList[section.name] << templatePermission.permission.alias
         }
         return sectionPermissionList.collect { nameSection, permiss ->
-            return [section: nameSection, permisos: permiss]
+            def listP = [section: nameSection, permisos: permiss]
+            println "listP ----->" + listP.permisos
+            return listP 
         }
     }
+    
+    
+
+
+
+        
+    
+    
+    
+    
+    
+    
+    
     
     def getToken( userDetails ){
         AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
