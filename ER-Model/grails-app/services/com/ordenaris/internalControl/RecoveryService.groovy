@@ -5,8 +5,6 @@ import groovy.time.TimeCategory
 import groovy.time.TimeDuration
 import groovyx.net.http.Method
 import java.util.UUID
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 
 @Transactional
 class RecoveryService {
@@ -14,10 +12,11 @@ class RecoveryService {
     def minExpired = Setting.get(Setting.MINUTES_VALIDITY_CODE)
     def numberIntents = Setting.get(Setting.NUMBER_RECOVERY_ATTEMPTS)
 
-    def createToken(username, flag = false, logId) {
+    def createToken(username, logId, flag = false) {
         Users.withTransaction{ uStatus->
             try {
                 def user = Users.findByUsername(username)
+                // TODO modificar para tambien gestionar la cuenta de empleados
                 def intent = IntentRecovery.findByUser(user)
                 if (user && user.dateLocked) {
                     TimeDuration timeDiff = TimeCategory.minus(user?.dateLocked, new Date())
@@ -41,7 +40,7 @@ class RecoveryService {
                 use(TimeCategory) { 
                     intent.dateExpired = new Date() + minExpired.toInteger().minutes
                     intent.intents -= 1
-                    intent.used = 'Activo'
+                    intent.used = 'activo'
                     if (intent.intents < 1) {
                         user.accountLocked = true
                         user.dateLocked = new Date() + minExpired.toInteger().minutes 
@@ -65,64 +64,62 @@ class RecoveryService {
         }
     }
 
-    def resetPassword(password, uuid, flag, logId) {
+    def resetPassword(password, uuid, flag = false,process, logId) {
         Users.withTransaction{uStatus->
             try{
+                //TODO: Incorporar para la gestión de empleados, y hacer la parte de la activación de la cuenta
                 def intent = IntentRecovery.findByUuid(uuid)
                 if (flag && !intent){
                     def user = Users.findByUsername(username)
                 }
                 if(!intent){
-                    new Logs( "Recuperar constraseña", "No se encontró el registro", logId, "ERROR", false, [ uuid:uuid ] )
-                    Utils.logger(logId, "Recuperar constraseña", "No se encontró el registro", uuid)
+                    new Logs( process, "No se encontró el registro", logId, "ERROR", false, [ uuid:uuid ] )
+                    Utils.logger(logId, process, "No se encontró el registro", uuid)
                     return TypeError.informationNotFound( logId )
                 }
                 TimeDuration timeDiff = TimeCategory.minus(intent.dateExpired, new Date())
                 if (timeDiff.seconds < 0) {
-                    new Logs( "Recuperar constraseña", "El codigo ha expirado", logId, "ERROR", false, [ uuid:uuid ] )
-                    Utils.logger(logId, "Recuperar constraseña", "El codigo ha expirado", uuid)
+                    new Logs( process, "El codigo ha expirado", logId, "ERROR", false, [ uuid:uuid ] )
+                    Utils.logger(logId, process, "El codigo ha expirado", uuid)
                     return TypeError.excessTime(logId)
                 }
                 def user = intent.user
                 if (!user) {
-                    new Logs( "Recuperar constraseña", "No se encontró el registro", logId, "ERROR", false, [ usuer:usuer ] )
-                    Utils.logger(logId, "Recuperar constraseña", "No se encontró el registro", usuer)
+                    new Logs( process, "No se encontró el registro", logId, "ERROR", false, [ usuer:usuer ] )
+                    Utils.logger(logId, process, "No se encontró el registro", usuer)
                     return TypeError.informationNotFound( logId )
                 }
                 intent.uuid = null
-                intent.used = 'Inactivo'
+                intent.used = 'inactivo'
                 intent.intents = numberIntents.toInteger()
                 user.password = password
                 user.save(flush:true, failOnError:true)
                 intent.save(flush:true, failOnError:true)
-                new Logs( "Recuperar constraseña", "Contraseña actualizada", logId, "INFO", true, [ uuid:uuid ] )
-                Utils.logger(logId, "Recuperar constraseña","Contraseña actualizada", uuid )
+                new Logs( process, "Contraseña actualizada", logId, "INFO", true, [ uuid:uuid ] )
+                Utils.logger(logId, process,"Contraseña actualizada", uuid )
                 return [data: [success: true], status: 200]
             } catch(Exception e) {
                 uStatus.setRollbackOnly()
-                new Logs( "Recuperar constraseña", "Error en la solicitud al actualizar la contraseña", logId, e, [ : ] )
-                Utils.logger(logId, "Recuperar constraseña", "Error en la solicitud al actualizar la contraseña", "f: ${e.getMessage()}")
+                new Logs( process, "Error en la solicitud al actualizar la contraseña", logId, e, [ : ] )
+                Utils.logger(logId, process, "Error en la solicitud al actualizar la contraseña", "f: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
         }
     }
 
     def getbody(token, flag){
-        String link
         String templatePath
         if (!flag) {
-            templatePath = "${Utils.grailsApplication.config.files}/recovery.html"
-            link = Utils.createUrl(token)
+            templatePath = "${Utils.grailsApplication.config.files}/templates/recovery.html"
         } else {
-            templatePath = "${Utils.grailsApplication.config.files}/activate.html"
-            link = Utils.createUrl(token, flag)
+            templatePath = "${Utils.grailsApplication.config.files}/templates/activate.html"
         }
+        String link = Utils.redirectMailURL(token, flag)
         File file = new File(templatePath)
         if (!file.exists()) {
             throw new FileNotFoundException("El archivo no existe: $templatePath")
         }
-        Document htmlContent = Jsoup.parse(file, "UTF-8")
-        htmlContent.getElementById("link").attr("href", link)
-        return htmlContent.html().replaceAll('  ', '').replaceAll('\n','').replaceAll('"',"'")
+        String fileContent = file.text
+        return fileContent.replace('#link#', "${link}").replace('\n', '')
     }
 }

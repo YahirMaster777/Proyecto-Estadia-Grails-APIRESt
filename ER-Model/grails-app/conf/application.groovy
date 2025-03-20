@@ -31,7 +31,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 
 ]
 
-    grails.plugin.springsecurity.filterChain.chainMap = [
+grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],

@@ -10,12 +10,12 @@ class Enterprises {
     
     static mapping = {
         version false
-        type sqlType:"Enum('Cliente', 'Interna')"
+        type sqlType:"Enum('cliente', 'interna')"
     }
     static constraints = {
         name maxSize:50
         uuid maxSize:32, unique:true
-        type maxSize:20, inList:['Cliente', 'Interna']
+        type maxSize:20, inList:['cliente', 'interna']
         description maxSize:150
     }
 }

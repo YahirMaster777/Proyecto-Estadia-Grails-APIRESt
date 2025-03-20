@@ -178,11 +178,10 @@ class UsersService {
     }
 
     @Transactional(readOnly = true)
-    def buscarCuenta(UserPassOrgAuthToken auth){
+    def searchAccount(UserPassOrgAuthToken auth){
         def username = auth.name
         def password = auth.credentials
         Users user = Users.findByUsername(username)
-        
         if (!user){
             println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
             throw new BadCredentialsException("Account notFound")

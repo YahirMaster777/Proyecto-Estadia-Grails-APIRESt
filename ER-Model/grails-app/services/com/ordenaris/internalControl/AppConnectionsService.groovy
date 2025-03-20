@@ -21,8 +21,8 @@ class AppConnectionsService {
                 }
                 def service = Apps.findByName(data.service)
                 if(!service){
-                    new Logs("Registrar Conexiones de Apps", "No se encontro la App-Servicio", logId, "INFO", false, [ :])
-                    Utils.logger(logId,"Registrar Conexiones de Apps", "No se encontro la App-Servicio")
+                    new Logs("Registrar Conexiones de Apps", "No se encontro la App-servicio", logId, "INFO", false, [ :])
+                    Utils.logger(logId,"Registrar Conexiones de Apps", "No se encontro la App-servicio")
                     return TypeError.informationNotFound(logId)
                 }
                 

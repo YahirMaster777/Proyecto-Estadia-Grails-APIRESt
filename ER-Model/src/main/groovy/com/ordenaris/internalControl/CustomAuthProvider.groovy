@@ -52,7 +52,7 @@ class CustomAuthProvider implements AuthenticationProvider {
 
     def doAuthentication(UserPassOrgAuthToken auth) {
         println "Inicio de sesion | Inciando Solicitud | User: ${auth.principal}"
-        def respuestaBusqueda = userService.buscarCuenta(auth)
+        def respuestaBusqueda = userService.searchAccount(auth)
         def getUserAuthorities = userService.getUserAuthorities(respuestaBusqueda)
         def infoUsers = userService.infoUsers(respuestaBusqueda)
 

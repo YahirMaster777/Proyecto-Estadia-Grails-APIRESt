@@ -51,7 +51,7 @@ class CustomAuthProvider implements AuthenticationProvider{
     // our custom authorization logic
     def doAuthentication(UserPassOrgAuthToken auth){
 
-      def respuestaBusqueda = userService.buscarCuenta( auth )
+      def respuestaBusqueda = userService.searchAccount( auth )
       if( respuestaBusqueda.success ){
         fnVerifyStatusUser( respuestaBusqueda.user )
 

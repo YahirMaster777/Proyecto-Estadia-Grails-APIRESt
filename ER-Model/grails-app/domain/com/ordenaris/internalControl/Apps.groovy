@@ -4,7 +4,7 @@ class Apps {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
     String name
     String urlRepository
-    String status = "Pendiente"
+    String status = "pendiente"
     String type
     String criticality
     Date dateCreated
@@ -13,18 +13,18 @@ class Apps {
     String description
     
     static mapping ={
-        type sqlType:"Enum('Frontend','Backend','Aplication','Data Base')"
-        criticality sqlType: "Enum('Indiferente', 'Baja', 'Media', 'Alta', 'Critica')"
-        status sqlType : "Enum('Activa','Deprecada','Pendiente','Desarollo')"
+        type sqlType:"Enum('frontend','backend','aplication','base de datos')"
+        criticality sqlType: "Enum('indiferente', 'baja', 'media', 'alta', 'critica')"
+        status sqlType : "Enum('activa','deprecada','pendiente','desarollo')"
         version false
 
     }   
     static constraints = {
         urlRepository nullable:true, maxSize:150, blank:true
-        type inList:['Frontend','Backend','Aplication','Data Base']
+        type inList:['frontend','backend','aplication','base de datos']
         dateUndeploy nullable:true, blank:true
-        status inList: ['Activa','Deprecada','Pendiente','Desarollo']
-        criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
+        status inList: ['activa','deprecada','pendiente','desarollo']
+        criticality inList: ["indiferente", "baja", "media", "alta", "critica"], blank: true, nullable:true
         uuid maxSize:32, unique:true
         description maxSize:150
         name maxSize:50 

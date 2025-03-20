@@ -12,12 +12,12 @@ import java.util.UUID
     
     static constraints = {
         uuid unique:true, maxSize:32
-        statusAnalist inList:['Activo','Inactivo']
-        incumbency inList:['Alta','Media','Baja']
+        statusAnalist inList:['activo','inactivo']
+        incumbency inList:['alta','media','baja']
     }
     static mapping = {
         version false
-        statusAnalist sqlType:"Enum('Activo','Inactivo')"
-        incumbency sqlType:"Enum('Alta','Media','Baja')"
+        statusAnalist sqlType:"Enum('activo','inactivo')"
+        incumbency sqlType:"Enum('alta','media','baja')"
     }
 }

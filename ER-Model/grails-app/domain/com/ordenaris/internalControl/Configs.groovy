@@ -13,7 +13,7 @@ class Configs {
 
     static mapping = {
         version false
-        type sqlType:"Enum('Programa','Servcio','Aplicación','Base de datos','Servidor','Respaldo')"
+        type sqlType:"Enum('programa','servicio','aplicacion','base de datos','servidor','respaldo')"
     }
 
     static constraints = {
@@ -21,6 +21,6 @@ class Configs {
         lastUpdated nullable: true, blank:true
         name maxSize: 50
         description maxSize:150, nullable:true, blank:true
-        type inList: ['Programa','Servcio','Aplicación','Base de datos','Servidor','Respaldo']
+        type inList: ['programa','servicio','aplicacion','base de datos','servidor','respaldo']
     }
 }

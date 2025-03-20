@@ -115,13 +115,13 @@ class PermissionsService {
                     new Logs("Cambiar status del permiso", "Activar Permiso", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambiar status del permiso", "Activar Permiso")
                     
-                    if(permission.status == 'Activo'){
-                        new Logs("Cambiar status del permiso", "El permios ya esta Activo", logId, "INFO", false, [ : ])
-                        Utils.logger(logId, "Cambiar status del permiso", "El permiso ya esta Activo")
+                    if(permission.status == 'activo'){
+                        new Logs("Cambiar status del permiso", "El permios ya esta activo", logId, "INFO", false, [ : ])
+                        Utils.logger(logId, "Cambiar status del permiso", "El permiso ya esta activo")
                         return TypeError.existingRegister(logId)
                     }
                     
-                    permission.status = 'Activo'
+                    permission.status = 'activo'
                     permission.save(failOnError:true, flush:true)           
                     new Logs("Cambiar status del permiso", "Se activo el Permiso", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambiar status del permiso", "Se activo el Permiso")
@@ -131,13 +131,13 @@ class PermissionsService {
                     new Logs("Cambiar status del permiso", "Desactivar Permiso", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambiar status del permiso", "Desactivar Permiso")
                     
-                    if(permission.status == 'Inactivo'){
+                    if(permission.status == 'inactivo'){
                         new Logs("Cambiar status del permiso", "El permiso ya esta inactivo", logId, "INFO", false , [ : ])
                         Utils.logger(logId, "Cambiar status del permiso", "El permiso ya esta inactivo")
                         return TypeError.existingRegister(logId)
                     }
                     
-                    permission.status = 'Inactivo'
+                    permission.status = 'inactivo'
                     permission.save(failOnError:true, flush:true)
                     new Logs("Cambiar status del permiso", "Se desactivo el Permiso", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambiar status del permiso", "Se desactivo el permiso")

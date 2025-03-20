@@ -26,15 +26,15 @@ class Servers {
 
     static mapping = {
         version false
-        type sqlType:"Enum('Virtual','Fisico','Dedicado')"
-        criticality sqlType:"Enum('Indiferente','Baja','Media','Alta','Critica')"
-        status sqlType:"Enum('Activo','Inactivo','Mantenimiento')"
+        type sqlType:"Enum('virtual','fisico','dedicado')"
+        criticality sqlType:"Enum('indiferente','baja','media','alta','critica')"
+        status sqlType:"Enum('activo','inactivo','mantenimiento')"
     }
     static constraints = {
         uuid unique: true, maxSize: 32
-        type inList:['Virtual','Fisico','Dedicado']
-        criticality inList:['Indiferente','Baja','Media','Alta','Critica'], blank: true, nullable:true
-        status :['Activo','Inactivo','Mantenimiento']
+        type inList:['virtual','fisico','dedicado']
+        criticality inList:['indiferente','baja','media','alta','critica'], blank: true, nullable:true
+        status :['activo','inactivo','mantenimiento']
         publicIp blank:true, nullable:true,maxSize: 15
         privateIp blank:true, nullable: true,maxSize: 15
         lastUpdated blank:true, nullable: true

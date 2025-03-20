@@ -11,12 +11,12 @@ class Binnacles {
     static mapping = {
         version false
         status sqlType:"Enum('Ok','Error')"
-        type sqlType:"Enum('Actualización','Creación','Eliminación')"
+        type sqlType:"Enum('actualizacion','creacion','eliminacion', 'busqueda')"
     }
     static constraints = {
         tableName maxSize: 40
         description maxSize:150, blank:true, nullable: true
         status inList: ['Ok','Error']
-        type inList:['Actualización','Creación','Eliminación']
+        type inList:['actualizacion','creacion','eliminacion', 'busqueda']
     }
 }

@@ -97,7 +97,7 @@ class SectionsService {
                 if(params.actionService == 'activate'){
                     new Logs("Actualizar status de seccion", "Activar seccion", logId,"INFO", true, [ : ])
                     Utils.logger(logId, "Actualizar status de seccion", "Activar seccion")
-                    section.status='Activa'
+                    section.status='activa'
                     section.save(failOnError:true, flush:true)
                     new Logs("Actualizar status de seccion", "Se activo la seccion", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Actualizar status de seccion", "Se activo la seccion")

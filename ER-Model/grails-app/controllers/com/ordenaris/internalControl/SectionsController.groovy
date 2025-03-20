@@ -70,14 +70,14 @@ class SectionsController {
         Utils.logger(logId,process, "Validando los datos ingresados")
      
     
-        def listStatus  = ['Activa','Inactiva','Mantenimiento','Pruebas']
+        def listStatus  = ['activa','Inactiva','mantenimiento','Pruebas']
         if(data.status && ((listStatus.indexOf(data.status) < 0))){
             new Logs(process, "El dato 'status' no coincide con el formato esperado.", logId, "INFO", false, [ : ])
             Utils.logger(logId, process,"El dato 'status' no coincide con el formato esperado")
-            return TypeError.incorrectFormat( "'Status'", ": 'Activa','Inactiva','Mantenimiento','Pruebas'", logId)
+            return TypeError.incorrectFormat( "'Status'", ": 'activa','Inactiva','mantenimiento','Pruebas'", logId)
         }
         
-        if(data.name && (!data.name.specialCharacters())){
+        if(data.name && (!data.name.isSpecialCharacters())){
             new Logs(process, "El dato 'name' no coincide con el formato esperado.", logId, "INFO", false, [ data:data.name ])
             Utils.logger(logId, process,"El dato 'name' no coincide con el formato esperado.", "Nombre: ${data.name}")
             return TypeError.incorrectFormat( "'Nombre'", "Un valor numerico", logId)

@@ -15,13 +15,13 @@ class Programs {
 
     static mapping = {
         version false
-        type sqlType:"Enum('Programa','Servicio')"
+        type sqlType:"Enum('programa','servicio')"
     }
 
     static constraints = {
         uuid unique: true, maxSize: 32
         port unique: true, maxSize: 5
-        type inList:['Programa','Servicio']
+        type inList:['programa','servicio']
         description blank:true, nullable:true, maxSize:150
         instalation blank:true, nullable: true
         lastUpdated blank:true, nullable: true

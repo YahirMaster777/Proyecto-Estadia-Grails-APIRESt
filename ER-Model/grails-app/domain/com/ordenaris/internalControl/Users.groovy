@@ -31,7 +31,7 @@ class Users implements Serializable {
     }    
     static constraints = {
         uuid unique:true, maxSize:32
-        password password: true
+        password password: true, nullable:true, blank:true
         username nullable: false, blank: false, unique: true, maxSize:80
         dateLocked nullable:true, blank:true
     }

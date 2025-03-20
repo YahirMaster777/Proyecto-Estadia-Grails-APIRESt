@@ -75,21 +75,22 @@ class SettingsService {
         }
     }
 
+    @Transactional(readOnly = true)
     def refreshSetting(logId) {
         try {
-            new Logs("Refrscar datos parametrizables", "Procesando Solicitud", logId, "INFO", true, [:])
-            Utils.logger(logId, "Refrscar datos parametrizables", "Procesando Solicitud")
+            new Logs("Refrescar datos parametrizables", "Procesando Solicitud", logId, "INFO", true, [:])
+            Utils.logger(logId, "Refrescar datos parametrizables", "Procesando Solicitud")
             def listSetting = [:]
             Settings.list().each { setting ->
                 listSetting[setting.identifier] = setting.data
             }
             Setting.set(listSetting)
-            new Logs("Refrscar datos parametrizables", "Valores actualizados", logId, "INFO", true, [:])
-            Utils.logger(logId, "Refrscar datos parametrizables", "Valores actualizados")
+            new Logs("Refrescar datos parametrizables", "Valores actualizados", logId, "INFO", true, [:])
+            Utils.logger(logId, "Refrescar datos parametrizables", "Valores actualizados")
             return [data: [success: true], status: 200]
         } catch (Exception e) {
-            new Logs("Refrscar datos parametrizables", "Error en la solicitud al refrescar los datos", null, e, [:])
-            Utils.logger(logId, "Refrscar datos parametrizables", "Error en la solicitud al refrescar los datos", "f: ${e.message}")
+            new Logs("Refrescar datos parametrizables", "Error en la solicitud al refrescar los datos", null, e, [:])
+            Utils.logger(logId, "Refrescar datos parametrizables", "Error en la solicitud al refrescar los datos", "f: ${e.message}")
             throw new RuntimeException(e)
         }
     }  

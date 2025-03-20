@@ -29,19 +29,18 @@ class BootStrap {
             listSetting.each{ register ->
                 new Settings(identifier:register.key, data:register.value).save()
             }
-            Setting.set(listSetting)
         }
         if (PositionEmployees.count() == 0) {
-            def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
-            def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
-            def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
-            def innovattia = new Enterprises(name: 'Innovattia', type: 'Interna', description: 'Empresa')
-            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', idEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'Inactivo')
-            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', idEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'Inactivo')
-            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', idEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'Activo')
-            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', idEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'Activo')
-            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', idEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'Activo')
-            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', idEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'Inactivo')
+            def back = new PositionEmployees(name: 'backend', description: 'Desarrollador backend', area: 'Desarrollo')
+            def front = new PositionEmployees(name: 'frontend', description: 'Desarrollador frontend', area: 'Desarrollo')
+            def ordenaris = new Enterprises(name: 'Ordenaris', type: 'interna', description: 'Empresa de ecomerce')
+            def innovattia = new Enterprises(name: 'Innovattia', type: 'interna', description: 'Empresa')
+            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', idEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'inactivo')
+            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', idEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'inactivo')
+            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', idEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'activo')
+            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', idEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'activo')
+            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', idEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'activo')
+            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', idEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'inactivo')
             if (!back.save(flush:true) || !front.save(flush:true)  || !ordenaris.save(flush:true)  || !innovattia.save(flush:true)){
                 back.errors.allErrors.each { println it }
                 front.errors.allErrors.each { println it }
@@ -123,73 +122,73 @@ class BootStrap {
             def matcher = pattern.matcher( delegate ) 
             return matcher.matches()  
         }
-        String.metaClass.onlyInt = {
+        String.metaClass.isInt = {
             def pageExpression = '^\\d+$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.phoneNumber = {
+        String.metaClass.isPhoneNumber = {
         def pageExpression = '^\\d{10}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validNss = {
+        String.metaClass.isNss = {
         def pageExpression = '^\\d{11}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.uuidFormat = {
+        String.metaClass.isUuid = {
             def pageExpression = '^[a-fA-F0-9]{32}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.specialCharacters = {
+        String.metaClass.isSpecialCharacters = {
             def pageExpression = '^[a-zA-Z0-9\\s]+$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validPassword = {
+        String.metaClass.isPassword = {
             def pageExpression = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){8,40}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.onlyDouble = {
+        String.metaClass.isDouble = {
             def pageExpression = "^[0-9]+(.[0-9]+)?\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.macAddress = {
+        String.metaClass.isMacAddress = {
             def pageExpression = "^([0-9A-Fa-f]{2}[\\:-]){5}([0-9A-Fa-f]{2})\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.ipAddress = {
+        String.metaClass.isIpAddress = {
             def pageExpression = "^(\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validPort = {
+        String.metaClass.isPort = {
             def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.institutionalEmail = {
+        String.metaClass.isInstitutionalEmail = {
             def pageExpression = "^[a-zA-Z0-9\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.personalEmail = {
+        String.metaClass.isPersonalEmail = {
             def pageExpression = "^[\\w\\%*.=-]+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
@@ -205,13 +204,6 @@ class BootStrap {
             delegate.format("yyyy-MM-dd HH:mm:ss")
         }
         
-        String.metaClass.validPort = {
-            def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
-            def pattern = Pattern.compile(pageExpression)
-            def matcher = pattern.matcher(delegate)
-            return matcher.matches()
-        }
-         
         Object.metaClass.toPrettyString = {
             try {
                 return new JsonBuilder(delegate).toPrettyString().replaceAll('\n', '').replaceAll('    ', '')
@@ -220,7 +212,7 @@ class BootStrap {
             }
         }
 
-        SettingsService.refreshSetting("6f468ad65bfe45608e8ea69388198adb")
+        SettingsService.refreshSetting(UUID.randomUUID().toString().replaceAll('\\-', ''))
     }
     def destroy = {
     }

@@ -91,7 +91,7 @@ class ProfilesService {
                     Utils.logger(logId,"Activar Perfil", "No se encontro la informacion solicitada")
                     return TypeError.informationNotFound(logId)
                 }
-                profile.status ="Activo"
+                profile.status ="activo"
                 profile.save(failOnError:true, flush:true)
                 new Logs("Activar Perfil","Se activo el perfil", logId, "INFO", true, [data:[profile.name]])
                 Utils.logger(logId,"Activar Perfil", "Se activo el perfil", "Perfil:${profile.name}")
@@ -117,7 +117,7 @@ class ProfilesService {
                     Utils.logger(logId, "Desactivar Perfil", "Nose encontro la informacion solicitada")
                 }
                 
-                profile.status = "Inactivo"
+                profile.status = "inactivo"
                 profile.save(failOnError:true, flush:true)
                 new Logs("Desactivar Perfil", "Se desactivo el perfil",logId, "INFO", true, [data:[profile.name]])
                 Utils.logger(logId,"Desactivar Perfil","Se desactivo el perfil", "Perfil:${profile.name}")
@@ -204,7 +204,7 @@ def infoProfile(params, logId) {
             new Logs("Información del Perfil", "Procesando solicitud", logId, "INFO", true, [data: params.uuid])
             Utils.logger(logId, "Información del Perfil", "Procesando solicitud")
 
-            def profile = Templates.findByUuidAndStatus(params.uuid, "Activo")
+            def profile = Templates.findByUuidAndStatus(params.uuid, "activo")
             println profile
             if (!profile) {
                 new Logs("Información del Perfil", "No se encontró la información solicitada", logId, "INFO", false, [:])

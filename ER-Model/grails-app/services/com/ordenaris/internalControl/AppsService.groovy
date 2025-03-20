@@ -60,7 +60,7 @@ class AppsService {
                 if(params.actionService == "activate"){
                     new Logs("Cambio de status", "Activar App", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambio de status", "Activar App")
-                    app.status = "Activa"
+                    app.status = "activa"
                     app.save(flush:true, failOnError:true)
                     new Logs("Cambio de status", "Se activo la app", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambio de status", "Se activo la app")
@@ -70,7 +70,7 @@ class AppsService {
                 if(params.actionService == "deactivate"){
                     new Logs("Cambio de status", "Se desactivo la App", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambio de status", "Se desactivo la App")
-                    app.status = "Deprecada"
+                    app.status = "deprecada"
                     app.save(flush:true, failOnError:true)
                     new Logs("Cambio de status", "Se desactivo la App", logId, "INFO", true, [ : ])
                     Utils.logger(logId, "Cambio de status", "Se desactivo la App")
@@ -100,7 +100,7 @@ class AppsService {
                     return TypeError.informationNotFound(logId)
                 }
                 app.uuid = "_delete_"+new Date().log()
-                app.status = "Deprecada"
+                app.status = "deprecada"
                 app.save(failOnError:true,flush:true)
                 new Logs("Eliminar Aplicacion", "Se elimino la aplicacion", logId, "INFO", true, [data:params.uuid])
                 Utils.logger(logId, "Eliminar Aplicacion", "Se elimino la aplicacion", "${params.uuid}")

@@ -17,18 +17,18 @@ class Templates {
     Date dateCreated
     Date lastUpdated
     String name
-    String status = "Activo"
+    String status = "activo"
     String description
     
     static hasMany=[permissions:TemplatePermissions]
     
     static mapping = {
         version false
-        status sqlType : "Enum('Activo', 'Inactivo', 'Eliminado')"
+        status sqlType : "Enum('activo', 'inactivo', 'Eliminado')"
         permissions cascade: 'all-delete-orphan'
     }
     static constraints = {
-        status inList:["Activo", "Inactivo", "Eliminado"]
+        status inList:["activo", "inactivo", "Eliminado"]
         uuid unique:true, maxSize:32
         name maxSize:50, unique:true
         description maxSize:150

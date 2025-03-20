@@ -22,10 +22,10 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware {
             configBase =  new File( "C:/Users/ord-back08/Documents/proyectosGrails/proyectos/configs/local/config.groovy" )
         }
         if( environment.activeProfiles[0] == 'stage_qa' ){
-            configBase =  new File( "/mnt/config/.core-pospago.groovy" ) //TODO: Pendiente de cambio
+            configBase =  new File( "/mnt/config/.core-pospago.groovy" ) //TODO: pendiente de cambio
         }
         if( environment.activeProfiles[0] == 'production' ){
-            configBase =  new File( "/mnt/config/.core-pospago.groovy" ) //TODO: Pendiente de cambio
+            configBase =  new File( "/mnt/config/.core-pospago.groovy" ) //TODO: pendiente de cambio
         }
         if(configBase.exists()) {
             println "${new Date().format('yyyy-MM-dd HH:mm:ss')} | Wiki Internal Control Connection | Loading configuration. | Success | path: ${configBase.absolutePath}"

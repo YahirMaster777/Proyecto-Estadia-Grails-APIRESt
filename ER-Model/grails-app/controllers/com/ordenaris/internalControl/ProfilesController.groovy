@@ -49,7 +49,7 @@ class ProfilesController {
         Utils.logger(logId,"Editar Perfil", "Inicio de solocitud")
         def data = request.JSON
         
-        if(data.name && (!data.name.specialCharacters())){
+        if(data.name && (!data.name.isSpecialCharacters())){
             new Logs( process, "El dato 'name' ingresado no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )
             Utils.logger(logId,process, "El dato 'name' ingresado no coincide con el formato esperado.", data.name)
             return TypeError.incorrectFormat( "'Nombre'", "Un valor alfanúmerico", logId )
@@ -92,7 +92,7 @@ class ProfilesController {
         def isArrayExist = Utils.dataRequired(validDataExist, process, logId)
         if(isArrayExist.status != 200) return isArrayExist
         
-        if (!data.name.specialCharacters()) {
+        if (!data.name.isSpecialCharacters()) {
             new Logs( process, "El dato 'name' ingresado no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )
             Utils.logger(logId,process, "El dato 'name' ingresado no coincide con el formato esperado.", data.name)
             return TypeError.incorrectFormat( "'Nombre'", "Un valor alfanúmerico", logId )

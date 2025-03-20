@@ -15,11 +15,11 @@ class serverConnections {
         portServer unique: true,maxSize: 5
         portSubServer unique: true,maxSize: 5
         lastUpdated blank: true, nullable: true
-        status inList:['Activa','Inactiva', 'Matenimiento', 'Pruebas']
+        status inList:['activa','Inactiva', 'Matenimiento', 'Pruebas']
     }
     static mapping = {
         version false
-        status sqlType:"Enum('Activa','Inactiva', 'Matenimiento', 'Pruebas')"
+        status sqlType:"Enum('activa','Inactiva', 'Matenimiento', 'Pruebas')"
 
     }
 }

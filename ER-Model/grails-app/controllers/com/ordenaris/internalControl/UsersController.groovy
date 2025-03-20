@@ -71,22 +71,23 @@ class UsersController {
     }
 
     def validFormatData(process,data, logId) {
-        if (data.username  && !data.username.institutionalEmail()) {
+        if (data.username  && !data.username.isInstitutionalEmail()) {
             new Logs( process, "El nombre de usuario no coincide con el formato esperado", logId, "ERROR", false, [  data: data.username ] )
             Utils.logger(logId, process, "El nombre de usuario no coincide con el formato esperado", data.username)
             return TypeError.incorrectFormat( "nombre de usuario", "correo empresarial", logId )
         }
-        if (data.businessEmail && (!data.businessEmail.institutionalEmail())) {
-            new Logs( process, "El correo electronico no coincide con el formato esperado", logId, "ERROR", false, [ data: data.businessEmail])
-            Utils.logger(logId, process, "El correo electronico no coincide con el formato esperado", data.businessEmail)
-            return TypeError.incorrectFormat("correo electronico", "correo electronico valido", logId)
-        }
-        if(data.password && !data.password.validPassword()) {
+        if(data.password && !data.password.isPassword()) {
             new Logs( "Registrar usuario", "La contraseña no coincide con el formato esperado ", logId, "ERROR", false, [  data: data.password ] )
             Utils.logger(logId, "Registrar usuario", "La contraseña no coincide con el formato esperado", data.password)
             def validPasswordResponse = TypeError.incorrectFormat( "contraseña", "minimo 8 de caracteres, al menos una letra mayúscula, una letra minucula, un número, sin espacios y un caracter especial", logId )
             return respond(validPasswordResponse.data, status:validPasswordResponse.status)
         }
+        if (data.businessEmail && (!data.businessEmail.isInstitutionalEmail())) {
+            new Logs( process, "El correo electronico no coincide con el formato esperado", logId, "ERROR", false, [ data: data.businessEmail])
+            Utils.logger(logId, process, "El correo electronico no coincide con el formato esperado", data.businessEmail)
+            return TypeError.incorrectFormat("correo electronico", "correo electronico valido", logId)
+        }
+        // TODO: Cambiar esta parte porque no deberia tener conexión a la bd
         def userList = Users.createCriteria().list() {
             or{
                 ilike('username', data.username?:'')
@@ -94,8 +95,8 @@ class UsersController {
             }   
         }.collect()
         if (!userList.isEmpty()) {
-            new Logs(process, "Daxos existentes, por favor utilice valores diferentes", logId, "INFO", false, [data: [success: false]])
-            Utils.logger(logId, process, "Daxos existentes, por favor utilice valores diferentes" )
+            new Logs(process, "Datos existentes, por favor utilice valores diferentes", logId, "INFO", false, [data: [success: false]])
+            Utils.logger(logId, process, "Datos existentes, por favor utilice valores diferentes" )
             return TypeError.existingRegister(logId)
         }
         if (data.employeeUuid) {

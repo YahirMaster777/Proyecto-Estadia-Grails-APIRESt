@@ -20,8 +20,7 @@ public class Utils {
     }
 
     public static Boolean validateAccessProject( wikiService ){
-        def grailsApplication = Holders.config
-        return wikiService == grailsApplication.id
+        return wikiService == grailsApplication.config.id
     }
 
     public static sendApiRequest( host, path, data, headersList, method, type, logId ){
@@ -71,7 +70,7 @@ public class Utils {
             new Logs( "Envío de correo", "Realiza una petición al API de envío de correos", logId, 'INFO', true, [ correo: to, campaign: campaign ])
             logger( logId, "Envío de correo", "Realiza una petición al API de envío de correos", "correo: $to, campaign: $campaign" )
             def nRequest = [
-                app: [nombre: "Onefa"],
+                app: [nombre: grailsApplication.config.apiMail.name],
                 tipoServicio: 1,
                 data: [],
                 request: [
@@ -121,9 +120,9 @@ public class Utils {
     }
 
     public static dataRequired(hashMapData, process, logId) {
-        for (validData in hashMapData) { 
-            def key = validData.keySet().first()
-            def value = validData.get(key)
+        for (data in hashMapData) { 
+            def key = data.keySet().first()
+            def value = data.get(key)
             if (!value) {
                 new Logs(process, "Es necesario enviar el dato", logId, "ERROR", false, [key:value])
                 logger(logId, process, "Es necesario enviar el dato", key)
@@ -134,7 +133,7 @@ public class Utils {
     }
 
     public static validFormatUuid(process, name, uuid, logId) {
-        if(!uuid.uuidFormat()){
+        if(!uuid.isUuid()){
             new Logs( process, "No coincide el formato esperado", logId, "ERROR", false, [  uuid:uuid ] )
             logger(logId,process, "No coincide el formato esperado", uuid)
             return TypeError.incorrectFormat( name, "un texto de 32 caracteres", logId )
@@ -143,17 +142,17 @@ public class Utils {
     }
 
     public static validPaginationFormat(params, table, hashMapFields , logId) {
-        if (params.page && (!params.page.onlyInt())){
+        if (params.page && (!params.page.isInt())){
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ page: params.page ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", "Página: ${params.page}")
             return TypeError.incorrectFormat( "página", "número entero positivo", logId )
         }
-        if (params.max && (!params.max.onlyInt())){
+        if (params.max && (!params.max.isInt())){
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ max: params.max ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado","Máximo: ${params.max}")
             return TypeError.incorrectFormat( "máximo", "número entero positivo", logId )
         }
-        if (params.order && (['asc', 'desc'].indexOf(params.order.toLowerCase()) < 0)){
+        if (params.order && ([Constants.ASCENDING, Constants.DESCENDANT].indexOf(params.order.toLowerCase()) < 0)){
             new Logs( "Páginado ${table}", "No coincide el formato esperado", logId, "ERROR", false, [ order: params.order ] )
             logger(logId,"Páginado ${table}", "No coincide el formato esperado", "Orden de lista: ${params.order}")
             return TypeError.incorrectFormat("orden de lista","asc o desc", logId )
@@ -166,10 +165,10 @@ public class Utils {
         return [ data: [success: true], status:200]
     }   
 
-    public static createUrl(token, flag = null){
+    public static redirectMailURL(token, flag = null){
         if (!flag) {
             return "${grailsApplication.config.apiMail.link}/auth/password-recovery?token=${token}"
         }
-        return "${grailsApplication.config.apiMail.link}/auth/password-update?token=${token}&flag=${flag}"    
+        return "${grailsApplication.config.apiMail.link}/auth/activate-account?token=${token}&flag=${flag}"    
     }
 }

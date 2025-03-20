@@ -15,18 +15,19 @@ class Employees {
     String nss
     String personalEmail
     String curp
-    String status = "Activo"
+    String status = "activo"
     Employees manage
     Enterprises company
     PositionEmployees position
+    String description
     
     static mapping={
         version false
-        status sqlType:"Enum('Activo', 'Inactivo','Suspendido','Descanso','Incapacitado')"
+        status sqlType:"Enum('activo', 'inactivo','Suspendido','Descanso','Incapacitado')"
     }
 
     static constraints = {
-        status inList:["Activo", "Inactivo","Suspendido","Descanso","Incapacitado"]
+        status inList:["activo", "inactivo","Suspendido","Descanso","Incapacitado"]
         initialDate nullable:true, blank:true
         dismissedDate nullable:true, blank:true
         lastName2  nullable:true, blank:true, maxSize:30
@@ -39,5 +40,6 @@ class Employees {
         curp maxSize:18, unique:true
         personalEmail email:true, maxSize:100, unique:true
         name maxSize:50
+        description maxSize:150, nullable:true, blank:true
     }
 }

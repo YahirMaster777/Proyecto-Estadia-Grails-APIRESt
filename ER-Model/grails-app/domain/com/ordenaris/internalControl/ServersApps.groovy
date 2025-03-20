@@ -10,7 +10,7 @@ class ServersApps {
     String description
     String portApp
     String portServer
-    String status = 'Activa'
+    String status = 'activa'
     Date dateCreated
     Date lastUpdated
     String environmentType
@@ -18,7 +18,7 @@ class ServersApps {
 
     static mapping = {
         version false
-        status sqlType:"Enum('Activa','Inactiva','Matenimiento','Pruebas')"
+        status sqlType:"Enum('activa','Inactiva','Matenimiento','Pruebas')"
         environmentType sqlType:"Enum('Pruebas','Producción','Desarrollo')"
 
     }
@@ -29,6 +29,6 @@ class ServersApps {
         description blank:true, nullable:true, maxSize:150
         lastUpdated blank: true, nullable: true
         environmentType inList:['Pruebas','Producción','Desarrollo']
-        status inList:['Activa','Inactiva','Matenimiento','Pruebas'], blank: true, nullable:true
+        status inList:['activa','Inactiva','Matenimiento','Pruebas'], blank: true, nullable:true
     }
 }

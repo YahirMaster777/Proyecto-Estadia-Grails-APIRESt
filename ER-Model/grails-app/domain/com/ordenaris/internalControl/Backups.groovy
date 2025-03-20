@@ -9,11 +9,11 @@ class Backups {
     String url
     static mapping = {
         version false
-        type sqlType:"Enum('Local','Nube','Servidor')"
+        type sqlType:"Enum('local','nube','servidor')"
     }
     static constraints = {
         uuid unique: true,maxSize:32
-        type inList:['Local','Nube','Servidor']
+        type inList:['local','nube','servidor']
         url nullable: false, blank: false
         description maxSize:150, blank:true, nullable: true
     }
