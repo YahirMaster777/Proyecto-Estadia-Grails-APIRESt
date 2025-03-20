@@ -11,4 +11,4 @@ out/
 .settings
 .classpath
 *.PruebasSuccesHandler
-bin/
+bin/*
