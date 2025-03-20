@@ -241,7 +241,7 @@ class UsersService {
         }
         def userSections = UserSectionPermission.findAllByUser(user)
         def permisos = userSections.collect { it.permission.alias } 
-
+        println "Permisos de usuario: ${permisos}"
         return permisos
     }
 

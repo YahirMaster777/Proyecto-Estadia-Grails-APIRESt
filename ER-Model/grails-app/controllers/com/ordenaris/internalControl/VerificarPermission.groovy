@@ -18,10 +18,10 @@ class PermisoInterceptor implements Interceptor {
         def metodo = actionName
         def permisoRequerido = controllerClass?.clazz?.getMethod(metodo)?.getAnnotation(RequierePermiso)?.value()
 
-        println "Verificando permisos para el método: ${metodo} - Requiere permiso: ${permisoRequerido}"
+        println "Verificando permisos para el metodo: ${metodo} - Requiere permiso: ${permisoRequerido}"
         if (permisoRequerido) {
             def usuario = SecurityContextHolder.context.authentication?.name
-            def permisosUsuario = usersService.sections(usuario)
+            def permisosUsuario = usersService.obtenerPermisosUsuario(usuario)
 
             println "Usuario: ${usuario} - Permisos: ${permisosUsuario}"
 
