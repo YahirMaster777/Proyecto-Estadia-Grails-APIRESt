@@ -20,6 +20,8 @@ class Users implements Serializable {
     Employees employee
     boolean passwordExpired
     Date dateLocked
+
+    static hasMany = [userSectionPermission: UserSectionPermission]
    
 
     Set<Roles> getAuthorities() {
