@@ -23,14 +23,15 @@ class PermisoInterceptor implements Interceptor {
             def usuario = SecurityContextHolder.context.authentication?.name
             def permisosUsuario = usersService.sections(usuario)
 
-            println " Usuario: ${usuario} - Permisos: ${permisosUsuario}"
+            println "Usuario: ${usuario} - Permisos: ${permisosUsuario}"
 
-            if (!(permisoRequerido in permisosUsuario)) {
+            if (permisosUsuario.indexOf(permisoRequerido) < 0) {
                 println "Acceso denegado a ${usuario}"
-                 render(status: 403, text: "Acceso denegado")
-                 return false
+                render(status: 403, text: "Acceso denegado")
+                return false
             }
         }
+
 
         return true
     }
