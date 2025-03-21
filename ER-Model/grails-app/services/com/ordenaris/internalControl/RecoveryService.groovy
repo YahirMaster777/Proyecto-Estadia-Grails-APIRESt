@@ -10,28 +10,29 @@ import java.util.UUID
 class RecoveryService {
     def grailsApplication
     def minExpired = Setting.get(Setting.MINUTES_VALIDITY_CODE)
+    def minAccountLock = Setting.get(Setting.MINUTES_ACCOUNT_LOKED)
     def numberIntents = Setting.get(Setting.NUMBER_RECOVERY_ATTEMPTS)
 
     def createToken(username, logId, flag = false) {
         Users.withTransaction{ uStatus->
             try {
                 def user = Users.findByUsername(username)
-                // TODO modificar para tambien gestionar la cuenta de empleados
+                if (!user) {return [data: [success: dataMail], status: 200]}
                 def intent = IntentRecovery.findByUser(user)
-                if (user && user.dateLocked) {
-                    TimeDuration timeDiff = TimeCategory.minus(user?.dateLocked, new Date())
+                if (user.dateLocked) {
+                    TimeDuration timeDiff = TimeCategory.minus(user.dateLocked, new Date())
                     if(timeDiff.seconds < 0) {
-                        user?.dateLocked = null
-                        user?.accountLocked = false
-                        intent?intent.intents=numberIntents.toInteger():null
+                        user.dateLocked = null
+                        user.accountLocked = false
+                        // intent?intent.intents=numberIntents.toInteger():null
+                        intent?.intents=numberIntents.toInteger()
                     }
                 }
-                if(user && user.accountLocked){
+                if(user.accountLocked){
                     new Logs( "Crear token", "La cuenta ya esta bloqueada", logId, "ERROR", false, [ username:username ] )
                     Utils.logger(logId, "Crear token", "La cuenta ya esta bloqueada", username)
                     return TypeError.exceededAttempts(logId)
                 }
-                // intent?intent.uuid=UUID.randomUUID().toString().replaceAll('\\-', ''):intent = new IntentRecovery(user:user, intents:numberIntents.toInteger())
                 if (!intent) {
                     intent = new IntentRecovery(user:user, intents:numberIntents.toInteger())
                 } else {
@@ -40,22 +41,22 @@ class RecoveryService {
                 use(TimeCategory) { 
                     intent.dateExpired = new Date() + minExpired.toInteger().minutes
                     intent.intents -= 1
-                    intent.used = 'activo'
+                    intent.used = Constants.STATUS_ACTIVE
                     if (intent.intents < 1) {
                         user.accountLocked = true
-                        user.dateLocked = new Date() + minExpired.toInteger().minutes 
+                        user.dateLocked = new Date() + minAccountLock.toInteger().minutes 
                     }
                 }
                 def to = user?user.username:username
                 def subject = flag?"Correo de activación de cuenta":"Correo de recuperación de contraseña" 
                 def _body = getbody(intent.uuid, flag)
                 def dataMail = Utils.sendEmailApi(logId, to, subject , _body, "Pruebas", [:])
-                user?user.save(flush:true, failOnError:true):null
-                intent.user?intent.save(flush:true, failOnError:true):null
+                user.save(flush:true, failOnError:true)
+                intent.save(flush:true, failOnError:true)
                 new Logs( "Crear token", "Token genereado", logId, "INFO", true, [ username:username ] )
                 Utils.logger(logId, "Crear token","Token genereado", username )
                 return [data: [success: dataMail], status: 200]
-            } catch(Exception e) {
+            } catch(e) {
                 uStatus.setRollbackOnly()
                 new Logs( "Crear token", "Error en la solicitud al crear el Token", logId, e, [ : ] )
                 Utils.logger(logId, "Crear token", "Error en la solicitud al crear el Token", "f: ${e.getMessage()}")
@@ -64,44 +65,42 @@ class RecoveryService {
         }
     }
 
-    def resetPassword(password, uuid, flag = false,process, logId) {
+    def resetPassword(password, params, logId) {
         Users.withTransaction{uStatus->
             try{
-                //TODO: Incorporar para la gestión de empleados, y hacer la parte de la activación de la cuenta
-                def intent = IntentRecovery.findByUuid(uuid)
-                if (flag && !intent){
-                    def user = Users.findByUsername(username)
-                }
+                new Logs( "Resetear contraseña", "Procesando Solicitud", logId, "INFO", true, [ contraseña:password, token:params.uuid ] )
+                Utils.logger(logId, "Resetear contraseña","Procesando Solicitud", "contraseña:$password, token:$params.uuid" )
+                def intent = IntentRecovery.findByUuidAndStatus(params.uuid, Constants.STATUS_ACTIVE)
                 if(!intent){
-                    new Logs( process, "No se encontró el registro", logId, "ERROR", false, [ uuid:uuid ] )
-                    Utils.logger(logId, process, "No se encontró el registro", uuid)
+                    new Logs( "Resetear contraseña", "No se encontró el registro", logId, "ERROR", false, [ token:params.uuid ] )
+                    Utils.logger(logId, "Resetear contraseña", "No se encontró el registro", "token:$params.uuid")
                     return TypeError.informationNotFound( logId )
                 }
                 TimeDuration timeDiff = TimeCategory.minus(intent.dateExpired, new Date())
                 if (timeDiff.seconds < 0) {
-                    new Logs( process, "El codigo ha expirado", logId, "ERROR", false, [ uuid:uuid ] )
-                    Utils.logger(logId, process, "El codigo ha expirado", uuid)
+                    new Logs( "Resetear contraseña", "El codigo ha expirado", logId, "ERROR", false, [ token:params.uuid ] )
+                    Utils.logger(logId, "Resetear contraseña", "El codigo ha expirado", "token:$params.uuid")
                     return TypeError.excessTime(logId)
                 }
                 def user = intent.user
                 if (!user) {
-                    new Logs( process, "No se encontró el registro", logId, "ERROR", false, [ usuer:usuer ] )
-                    Utils.logger(logId, process, "No se encontró el registro", usuer)
+                    new Logs( "Resetear contraseña", "No se encontró el registro", logId, "ERROR", false, [ usuario:user ] )
+                    Utils.logger(logId, "Resetear contraseña", "No se encontró el registro", "usuario:$user")
                     return TypeError.informationNotFound( logId )
                 }
-                intent.uuid = null
-                intent.used = 'inactivo'
+                intent.uuid = ""
+                intent.used = Constants.STATUS_INACTIVE
                 intent.intents = numberIntents.toInteger()
                 user.password = password
                 user.save(flush:true, failOnError:true)
                 intent.save(flush:true, failOnError:true)
-                new Logs( process, "Contraseña actualizada", logId, "INFO", true, [ uuid:uuid ] )
-                Utils.logger(logId, process,"Contraseña actualizada", uuid )
+                new Logs( "Resetear contraseña", "Contraseña actualizada", logId, "INFO", true, [ token:params.uuid ] )
+                Utils.logger(logId, "Resetear contraseña","Contraseña actualizada", "token:$params.uuid" )
                 return [data: [success: true], status: 200]
-            } catch(Exception e) {
+            } catch(e) {
                 uStatus.setRollbackOnly()
-                new Logs( process, "Error en la solicitud al actualizar la contraseña", logId, e, [ : ] )
-                Utils.logger(logId, process, "Error en la solicitud al actualizar la contraseña", "f: ${e.getMessage()}")
+                new Logs( "Resetear contraseña", "Error en la solicitud al actualizar la contraseña", logId, e, [ contraseña:password, token:params.uuid ]  )
+                Utils.logger(logId, "Resetear contraseña", "Error en la solicitud al actualizar la contraseña", "f: ${e.getMessage()}")
                 return TypeError.internalError( logId )
             }
         }

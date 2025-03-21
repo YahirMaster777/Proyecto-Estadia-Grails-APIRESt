@@ -24,7 +24,7 @@ try {
             permisos: permission.permission
         ]
     }
-} catch (Exception e) {
+} catch (e) {
     println("Error converting profile ID to Double: ${e.message}")
     return TypeError.informationConversionError(logId)
 }

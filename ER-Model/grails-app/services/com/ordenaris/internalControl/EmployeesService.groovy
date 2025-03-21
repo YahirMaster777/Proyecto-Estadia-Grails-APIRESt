@@ -27,7 +27,7 @@ class EmployeesService {
                 def employee = new Employees()
                 employee.curp = data.curp
                 employee.phone = data.phone
-                employee.idEmployee = data.idEmployee
+                employee.identifierEmployee = data.identifierEmployee
                 employee.rfc = data.rfc
                 employee.dismissedDate = data.dismissedDate
                 employee.lastName1 = data.lastName1
@@ -39,6 +39,7 @@ class EmployeesService {
                 employee.company = company    
                 employee.personalEmail = data.personalEmail
                 employee.initialDate = data.initialDate
+                // TODO: Tratar de hacer un prrueba sin la parte :null
                 data.status?employee.status = data.status:employee.status
                 def user = Users.findByUsername(data.username)
                 if (user) {
@@ -96,6 +97,30 @@ class EmployeesService {
     }
 
     // TODO: gestion de ingreso/baja de empleado para la tabla de empleados
+    def statusEmployee (params, data, logId) {
+        Employees.withTransaction{ eStatus ->
+            def action = (params.actionService)?"ingreso":"baja"
+            try {
+                new Logs("Gestion de $action de empleado","Procesando Solicitud", logId,"INFO", true, [data:params.uuid])
+                Utils.logger(logId,"Gestion de $action de empleado", "Procesando Solicitud")
+                def employee = Employees.findByUuid(params.uuid)
+                if(!employee) {
+                    new Logs("Gestion de cuenta de empleado", "No se encontro la informacion solicitada", logId, "INFO", false, [data:params.uuid])
+                    Utils.logger(logId,"Gestion de cuenta de empleado","No se encontro la informacion solicitada", params.uuid)
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                new Logs("Gestion de $action de empleado","Procesando Solicitud", logId,"INFO", true, [data:params.uuid])
+                Utils.logger(logId,"Gestion de $action de empleado", "Procesando Solicitud")
+                return[data:[success:true],status:200]
+            } catch (e) {
+                eStatus.setRollbackOnly()
+                new Logs("Gestion de $action de empleado","Error en la solicitud", logId, e, [data:[success:false]])
+                Utils.logger(logId, "Gestion de $action de empleado", "Error en la solicitud", "f: ${e.getMessage()}")
+                return TypeError.internalError(logId)
+            }
+        }
+    }
 
     def accountManagement(params, data, logId){
         // TODO: modificarlo para la tabla dev usuarios
@@ -126,7 +151,7 @@ class EmployeesService {
                 new Logs("Gestion de cuenta de empleado","Se hac cambiado el estatus", logId,"INFO", true, [data:params.uuid])
                 Utils.logger(logId,"Gestion de cuenta de empleado", "Se hac cambiado el estatus", params.actionService)
                 return[data:[success:true],status:200]
-            } catch (Exception e) {
+            } catch (e) {
                 eStatus.setRollbackOnly()
                 new Logs("Gestion de cuenta de empleado","Error en la solicitud", logId, e, [data:[success:false]])
                 Utils.logger(logId, "Gestion de cuenta de empleado", "Error en la solicitud", "f: ${e.getMessage()}")

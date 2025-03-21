@@ -45,16 +45,8 @@ class EmployeesController {
         def updateEmployeeResponse = EmployeesService.updateEmployee(params,data,logId)
         return respond(updateEmployeeResponse.data, status:updateEmployeeResponse.status)
     }
-    
-    def delete(){
-        def logId = new Logs("Eliminar Empleado","Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
-        Utils.logger(logId,"Eliminar Empleado", "Inicio de solicitud")
-        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
-        def deleteEmployeeResponse = EmployeesService.deleteEmployee(params, logId)
-        return respond(deleteEmployeeResponse.data, status:deleteEmployeeResponse.status)
-    }
 
-    def changeStatus(){
+    def accountManagement(){
         def data = request.JSON
         def logId = new Logs("Gestion de cuenta de empleado","Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
         Utils.logger(logId,"Gestion de cuenta de empleado", "Inicio de solicitud")
@@ -67,6 +59,21 @@ class EmployeesController {
         }
         def isValidData = validFormatData("Gestion de cuenta de empleado", data, logId)
         if (isValidData.status != 200) return respond(isValidData.data, status: isValidData.status)
+        def deleteEmployeeResponse = EmployeesService.accountManagement(params, data, logId)
+        return respond(deleteEmployeeResponse.data, status:deleteEmployeeResponse.status)
+    }
+
+    def statusEmployee(){
+        def data = request.JSON
+        def logId = new Logs("Gestion de cuenta de empleado","Inicio de solicitud", request, request.getHeader(Constants.HEADER_LOG_ID)).getId()
+        Utils.logger(logId,"Gestion de cuenta de empleado", "Inicio de solicitud")
+        if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
+        if(data.date.isDate()) {
+            new Logs( process, "El dato nombre de empleado no coincide el formato esperado que se quiere ingresar.", logId, "ERROR", false, [  data: data.name ] )
+            Utils.logger(logId,process, "No coincide el formato esperado que se quiere ingresar.", data.name)
+            def formatDate = TypeError.incorrectFormat( "Nombre de empleado", "valor alfanúmerico", logId )
+            return respond(formatDate.data, status:formatDate.status)
+        }
         def deleteEmployeeResponse = EmployeesService.accountManagement(params, data, logId)
         return respond(deleteEmployeeResponse.data, status:deleteEmployeeResponse.status)
     }

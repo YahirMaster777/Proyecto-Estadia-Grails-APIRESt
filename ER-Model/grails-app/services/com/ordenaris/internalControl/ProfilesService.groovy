@@ -246,7 +246,7 @@ def infoProfile(params, logId) {
 
             return [data: [success: true, data: response], status: 200]
 
-        } catch (Exception e) {
+        } catch (e) {
             new Logs("Información del Perfil", "Error en la solicitud", logId, "ERROR", false, [:])
             Utils.logger(logId, "Información del Perfil", "Error en la solicitud: ${e.getMessage()}")
             status.setRollbackOnly()

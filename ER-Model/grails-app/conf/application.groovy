@@ -23,7 +23,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
     [pattern: '/appConnections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
     [pattern: '/sections/**',    access: ['ROLE_ROOT','ROLE_ADMIN']],
 	[pattern: '/servers/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
-	[pattern: '/settings/**',     access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
+	[pattern: '/settings/**',    access: ['ROLE_ROOT']],
 	[pattern: '/users/**',       access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/employees/**',   access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
 	[pattern: '/serversApps/**', access: ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_CUSTOM']],
@@ -32,11 +32,9 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 grails.plugin.springsecurity.filterChain.chainMap = [
-	[pattern:"/api/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-	[pattern:"/auth/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter"],
 	[pattern:"/admin/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
-	[pattern:"/public/**", filters:"anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor"],
-    [pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+	[pattern:"/public/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
+	[pattern:"/admin/$uuid/**", filters:"JOINED_FILTERS,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-authenticationFilter"],
 ]
 
 // Configuración de validación de tokens en el plugin Spring Security REST
@@ -46,14 +44,14 @@ grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
 grails.plugin.springsecurity.rest.token.storage.jwt.expiration = 86400  // Duración del token
 // Endpoint para validar tokens
 grails.plugin.springsecurity.rest.token.validation.active=true // Habilita la validación de tokens.
-grails.plugin.springsecurity.rest.token.validation.endpointUrl='/api/validate' // Define el endpoint para validar tokens.
+grails.plugin.springsecurity.rest.token.validation.endpointUrl='/public/validate' // Define el endpoint para validar tokens.
 // Configuración de inicio de sesión en el plugin Spring Security REST
 grails.plugin.springsecurity.rest.login.active=true
 grails.plugin.springsecurity.rest.login.useJsonCredentials = true
 grails.plugin.springsecurity.rest.login.failureStatusCode = 401
 grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username' // Parametro para el inicio de sesión.
 grails.plugin.springsecurity.rest.login.passwordPropertyName='password' // Parametro para el inicio de sesión.
-grails.plugin.springsecurity.rest.login.endpointUrl='/api/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
+grails.plugin.springsecurity.rest.login.endpointUrl='/public/login' // ruta para el inicio de sesión ---> localhost:8080/api/login.
 grails.plugin.springsecurity.rest.login.useRequestParamsCredentials = false
 grails.plugin.springsecurity.useSecurityEventListener = true // Activar eventos
 

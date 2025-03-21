@@ -87,7 +87,7 @@ class UsersController {
             Utils.logger(logId, process, "El correo electronico no coincide con el formato esperado", data.businessEmail)
             return TypeError.incorrectFormat("correo electronico", "correo electronico valido", logId)
         }
-        // TODO: Cambiar esta parte porque no deberia tener conexión a la bd
+        // TODO: Cambiar esta parte al servicio porque no deberia tener conexión a la bd
         def userList = Users.createCriteria().list() {
             or{
                 ilike('username', data.username?:'')

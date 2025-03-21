@@ -21,12 +21,12 @@ class BootStrap {
     def SettingsService
 
     def init = { servletContext ->
-        def listSetting = [
-            'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
-            'MINUTES_OF_VALIDITY_CODE':'30',  
-        ]
         if(Settings.count() == 0) {
-            listSetting.each{ register ->
+            [
+                'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
+                'MINUTES_OF_VALIDITY_CODE':'30',  
+                'MINUTES_OF_ACCOUNT_LOKED':'60',
+            ].each{ register ->
                 new Settings(identifier:register.key, data:register.value).save()
             }
         }
@@ -35,12 +35,12 @@ class BootStrap {
             def front = new PositionEmployees(name: 'frontend', description: 'Desarrollador frontend', area: 'Desarrollo')
             def ordenaris = new Enterprises(name: 'Ordenaris', type: 'interna', description: 'Empresa de ecomerce')
             def innovattia = new Enterprises(name: 'Innovattia', type: 'interna', description: 'Empresa')
-            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', idEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'inactivo')
-            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', idEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'inactivo')
-            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', idEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'activo')
-            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', idEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'activo')
-            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', idEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'activo')
-            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', idEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'inactivo')
+            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', identifierEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'inactivo')
+            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', identifierEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'inactivo')
+            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', identifierEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'activo')
+            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', identifierEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'activo')
+            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', identifierEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'activo')
+            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', identifierEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'inactivo')
             if (!back.save(flush:true) || !front.save(flush:true)  || !ordenaris.save(flush:true)  || !innovattia.save(flush:true)){
                 back.errors.allErrors.each { println it }
                 front.errors.allErrors.each { println it }
@@ -116,8 +116,8 @@ class BootStrap {
             new TemplatePermissions (template: template4, description: "retreytruyuy@gmail.com",permission: section1permission4).save(flush:true)
         }
 
-        String.metaClass.formatHour = {
-            def horaCodeExpression = '^([0-1][1-9]|[2][0-3])(:)([0-5][0-9])(:)([0-5][0-9])$'
+        String.metaClass.isDate = {
+            def horaCodeExpression = '^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
             def pattern = Pattern.compile(horaCodeExpression) 
             def matcher = pattern.matcher( delegate ) 
             return matcher.matches()  
@@ -217,4 +217,3 @@ class BootStrap {
     def destroy = {
     }
 }
-

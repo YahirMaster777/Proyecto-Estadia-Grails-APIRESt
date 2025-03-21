@@ -7,11 +7,11 @@ class UserSectionPermissionService {
 
     def createUserPermission(data, logId) {
         try{
-            new Logs("Asignar permisos al usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUserdata.uuidUser])
+            new Logs("Asignar permisos al usuario", "Procesando Solicitud", logId, "INFO", true, [uuidUser:data.uuidUser])
             Utils.logger(logId,"Asignar permisos al usuario","Procesando Solicitud")
             def user = Users.findByUuid(data.uuidUser)
             if(!user){
-                new Logs("Asignar permisos al usuario", "No se encontro el empleado(a)", logId, "INFO", false, [uuidUserdata.uuidUser])
+                new Logs("Asignar permisos al usuario", "No se encontro el empleado(a)", logId, "INFO", false, [uuidUser:data.uuidUser])
                 Utils.logger(logId,"Asignar permisos al usuario","No se encontro el empleado(a)")
                 return TypeError.informationNotFound(logId)
             }
@@ -27,14 +27,16 @@ class UserSectionPermissionService {
                     userPermission.user = user
                     userPermission.permission = permission
                     userPermission.save(flush:true, failOnError:true)
-                } catch (Exception e) {
+                } catch (e) {
                     new Logs("Asignar permisos al usuario","Error en la solicitud", logId, e, [data:[success:false]])
                     Utils.logger(logId, "Asignar permisos al usuario", "Error en la solicitud", "f: ${e.getMessage()}")
                     return TypeError.internalError(logId)
                 }
             }
+            new Logs("Asignar permisos al usuario", "Se han asignado los permisos al usuario", logId, "INFO", true, [uuidUser:data.uuidUser])
+            Utils.logger(logId,"Asignar permisos al usuario","Se han asignado los permisos al usuario", data.uuidUser)
             return[data:[success:true],status:200]
-        }catch(Exception e) {
+        }catch(e) {
             uspStatus.setRollbackOnly()
             new Logs("Asignar permisos al usuario","Error en la solicitud", logId, e, [data:[success:false]])
             Utils.logger(logId, "Asignar permisos al usuario", "Error en la solicitud", "f: ${e.getMessage()}")

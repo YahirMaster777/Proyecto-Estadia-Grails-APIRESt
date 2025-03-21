@@ -1,5 +1,4 @@
 package com.ordenaris.internalControl
-import java.util.UUID
 
 class PositionEmployees {
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
@@ -9,14 +8,22 @@ class PositionEmployees {
     String description
     String area
     
+    static hasmany=[employee:Employees]
+    
     static mapping = {
+        uuid index:"positionEmployees_uuid_idx"
+        dateCreated index:"positionEmployees_dateCreated_idx"
+        lastUpdated index:"positionEmployees_lastUpdated_idx"
+        name index:"positionEmployees_name_idx"
+        description index:"positionEmployees_description_idx"
+        area index:"positionEmployees_description_idx"
         version false
     }
 
     static constraints = {
-        name maxSize:50
+        uuid maxSize:32, unique:true
+        name maxSize:50, unique:true
         description maxSize:150
         area maxSize:30
-        uuid unique:true, maxSize:32
     }
 }

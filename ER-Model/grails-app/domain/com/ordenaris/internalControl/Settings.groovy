@@ -8,6 +8,8 @@ class Settings {
         identifier maxSize:50, unique:true
     }
     static mapping = {
+        identifier index:"settings_identifier_idx"
+        data index:"settings_identifier_idx"
         version false
     }
 }

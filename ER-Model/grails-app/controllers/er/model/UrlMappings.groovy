@@ -4,77 +4,88 @@ class UrlMappings {
 
     static mappings = {
         group "/admin", {
-            get "/refresh/setting"(controller:'settings', action:'refresh')
-            group "/$identifier", {
-                patch "/update/setting"(controller:'settings', action:'update')
-                delegate "/delete/setting"(controller:'settings', action:'delete')
+            group "/auth", {
+                patch "/activate-account/$flag"(controller: 'users', action: 'resetPassword')
             }
-            group "/create", {
-                post "/app"(controller:'apps', action: 'save')
-                post "/app-conections"(controller:'appConnections', action:'save')
-                post "/employee"(controller:'employees', action:'save')
-                post "/profile"(controller:'profiles', action:'save')
-                post "/profile-permissions"(controller:'profilePermissions', action:'save')
-                post "/section"(controller:'sections', action:'save')
-                post "/setting"(controller:'settings', action:'save')
-                post "/user"(controller:'users', action: 'create')
-                post "/profile-complete"(controller:'profiles', action:'saveComplete')
-                post "/permission"(controller:'permissions', action:'save')
-            }    
-            group "/$uuid", {
-                group "/update",{
-                    put "/employee"(controller:'employees', action: 'update')
-                    put "/profile"(controller:'profiles', action:'update')
-                    put "/user"(controller:'users', action: 'update')
-                    put "/section"(controller:'sections', action:'update')
+            group "/settings", {
+                post "/create"(controller:'settings', action:'save')
+                get "/refresh"(controller:'settings', action:'refresh')
+                group "/$identifier", {
+                    patch "/update"(controller:'settings', action:'update')
+                    delete "/delete"(controller:'settings', action:'delete')
                 }
-                group "/read", {
-                    get "/app"(controller:'apps', action:'info')
-                    get "/profile"(controller:'profiles', action:'info')
-                    get "/user"(controller:'users', action: 'read')
-                    get "/permission"(controller:'permissions', action:'info')
+            }
+            group "/app", {
+                post "/create"(controller:'apps', action: 'save')
+                post "/conections/create"(controller:'appConnections', action:'save')
+                get "/all"(controller:'apps', action:'all')
+                group "/$uuid", {
+                    get "/read"(controller:'apps', action:'info')
+                    patch "/$actionService"(controller:'apps', action:'changeStatus')
+                    delete "/delete"(controller:'apps', action:'delete')
+                    delete "/conection/delete"(controller:'appConnections', action:'delete')
                 }
-                group "/delete", {
-                    delete "/app"(controller:'apps', action:'delete')
-                    delete "/conection"(controller:'appConnections', action:'delete')
+            }
+            group "/employee", {
+                post "/create"(controller:'employees', action:'save')
+                group "/$uuid", {
+                    put "/update"(controller:'employees', action: 'update')
+                    patch "/$actionService"(controller:'employees', action:'accountManagement')
+                    patch "/$status"(controller:'employees', action:'accountManagement')
                     delete "/employee"(controller:'employees', action:'delete')
-                    delete "/profile"(controller:'profiles', action:'delete')
-                    delete "/permission"(controller:'permissions', action:'delete')
-                    delete "/user"(controller:'users', action: 'delete')
-                    delete "/section"(controller:'sections', action:'delete')
-                }
-                group "/$actionService",{
-                    patch "/app"(controller:'apps', action:'changeStatus')
-                    patch "/employee"(controller:'employees', action:'changeStatus')
-                    patch "/section"(controller:'sections', action:'changeStatus')
-                    patch "/permission"(controller:'permissions', action:'changeStatus')
-                }
-                constraints {
-                    uuid(matches: '^[a-fA-F0-9]{32}$')
                 }
             }
-            
-        }
-        group "/list", {
-            get "/user"(controller:'users', action: 'list')
-        }
-        group "/all", {
-            get "/app"(controller:'apps', action:'all')
-            get "/user"(controller:'users', action: 'all')
-            get "/permissions"(controller:'permissions', action:'all')
-            get "/profiles"(controller:'profiles', action:'all')
-            get "/sections"(controller:'sections', action: 'all')
+            group "/profile", {
+                post "/create"(controller:'profiles', action:'save')
+                post "/create-complete"(controller:'profiles', action:'saveComplete')
+                post "/create-permissions"(controller:'profilePermissions', action:'save')
+                get "/all"(controller:'profiles', action:'all')
+                group "/$uuid", {
+                    put "/update"(controller:'profiles', action:'update')
+                    get "/read"(controller:'profiles', action:'info')
+                    delete "/delete"(controller:'profiles', action:'delete')
+                }
+            }
+            group "/section", {
+                post "/create"(controller:'sections', action:'save')
+                get "/all"(controller:'sections', action: 'all')
+                group "/$uuid", {
+                    put "/update"(controller:'sections', action:'update')
+                    patch "/$actionService"(controller:'sections', action:'changeStatus')
+                    delete "/delete"(controller:'sections', action:'delete')
+                }
+            }
+            group "/user", {
+                post "/create"(controller:'users', action: 'create')
+                get "/list"(controller:'users', action: 'list')
+                get "/all"(controller:'users', action: 'all')
+                group "/$uuid", {
+                    put "/update"(controller:'users', action: 'update')
+                    get "/read"(controller:'users', action: 'read')
+                    delete "/delete"(controller:'users', action: 'delete')
+                }
+            }
+            group "/permission", {
+                post "/create"(controller:'permissions', action:'save')
+                get "/all"(controller:'permissions', action:'all')
+                group "$uuid", {
+                    get "/read"(controller:'permissions', action:'info')
+                    patch "/$actionService"(controller:'permissions', action:'changeStatus')
+                    delete "/delete"(controller:'permissions', action:'delete')
+                }
+            }
+            constraints {
+                uuid(matches: '^[a-fA-F0-9]{32}$')
+            }
         }
         group "/public", {
-            group "/$uuid", {
-                patch "/reset-password"(controller: 'recovery', action: 'resetPassword')
-                patch "/activate-account/$flag"(controller: 'recovery', action: 'resetPassword')
+            group "/auth", {
+                post "/recovery-password"(controller: 'recovery', action: 'createToken')
+                patch "/$uuid/reset-password"(controller: 'recovery', action: 'resetPassword')
                 constraints {
                     uuid(matches: '^[a-fA-F0-9]{32}$')
-                    flag(matches: '^[true]|[false]$')
                 }
             }
-            post "/token"(controller: 'recovery', action: 'createToken')
         }
         "/"(controller: 'application', action:'index')
         "500"(view: '/error')

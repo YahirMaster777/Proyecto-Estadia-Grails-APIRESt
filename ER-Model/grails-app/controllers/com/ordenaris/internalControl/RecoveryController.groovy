@@ -26,19 +26,18 @@ class RecoveryController {
 
     def resetPassword(){
         def data = request.JSON
-        def process = params.flag?"Activar cuenta":"Recuperar constraseña"
-        def logId = new Logs(process, "Inicio de solicitud", request,  request.getHeader(Constants.HEADER_LOG_ID)).getId()
-        Utils.logger(logId,process, "Inicio de solicitud")
+        def logId = new Logs("Resetear contraseña", "Inicio de solicitud", request,  request.getHeader(Constants.HEADER_LOG_ID)).getId()
+        Utils.logger(logId,"Resetear contraseña", "Inicio de solicitud")
         if(!Utils.validateAccessProject( request.getHeader(Constants.HEADER_ORD_SERVICE))) return respond(TypeError.noPermissions(logId))
-        def isDataExist = Utils.dataRequired( [['contraseña': data.password]], "Recuperar constraseña", logId)
+        def isDataExist = Utils.dataRequired( [['contraseña': data.password]], "Resetear contraseña", logId)
         if (isDataExist.status != 200) return respond(isDataExist.data, status:isDataExist.status)
         if(!data.password.isPassword()) {
-            new Logs( process, "La contraseña no coincide con el formato esperado ", logId, "ERROR", false, [  data: data.password ] )
-            Utils.logger(logId, process, "La contraseña no coincide con el formato esperado", data.password)
+            new Logs( "Resetear contraseña", "La contraseña no coincide con el formato esperado ", logId, "ERROR", false, [  data: data.password ] )
+            Utils.logger(logId, "Resetear contraseña", "La contraseña no coincide con el formato esperado", data.password)
             def validPasswordResponse = TypeError.incorrectFormat( "contraseña", "minimo 8 de caracteres, al menos una letra mayúscula, una letra minucula, un número, sin espacios y un caracter especial", logId )
             return respond(validPasswordResponse.data, status:validPasswordResponse.status)
         }
-        def responseService = RecoveryService.resetPassword(data.password, params.uuid, params.flag, process, logId)
+        def responseService = RecoveryService.resetPassword(data.password, params, logId)
         return respond(responseService.data, status: responseService.status)
     }
 }
