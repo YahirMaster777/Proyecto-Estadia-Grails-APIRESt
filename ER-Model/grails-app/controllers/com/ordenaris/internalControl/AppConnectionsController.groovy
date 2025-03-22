@@ -45,19 +45,19 @@ class AppConnectionsController {
         Utils.logger(logId,process, "Validando los datos ingresados")
         def validDataExist = [
             ['App':data.app],
-            ['Servicio':data.service],
+            ['servicio':data.service],
         ]
         def isArrayExist = Utils.dataRequired(validDataExist,process,logId)
         if(isArrayExist.status != 200) return isArrayExist
     
         
         
-        if(data.portApp && (!data.portApp.validPort())){
+        if(data.portApp && (!data.portApp.isPort())){
             new Logs(process, "El dato 'portApp' no coincide con el formato esperado.", logId, "INFO", false, [ data:data.portApp ])
             Utils.logger(logId, process,"El dato 'portApp' no coincide con el formato esperado.", "Puerto: ${data.portApp}")
             return TypeError.incorrectFormat( "'Puerto App'", "Un valor numerico", logId)
         }
-        if(data.portService && (!data.portService.validPort())){
+        if(data.portService && (!data.portService.isPort())){
             new Logs(process, "El dato 'portService' no coincide con el formato esperado.", logId, "INFO", false, [ data:data.portService ])
             Utils.logger(logId, process,"El dato 'portService' no coincide con el formato esperado.", "Puerto: ${data.portService}")
             return TypeError.incorrectFormat( "'Puerto Service'", "Un valor numerico", logId)

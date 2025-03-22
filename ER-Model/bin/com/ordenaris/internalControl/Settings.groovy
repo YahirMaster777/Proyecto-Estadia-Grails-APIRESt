@@ -5,7 +5,7 @@ class Settings {
     String data
     
     static constraints = {
-        identifier maxSize:50
+        identifier maxSize:50, unique:true
     }
     static mapping = {
         version false

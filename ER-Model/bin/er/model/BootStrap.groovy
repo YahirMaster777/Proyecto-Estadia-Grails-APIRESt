@@ -17,10 +17,41 @@ import com.ordenaris.internalControl.Templates;
 import com.ordenaris.internalControl.TemplatePermissions;
 
 class BootStrap {
+    def SettingsService
+
     def init = { servletContext ->
+        def dataMapGlobal = [
+            'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
+            'MINUTES_OF_VALIDITY_CODE':'30',  
+        ]
+        println "Mi arreglo" + dataMapGlobal
+        if(Settings.count() == 0) {
+            dataMapGlobal.each{ register ->
+                new Settings(identifier:register.key, data:register.value).save()
+            }
+        }
+        println "ya se inicializo, tratando de refrescar la varialbe global"
+        // servletContext.setAttribute(null)
+
+        // settingsService.refreshData()
+        // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
+        // println dataMapGlobal.MINUTES_OF_VALIDITY_CODE
+        // println grailsApplication.servletContext.mainContext.getAttribute.("dataMapGlobal")
+
+
+        // servletContext.setAttribute("map", dataMapGlobal)
+        // SettingsService.refreshData()
+        // servletContext.setAttribute("map", dataMapGlobal)
+        // println "Intentando acceder al setting"
+        // println servletContext
+
+        // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
+        // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
+        // def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
+        // servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
         if (PositionEmployees.count() == 0) {
-            new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
-            new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
+            // new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
+            // new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
             def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
             def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
             def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
@@ -67,13 +98,13 @@ class BootStrap {
             def section3permission3 = new Permissions(alias:'edit_employee', section:section3, name:'Editar Empleados',description:'Permiso que permite').save(flush:true)
             def section3permission4 = new Permissions(alias:'view_employee', section:section3, name:'Ver Empleados',description:'Permiso que permite').save(flush:true)
     
-            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1)
-            def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2)
+            def userRoot1 = new Users(username: 'yairR', password: 'Yair141002',   businessEmail:'yairR@gmail.com', employee:employee1, enabled:true)
+            def userRoot2= new Users(username: 'emilioR', password: '1a2b3c4d',  businessEmail:'emilioR@gmail.com', employee:employee2, enabled:true)
             def userAdmin1 =  new Users(username: 'yairA', password: 'Yair141002', businessEmail:'yairA@gmail.com', employee:employee3)
             def userAdmin2 =  new Users(username: 'emilioA', password: '1a2b3c4d', businessEmail:'emilioA@gmail.com', employee:employee4)
             def userCustom1 =  new Users(username: 'yairC', password: 'Yair141002',  businessEmail:'yairC@gmail.com', employee:employee5)
             def userCustom2 =  new Users(username: 'emilioC', password: '1a2b3c4d', businessEmail:'emilioC@gmail.com', employee:employee6)
-            new Users(username: 'emilio.mendoza@ordenaris.com', password: '1a2b3c4d', businessEmail:'emilioT@gmail.com', employee:employee2).save(flush:true)
+            new Users(username: 'emilio.mendoza@ordenaris.com', password: '1a2b3c4d', businessEmail:'emilioT@gmail.com', employee:employee2, enabled:true).save(flush:true)
             if (!userRoot1.save(flush: true) || !userRoot2.save(flush: true) || !userAdmin1.save(flush: true) || !userAdmin2.save(flush: true) || !userCustom1.save(flush: true) || !userCustom2.save(flush: true)) {
                 userRoot1.errors.allErrors.each { println it }
                 userRoot2.errors.allErrors.each { println it }
@@ -105,11 +136,15 @@ class BootStrap {
             new TemplatePermissions (template: template3, description: "esrytruytuuyi@gmail.com",permission: section1permission3).save(flush:true)
             new TemplatePermissions (template: template4, description: "retreytruyuy@gmail.com",permission: section1permission4).save(flush:true)
         }
-        def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
-        servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
-        def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
-        servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
-        
+
+        // Set<Settings> getSettings(){
+        //     (Settings.findAll() as List<Settings>)*.setting as Set<Settings>
+        // }
+        // ServletContext ctx = request.getServletContext()
+        // ctx.setAttribute("map", Settings.singletonMap(Settings.refreshData()))
+        // println Settings.refreshData()
+
+
         String.metaClass.formatHour = {
             def horaCodeExpression = '^([0-1][1-9]|[2][0-3])(:)([0-5][0-9])(:)([0-5][0-9])$'
             def pattern = Pattern.compile(horaCodeExpression) 
@@ -189,7 +224,6 @@ class BootStrap {
             return matcher.matches()
         }
         String.metaClass.validarPathImg = {
-            // delegate.matches(/^\/.*\.webp$/)
             def pageExpression = '/^\\/.*\\.webp$/'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)

@@ -49,7 +49,7 @@ class CustomRestAuthFilter extends RestAuthenticationFilter {
 
 	@Override
 	void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException{
-		String endpointUrl =  "/api/login"
+		String endpointUrl =  "/public/login"
 		authenticationFailureHandler.setStatusCode( HttpServletResponse.SC_UNAUTHORIZED )
 		
 		HttpServletRequest httpServletRequest = request as HttpServletRequest

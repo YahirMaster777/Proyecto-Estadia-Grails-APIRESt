@@ -33,16 +33,16 @@ public class Logs {
     }
     //* Constructor para los mensajes de error.
     public Logs( String servicio, String descripcion, String id, Exception error, HashMap info = null ){
-            this.tipo = 'ERROR'
-            this.estatus = 'fail'
-            def extra
-            if( error.getClass().getPackage().getName().equals("java.net") ){
-                info.error = buildDataError( error )
-                extra = info
-            }else{
-                extra = buildDataError( error )
-            }
-            buildLog( servicio, descripcion, id, extra )
+        this.tipo = 'ERROR'
+        this.estatus = 'fail'
+        def extra
+        if( error.getClass().getPackage().getName().equals("java.net") ){
+            info.error = buildDataError( error )
+            extra = info
+        }else{
+            extra = buildDataError( error )
+        }
+        buildLog( servicio, descripcion, id, extra )
     }
 
     //*Contructor para los mensajes de request.
@@ -150,7 +150,7 @@ public class Logs {
             writer.write( "${logInfo}\n" )
             writer.close()
         }catch(e){  
-            println "${new Date().format('yyyy-MM-dd HH:mm:ss :::=>')} | erModel | Logs | Save Log File | Archivo de Log | ${e.getMessage()} "
+            println "${new Date().format('yyyy-MM-dd HH:mm:ss :::=>')} | Wiki Internal Control Connection | Logs | Save Log File | Archivo de Log | ${e.getMessage()} "
         }
     }
 }

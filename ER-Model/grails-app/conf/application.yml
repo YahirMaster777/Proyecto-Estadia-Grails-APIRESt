@@ -73,11 +73,11 @@ plugin:
         springsecurity:
             controllerAnnotations:
                 chainMap:
-                    '/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'
+                    '/public/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'
                     '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
             rest:
                 logout:
-                    endpointUrl: '/api/logout'
+                    endpointUrl: '/public/logout'
                 # ja é default
                 token:
                     validation: 

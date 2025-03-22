@@ -6,6 +6,10 @@ import org.springframework.security.core.authority.AuthorityUtils
 import grails.plugin.springsecurity.rest.token.AccessToken
 import org.springframework.security.authentication.BadCredentialsException
 
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Before
+import org.springframework.stereotype.Component
+
 import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
@@ -33,7 +37,7 @@ class UsersService {
                 user.save(flush: true, failOnError:true)
                 new Logs("Registrar usuario", "Se registro el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Registrar usuario", "Se registro el usuario", "Nombre de usuario:${data.username}")
-                return [ data: [ success: true,data: [identifier: user.uuid] ], status: 200 ]
+                return [ data: [success: true], status: 200 ]
             }catch(e){
                 uStatus.setRollbackOnly()
                 new Logs("Registrar usuario","Error en la solicitud al crear un usuario", logId, e, [ : ])
@@ -75,64 +79,6 @@ class UsersService {
             }
         }
     }   
-
-    @Transactional(readOnly = true)
-    def buscarCuenta(UserPassOrgAuthToken auth){
-        def username = auth.name
-        Users user = Users.findByUsername(username)
-        return user
-    }
-    
-    def getUserAuthorities( Users username ){
-        def userRoles = UsersRoles.findAllByUser(username)
-        def authorities = []
-        if(userRoles.size() > 0){
-            authorities = userRoles.role.authority
-        }        
-        return AuthorityUtils.createAuthorityList(authorities as String[])
-    }
-
-    @Transactional(readOnly = true)
-    def infoUsers( Users username ){
-        try {
-            def user = Users.findByUsername(username.username)
-            def userSectionPermission = UserSectionPermission.findAllByUser(username)
-            def seccionesAgrupadas = [:]
-            UserSectionPermission.findAllByUser(username).each{templatePermission ->
-                def permiso = templatePermission.permission 
-                def seccion = permiso?.section  
-                if (seccion && permiso) {
-                    if (!seccionesAgrupadas.containsKey(seccion.name)) {
-                        seccionesAgrupadas[seccion.name] = [:]
-                    }
-                    seccionesAgrupadas[seccion.name][permiso.name] = permiso.alias
-                }
-            }
-            def section = seccionesAgrupadas.collect { nombreSeccion, permisos ->
-                return [
-                    seccion  : nombreSeccion,
-                    permisos : permisos
-                ]
-            }
-            def uuidEmployee = user?.employee.uuid
-            def employee = Employees.findByUuid(uuidEmployee)
-            def response =[
-                uuid          : user.uuid,
-                employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
-                secctions     : section,
-            ]
-            return  response
-        }catch(Exception e) {
-            println e.getMessage()
-        }   
-    }
-    
-    def getToken( userDetails ){
-        AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
-        tokenStorageService.storeToken(accessToken.accessToken, userDetails)
-        authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
-        return accessToken
-    }
 
     @Transactional(readOnly = true)
     def readUser(uuid, logId) {
@@ -238,18 +184,18 @@ class UsersService {
         Users user = Users.findByUsername(username)
         
         if (!user){
-           throw new BadCredentialsException("Account notFound")
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
+            throw new BadCredentialsException("Account notFound")
         }
         if (user.password == springSecurityService.encodePassword(password)){
             return user
-        }
-        if (user.password != springSecurityService.encodePassword(password)){
+        }else {
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
             throw new BadCredentialsException("Authentication failed")
         }
+        
         return
     }
-    
-    
     
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
@@ -267,14 +213,11 @@ class UsersService {
             def userSectionPermission = UserSectionPermission.findAllByUser(username)
             def section = sections(username) //regresa los permisos por seccion
             def uuidEmployee = user?.employee.uuid
-            def permission = permissions(username) //regresa las lista de todos los permisos
             def employee = Employees.findByUuid(uuidEmployee)
             def response =[
                 uuid          : user.uuid,
                 username      : username.username,
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
-                lastLogin     : user.lastLoginTime,
-                currentLogin  : user.currentLoginDate,
                 secctions     : section,
             ]
             return  response
@@ -284,43 +227,45 @@ class UsersService {
     }
     
     def permissions(username) {
-        def sectionPermissionList = [:]
-        UserSectionPermission.findAllByUser(username).each { templatePermission ->
-            def permissionList = templatePermission.permission
-            sectionPermissionList[permissionList.name] = permissionList.alias
-        }
-        return sectionPermissionList
+        def user = UserSectionPermission.findAllByUser(username)
+        println user?.permission.alias
+        return [permission:user?.permission.alias ]
     }
     
     def sections(username) {
         def sectionPermissionList = [:]
-        UserSectionPermission.findAllByUser(username).each { templatePermission ->
+        def user = UserSectionPermission.findAllByUser(username).each { templatePermission ->
             def section = templatePermission.permission.section
             if (!sectionPermissionList.containsKey(section.name)) {
-                sectionPermissionList[section.name] = [:]
+                sectionPermissionList[section.name] = []
             }
-                
-            // sectionPermissionList[section.name] [templatePermission.permission.name] = templatePermission.permission.alias  
-            sectionPermissionList[section.name][templatePermission.permission.name] = templatePermission.permission.alias
+            sectionPermissionList[section.name] << templatePermission.permission.alias
         }
-        def section = sectionPermissionList.collect { nameSection, permiss ->
-            return [section: nameSection, permisos: permiss]
+        return sectionPermissionList.collect { nameSection, permiss ->
+            def listP = [section: nameSection, permisos: permiss]
+            println "listP ----->" + listP.permisos
+            return listP 
         }
-        return section
     }
+    
+    
+
+
+
+        
+    
+    
+    
+    
+    
+    
+    
     
     def getToken( userDetails ){
         AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)
         tokenStorageService.storeToken(accessToken.accessToken, userDetails)
         authenticationEventPublisher.publishAuthenticationSuccess( springSecurityService.getAuthentication() )
         return accessToken
-    }
-
-    def createUrl(token, flag = null){
-        if (!flag) {
-            return "http://localhost:4200/auth/login?token=${token}"
-        }
-        return "http://localhost:4200/auth/login?token=${token}&flag=${flag}"    
     }
 
     def constructorUser(user) {

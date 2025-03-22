@@ -2,13 +2,10 @@ package com.ordenaris.internalControl
 import java.util.UUID
 
 class Programs {
-    // almacena los programas y los servicios
     Servers server
     String uuid = UUID.randomUUID().toString().replaceAll('\\-', '')
-
     String name
     String version
-    // se metete el balanceador
     String description    
     String port
     String type

@@ -8,6 +8,7 @@ class AppsController {
 	static responseFormats = ['json', 'xml']
     def AppsService
     
+    @PermissionRequired("create_app")
     def save(){
         def logId = new Logs("Registrar Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Registrar Aplicacion", "Inicio de solicitud")
@@ -26,21 +27,14 @@ class AppsController {
         return respond(deleteAppResponse.data, status: deleteAppResponse.status)
     }
     
-    def activate(){
-        def logId = new Logs("Activar Aplicacion", "Inicio de solicitud", request).getId()
-        Utils.logger(logId, "Activar Aplicacion", "Inicio de solicitud")
-        def activeAppResponse = AppsService.activeApp(params, logId)
+    def changeStatus(){
+        def logId = new Logs("Status Aplicacion", "Inicio de solicitud", request).getId()
+        Utils.logger(logId, "Status Aplicacion", "Inicio de solicitud")
+        def activeAppResponse = AppsService.statusManagement(params, logId)
         return respond(activeAppResponse.data, status:activeAppResponse.status)
     }
     
-    def deactivate(){
-        def logId = new Logs("Desactivar Aplicacion","Inicio de solicitud", request).getId()
-        Utils.logger(logId,"Desactivar Aplicacion", "Inicio de solicitud")
-        def deactivateAppResponse = AppsService.deactivateApp(params, logId)
-        return respond(deactivateAppResponse.data, status:deactivateAppResponse.status)
-    }
-    
-    
+
     def info(){
         def logId = new Logs("Informacion de Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId,"Informacion de Aplicacion","Inicio de solicitud")
@@ -75,33 +69,33 @@ class AppsController {
         new Logs( process, "Validando los datos ingresados", logId, "INFO", true, [ : ])
         Utils.logger(logId,process, "Validando los datos ingresados")
         
-        def listStatus=['Activa','Depracada','Pendiente','Desarollo']
+        def listStatus=['activa','Depracada','pendiente','desarollo']
         if(data.status && (listStatus.indexOf(data.status) < 0)){
             new Logs( process, "El dato 'status' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.status ] )
             Utils.logger(logId,process, "El dato 'status' ingresado no coincide con el formato esperado", data.status)
-            return TypeError.incorrectFormat( "'Status de la Aplicacion'", ": 'Activa','Depracada','Pendiente','Desarollo'", logId )
+            return TypeError.incorrectFormat( "'Status de la Aplicacion'", ": 'activa','Depracada','pendiente','desarollo'", logId )
         }
         
-        if (!data.name.specialCharacters()) {
+        if (!data.name.isSpecialCharacters()) {
             new Logs( process, "El dato 'name' ingresado no coincide con el formato esperado.", logId, "ERROR", false, [  data: data.name ] )
             Utils.logger(logId,process, "El dato 'name' ingresado no coincide con el formato esperado.", data.name)
             return TypeError.incorrectFormat( "'Nombre'", "Un valor alfanúmerico", logId )
         }
        
         
-        def listType = ['Frontend','Backend','Aplication','Data Base']
-        if ((listType.indexOf(data.type) < 0) || (!data.type.specialCharacters())){
+        def listType = ['frontend','backend','aplication','base de datos']
+        if ((listType.indexOf(data.type) < 0) || (!data.type.isSpecialCharacters())){
             new Logs( process, "El dato 'type' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.type ] )
             Utils.logger(logId,process, "El dato 'type' ingresado no coincide con el formato esperado", data.type)
-            return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": 'Frontend','Backend','Aplication','Data Base'", logId )
+            return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": 'frontend','backend','aplication','base de datos'", logId )
         }
                 
         
-        def listCriticality = ['Indiferente','Baja','Media','Alta','Critica']
-        if ((listCriticality.indexOf(data.criticality) < 0) || (!data.criticality.specialCharacters())){
+        def listCriticality = ['indiferente','baja','media','alta','critica']
+        if ((listCriticality.indexOf(data.criticality) < 0) || (!data.criticality.isSpecialCharacters())){
             new Logs( process, "El dato 'criticality' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.criticality ] )
             Utils.logger(logId,process, "El dato 'criticality' ingresado no coincide con el formato esperado", data.criticality)
-            return TypeError.incorrectFormat( "'Criticidad'", ": 'Indiferente','Baja','Media','Alta','Critica'", logId )
+            return TypeError.incorrectFormat( "'Criticidad'", ": 'indiferente','baja','media','alta','critica'", logId )
         }
         
         return [data: [success: true], status:200]

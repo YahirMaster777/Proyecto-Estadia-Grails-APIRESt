@@ -74,60 +74,108 @@ class SectionsService {
         
     }
     
-    def activateSection(params, logId){
-       Sections.withTransaction{ status ->
+    def updateStatus(params, logId){
+        Sections.withTransaction{ status ->
             try{
-                new Logs("Activar Seccion", "Procesando solicitud", logId, "INFO", true, [data:params.uuid])
-                Utils.logger(logId, "Activar Seccion", "Procesando solictud", "Seccion :${params.uuid}")
+                new Logs("Actualizar status de seccion", "Procesando solicitud", logId, "INFO", true, [ : ])
+                Utils.logger(logId, "Actualizar status de seccion", "Procesando solicitud")
                 
                 def section = Sections.findByUuid(params.uuid)
+                println section.name
                 if(!section){
-                    new Logs("Activar Seccion","No se encontro la seccion", logId, "INFO",false, [data:params.uuid])
-                    Utils.logger(logId, "Activar Seccion", "No se encontro la seccion", "Seccion :${params.uuid}")
+                    new Logs("Actualizar status de seccion", "No se encontro la informacion solicitada", logId, "INFO", false, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "No se encontro la informacion solicitada")
                     return TypeError.informationNotFound(logId)
                 }
-                section.status = "Activa"
-                section.save(flush:true, failOnError:true)
-                
-                new Logs("Activar Seccion", "Se activo la seccion", logId, "INFO", true, [data:params.uuid])
-                Utils.logger(logId,"Activar Seccion", "Se activo la seccion", "Seccion :${params.uuid}")
-                return [data:[success:true], status:200]
-            }catch(e){
-                new Logs("Activar Seccion", "Error en la solicitud", logId, e, [ : ])
-                Utils.logger(logId,"Activar Seccion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
-                status.setRollbackOnly()
-                return TypeError.internalError(logId)
-            }
-       }
-        
-    }
-    
-    def deactivateSection(params, logId){
-        Sections.withTransaction{status ->
-            try{
-                new Logs("Desactivar Seccion", "Procesando solicitud", logId, "INFO", true, [data:params.uuid])
-                Utils.logger(logId,"Desactivar Seccion", "Procesando solicitud", "Seccion :${params.uuid}")
-                
-                def section = Sections.findByUuid(params.uuid)
-                if(!section){
-                    new Logs("Desactivar Seccion","No se encontro la seccion", logId, "INFO",false, [data:params.uuid])
-                    Utils.logger(logId, "Desactivar Seccion", "No se encontro la seccion", "Seccion :${params.uuid}")
-                    return TypeError.informationNotFound(logId)
+                def actions = ['activate', 'deactivate']
+                if(actions.indexOf(params.actionService)< 0){
+                    new Logs("Actualizar status de seccion", "Accion invalida", logId, "INFO", false, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "Accion invalida")
+                    return TypeError.invalidData(params.actionService, logId)
                 }
-                section.status ="Inactiva"
-                section.save(failOnError:true, flush:true)
                 
-                new Logs("Desactivar Seccion", "Se desactivo la seccion",logId, "INFO",true, [data:params.uuid])
-                Utils.logger(logId, "Desactivar Seccion", "Se desactivo la seccion", "Seccion :${params.uuid}")
-                return [data:[success:true], status:200]
+                if(params.actionService == 'activate'){
+                    new Logs("Actualizar status de seccion", "Activar seccion", logId,"INFO", true, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "Activar seccion")
+                    section.status='activa'
+                    section.save(failOnError:true, flush:true)
+                    new Logs("Actualizar status de seccion", "Se activo la seccion", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "Se activo la seccion")
+                }
+                
+                if(params.actionService == 'deactivate'){
+                    new Logs("Actualizar status de seccion","Desactivar seccion", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "Desactivar seccion")
+                    section.status='Inactiva'
+                    section.save(failOnError:true, flush:true)
+                    new Logs("Actualizar status de seccion", "Se desactivo la seccion", logId, "INFO", true, [ : ])
+                    Utils.logger(logId, "Actualizar status de seccion", "Se desactivo la seccion")
+                }
+                return [data:[succes:true],status:200]
+                
             }catch(e){
-                new Logs("Desactivar Seccion", "Error en la solicitud", logId, e, [data:[success:false]])
-                Utils.logger("Desactivar Seccion", "Error en la solicitud", "ERROR: ${e.getMessage()}") 
+                new Logs("Actualizar status de seccion", "Error en la solicitud", logId, e , [  : ])
+                Utils.logger(logId, "Actualizar status de seccion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
                 status.setRollbackOnly()
                 return TypeError.internalError(logId)
+                
             }
-        
         }
     }
+    
+    def deleteSection(params, logId){
+        Sections.withTransaction{ status -> 
+            try{
+                new Logs("Eliminar seccion", "Procesando solicitud",logId, "INFO",true, [ : ])
+                Utils.logger(logId, "Eliminar seccion", "Procesando solicitud")
+                
+                def section = Sections.findByUuid(params.uuid)
+                if(!section){
+                    new Logs("Eliminar seccion", "Procesando solicitud", logId, "INFO", true, [ : ])
+                    Utils.logger(logId,"Eliminar seccion", "Procesando solicitud")
+                    return TypeError.informationNotFound(logId)
+                }
+                
+                section.uuid = "_delete_"+ new Date().log()
+                section.status = 'Inactiva'
+                section.save(flush:true, failOnError:true)
+                new Logs("Eliminar seccion", "Se elimino la seccion", logId, "INFO", true, [ : ])
+                Utils.logger(logId, "Eliminar seccion", "Se elimmino la seccion")
+                return [data:[succes:true], status:200]    
+            }catch(e){
+                new Logs("Eliminar seccion", "Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Eliminar seccion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalError(logId)
+            }
+        }
+    }
+    
+    def allSections(logId){
+        Sections.withTransaction{ status ->
+            try{
+                new Logs("Lista de secciones", "Procesando solicitud", logId, "INFO",true, [ : ])
+                Utils.logger(logId, "Lista de secciones", "Procesando solicitud")
+                def sections = Sections.getAll().collect(){ section ->
+                    return[
+                        nombre: section.name,
+                        uuid  : section.uuid,
+                        url   : section.url,
+                        descripcion: section.description
+                    ]
+                }
+                new Logs("Lista de secciones", "Lista recuperda", logId, "INFO", true, [ : ])
+                Utils.logger(logId, "Lista de secciones","Lista recuperada")
+                return [data:[succes:true,data:[secciones: sections]], status:200]
+            }catch(e){
+                new Logs("Lista de secciones", "Error en la solicitud", logId, e, [ : ])
+                Utils.logger(logId, "Lista de secciones", "Error en la solicitud","ERROR: ${e.getMessage()}")
+                status.setRollbackOnly()
+                return TypeError.internalControl(logId)
+            }
+        }
+    }
+
+
     
 }

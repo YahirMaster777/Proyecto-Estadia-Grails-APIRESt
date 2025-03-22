@@ -6,6 +6,10 @@ import org.springframework.security.core.authority.AuthorityUtils
 import grails.plugin.springsecurity.rest.token.AccessToken
 import org.springframework.security.authentication.BadCredentialsException
 
+import org.aspectj.lang.annotation.Aspect
+import org.aspectj.lang.annotation.Before
+import org.springframework.stereotype.Component
+
 import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
 @Transactional
@@ -67,7 +71,7 @@ class UsersService {
                 new Logs("Actualizar usuario", "Se actualizo el usuario", logId,"INFO", true,[data:data.username])
                 Utils.logger(logId, "Actualizar usuario", "Se actualizo el usuario", "Nombre de usuario:${data.username}")
                 return [ data: [ success: true], status: 200 ]
-            } catch(Exception e) {
+            } catch(e) {
                 uStatus.setRollbackOnly()
                 new Logs("Actualizar usuario","Error en la solicitud al actualizar un usuario", logId, e, [ : ])
                 Utils.logger(logId, "Actualizar usuario", "Error en la solicitud al actualizar un usuario", "f: ${e.getMessage()}")
@@ -90,7 +94,7 @@ class UsersService {
             new Logs( "Buscar usuario", "Usuario encontrado", logId, "INFO", true, [ data: uuid ] )
             Utils.logger(logId, "Buscar usuario", "Usuario encontrado", uuid)
             return [ data: [success: true, data:infoUsers(user) ], status: 200 ]
-        }catch(Exception e) {
+        }catch(e) {
             new Logs("Buscar usuario","Error en la solicitud al buscar el usuario", logId, e, [ : ])
             Utils.logger(logId, "Buscar usuario", "Error en la solicitud al buscar el usuario", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
@@ -112,7 +116,7 @@ class UsersService {
                 new Logs("Eliminar usuario", "Se elimino el usuario", logId,"INFO", true,[uuidUser:uuid])
                 Utils.logger(logId, "Eliminar usuario", "Se elimino el usuario", uuid)
                 return [ data: [ success: true], status: 200 ]
-            } catch(Exception e) {
+            } catch(e) {
                 uStatus.setRollbackOnly()
                 new Logs("Eliminar usuario","Error en la solicitud al eliminar el usuario", logId, e, [ : ])
                 Utils.logger(logId, "Eliminar usuario", "Error en la solicitud al eliminar el usuario", "f: ${e.getMessage()}")
@@ -148,7 +152,7 @@ class UsersService {
             new Logs("Páginado usuario", "Resultados de la busqueda usuario", logId,"INFO", true,[ : ])
             Utils.logger(logId, "Páginado usuario", "Resultados de la busqueda usuario")
             return [ data: [ success: true, data: [list: users, total: userCount]], status: 200 ]
-        } catch(Exception e) {
+        } catch(e) {
             new Logs("Páginado usuario","Error en la solicitud al obtener el paginado", logId, e, [ : ])
             Utils.logger(logId, "Páginado usuario", "Error en la solicitud al obtener el paginado", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
@@ -166,7 +170,7 @@ class UsersService {
             new Logs( "Páginado usuario", "Usuarios encontrados", logId, "INFO", true, [ : ] )
             Utils.logger(logId, "Páginado usuario","Usuarios encontrados" )
             return [data: [success: true, data: userList, total: userCount], status: 200]
-        } catch(Exception e) {
+        } catch(e) {
             new Logs( "Páginado usuario", "Error en la solicitud al mostrar los resultados", logId, e, [ : ] )
             Utils.logger(logId, "Páginado usuario", "Error en la solicitud al mostrar los resultados", "f: ${e.getMessage()}")
             return TypeError.internalError( logId )
@@ -174,20 +178,21 @@ class UsersService {
     }
 
     @Transactional(readOnly = true)
-    def buscarCuenta(UserPassOrgAuthToken auth){
+    def searchAccount(UserPassOrgAuthToken auth){
         def username = auth.name
         def password = auth.credentials
         Users user = Users.findByUsername(username)
-        
         if (!user){
-           throw new BadCredentialsException("Account notFound")
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
+            throw new BadCredentialsException("Account notFound")
         }
         if (user.password == springSecurityService.encodePassword(password)){
             return user
-        }
-        if (user.password != springSecurityService.encodePassword(password)){
+        }else {
+            println "Inicio de sesion | Error al iniciar sesion | BadCredentialsException"
             throw new BadCredentialsException("Authentication failed")
         }
+        
         return
     }
     
@@ -212,12 +217,10 @@ class UsersService {
                 uuid          : user.uuid,
                 username      : username.username,
                 employee      : "${employee.name} ${employee.lastName1} ${employee.lastName2}",
-                lastLogin     : user.lastLoginTime,
-                currentLogin  : user.currentLoginDate,
                 secctions     : section,
             ]
             return  response
-        }catch(Exception e) {
+        }catch(e) {
             println e.getMessage()
         }   
     }
@@ -238,9 +241,24 @@ class UsersService {
             sectionPermissionList[section.name] << templatePermission.permission.alias
         }
         return sectionPermissionList.collect { nameSection, permiss ->
-            return [section: nameSection, permisos: permiss]
+            def listP = [section: nameSection, permisos: permiss]
+            println "listP ----->" + listP.permisos
+            return listP 
         }
     }
+    
+    
+
+
+
+        
+    
+    
+    
+    
+    
+    
+    
     
     def getToken( userDetails ){
         AccessToken accessToken = tokenGenerator.generateAccessToken(userDetails)

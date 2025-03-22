@@ -19,8 +19,6 @@ class CustomRestAuthenticationFailureHandler implements AuthenticationFailureHan
 
     Integer statusCode
     
-    
-
     void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         response.addHeader('WWW-Authenticate', 'X-Auth-Token')
         def mensaje

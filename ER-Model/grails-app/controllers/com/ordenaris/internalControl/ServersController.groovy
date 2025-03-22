@@ -74,21 +74,21 @@ class ServersController {
             ['proovedor de nube': data.cloudProvider],
             ['ubicación': data.location],
             ['fecha de despliegue': data.dateDeploy],
-            ['dirección mac': data.macAddress],
+            ['dirección mac': data.isMacAddress],
             ['capacidad de provesamiento': data.processingCapacity],
             ['ubicación de acceso': data.host],
             ['memoria': data.memory],
             ['tipo de servidor': data.type],
             ['sistema operativo': data.operatingSystem],
         ]
-        if (data.macAddress && data.macAddress.macAddress()) {
-            new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.macAddress ] )
-            Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.macAddress)
+        if (data.isMacAddress && data.isMacAddress.isMacAddress()) {
+            new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.isMacAddress ] )
+            Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.isMacAddress)
             return TypeError.incorrectFormat( "dirección mac", "correo empresarial", logId )
         }
-        // if (data.macAddress && data.macAddress.macAddress()) {
-        //     new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.macAddress ] )
-        //     Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.macAddress)
+        // if (data.isMacAddress && data.isMacAddress.isMacAddress()) {
+        //     new Logs( process, "La dirección mac no coincide con el formato esperado", logId, "ERROR", false, [  data: data.isMacAddress ] )
+        //     Utils.logger(logId, process, "La dirección mac no coincide con el formato esperado", data.isMacAddress)
         //     return TypeError.incorrectFormat( "dirección mac", "correo empresarial", logId )
         // }
 

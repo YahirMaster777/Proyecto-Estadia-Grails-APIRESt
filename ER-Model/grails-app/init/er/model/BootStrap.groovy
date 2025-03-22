@@ -9,7 +9,8 @@ import com.ordenaris.internalControl.Roles;
 import com.ordenaris.internalControl.PositionEmployees;
 import com.ordenaris.internalControl.Employees;
 import com.ordenaris.internalControl.Enterprises;
-import com.ordenaris.internalControl.Settings
+import com.ordenaris.internalControl.Settings;
+import com.ordenaris.internalControl.Setting;
 import com.ordenaris.internalControl.Sections;
 import com.ordenaris.internalControl.Permissions;
 import com.ordenaris.internalControl.UserSectionPermission;
@@ -20,48 +21,26 @@ class BootStrap {
     def SettingsService
 
     def init = { servletContext ->
-        def dataMapGlobal = [
-            'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
-            'MINUTES_OF_VALIDITY_CODE':'30',  
-        ]
-        println "Mi arreglo" + dataMapGlobal
         if(Settings.count() == 0) {
-            dataMapGlobal.each{ register ->
+            [
+                'NUMBER_OF_RECOVERY_ATTEMPTS':'3',
+                'MINUTES_OF_VALIDITY_CODE':'30',  
+                'MINUTES_OF_ACCOUNT_LOKED':'60',
+            ].each{ register ->
                 new Settings(identifier:register.key, data:register.value).save()
             }
         }
-        println "ya se inicializo, tratando de refrescar la varialbe global"
-        servletContext.setAttribute(null)
-
-        // settingsService.refreshData()
-        // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
-        // println dataMapGlobal.MINUTES_OF_VALIDITY_CODE
-        // println grailsApplication.servletContext.mainContext.getAttribute.("dataMapGlobal")
-
-
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // SettingsService.refreshData()
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // println "Intentando acceder al setting"
-        // println servletContext
-
-        // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
-        // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
-        // def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
-        // servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
         if (PositionEmployees.count() == 0) {
-            // new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
-            // new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
-            def back = new PositionEmployees(name: 'Backend', description: 'Desarrollador backend', area: 'Desarrollo')
-            def front = new PositionEmployees(name: 'Frontend', description: 'Desarrollador Frontend', area: 'Desarrollo')
-            def ordenaris = new Enterprises(name: 'Ordenaris', type: 'Interna', description: 'Empresa de ecomerce')
-            def innovattia = new Enterprises(name: 'Innovattia', type: 'Interna', description: 'Empresa')
-            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', idEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'Inactivo')
-            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', idEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'Inactivo')
-            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', idEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'Activo')
-            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', idEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'Activo')
-            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', idEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'Activo')
-            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', idEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'Inactivo')
+            def back = new PositionEmployees(name: 'backend', description: 'Desarrollador backend', area: 'Desarrollo')
+            def front = new PositionEmployees(name: 'frontend', description: 'Desarrollador frontend', area: 'Desarrollo')
+            def ordenaris = new Enterprises(name: 'Ordenaris', type: 'interna', description: 'Empresa de ecomerce')
+            def innovattia = new Enterprises(name: 'Innovattia', type: 'interna', description: 'Empresa')
+            def employee1 = new Employees(phone: '5519609544', curp: 'TOPM021014HPLLRRA0', identifierEmployee: 116, rfc: 'TOPM021014M62', lastName2: 'Perez', nss: '12345678911', position: back, company: innovattia, personalEmail: 'yair.ordenaris@gmail.com', name: 'Marvin Yair', lastName1: 'Tolentino', status: 'inactivo')
+            def employee2 = new Employees(phone: '7781638560', curp: 'TOPM021014HPLLRR03', identifierEmployee: 1117, rfc: 'TOPM021014M32', lastName2: 'Perez', nss: '12345678912',position: front, company: innovattia, personalEmail: 'marvin.ordenaris@gmail.com', name: 'Juan', lastName1: 'Tolentino', status: 'inactivo')
+            def employee3 = new Employees(phone: '7781638570', curp: 'TOPM021014HPLLRR01', identifierEmployee: 11172, rfc: 'TOPM021014M12', lastName2: 'Perez',nss: '12345678913', position: front, company: innovattia, personalEmail: 'marvin123.ordenaris@gmail.com', name: 'Adalid', lastName1: 'Tolentino', status: 'activo')
+            def employee4 = new Employees(phone: '7781638580', curp: 'TOPM021014HPLLRR21', identifierEmployee: 12172, rfc: 'TOPM021014M22', lastName2: 'Perez', nss: '12345678914', position: front, company: innovattia, personalEmail: 'marvin1213.ordenaris@gmail.com', name: 'Armando', lastName1: 'Tolentino', status: 'activo')
+            def employee5 = new Employees(phone: '7641638580', curp: 'TOPM021014HPLLRRA1', identifierEmployee: 1, rfc: 'TOPM021014M01', lastName2: 'Perez', nss: '12345678915', position: front, company: innovattia, personalEmail: 'marvin1.ordenaris@gmail.com', name: 'Luz', lastName1: 'Tolentino', status: 'activo')
+            def employee6 = new Employees(phone: '1234567891', curp: 'TOPM221155HPLLRRA1', identifierEmployee: 1, rfc: 'TOPM0221155M', lastName2: 'Lopez', nss: '12345678910', position: front, company: innovattia, personalEmail: 'juan.ordenaris@gmail.com', name: 'Luis', lastName1: 'Tolentino', status: 'inactivo')
             if (!back.save(flush:true) || !front.save(flush:true)  || !ordenaris.save(flush:true)  || !innovattia.save(flush:true)){
                 back.errors.allErrors.each { println it }
                 front.errors.allErrors.each { println it }
@@ -137,94 +116,85 @@ class BootStrap {
             new TemplatePermissions (template: template4, description: "retreytruyuy@gmail.com",permission: section1permission4).save(flush:true)
         }
 
-        // Set<Settings> getSettings(){
-        //     (Settings.findAll() as List<Settings>)*.setting as Set<Settings>
-        // }
-        // ServletContext ctx = request.getServletContext()
-        // ctx.setAttribute("map", Settings.singletonMap(Settings.refreshData()))
-        // println Settings.refreshData()
-
-
-        String.metaClass.formatHour = {
-            def horaCodeExpression = '^([0-1][1-9]|[2][0-3])(:)([0-5][0-9])(:)([0-5][0-9])$'
+        String.metaClass.isDate = {
+            def horaCodeExpression = '^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'
             def pattern = Pattern.compile(horaCodeExpression) 
             def matcher = pattern.matcher( delegate ) 
             return matcher.matches()  
         }
-        String.metaClass.onlyInt = {
+        String.metaClass.isInt = {
             def pageExpression = '^\\d+$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.phoneNumber = {
+        String.metaClass.isPhoneNumber = {
         def pageExpression = '^\\d{10}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validNss = {
+        String.metaClass.isNss = {
         def pageExpression = '^\\d{11}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.uuidFormat = {
+        String.metaClass.isUuid = {
             def pageExpression = '^[a-fA-F0-9]{32}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.specialCharacters = {
+        String.metaClass.isSpecialCharacters = {
             def pageExpression = '^[a-zA-Z0-9\\s]+$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validPassword = {
+        String.metaClass.isPassword = {
             def pageExpression = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])([A-Za-z\\d$@$!%*?&]|[^ ]){8,40}$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.onlyDouble = {
+        String.metaClass.isDouble = {
             def pageExpression = "^[0-9]+(.[0-9]+)?\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.macAddress = {
+        String.metaClass.isMacAddress = {
             def pageExpression = "^([0-9A-Fa-f]{2}[\\:-]){5}([0-9A-Fa-f]{2})\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.ipAddress = {
+        String.metaClass.isIpAddress = {
             def pageExpression = "^(\\b25[0-5]|\\b2[0-4][0-9]|\\b[01]?[0-9][0-9]?)(\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.validPort = {
+        String.metaClass.isPort = {
             def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.institutionalEmail = {
+        String.metaClass.isInstitutionalEmail = {
             def pageExpression = "^[a-zA-Z0-9\\.]+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
-        String.metaClass.personalEmail = {
+        String.metaClass.isPersonalEmail = {
             def pageExpression = "^[\\w\\%*.=-]+@[\\w\\.]+\\.[\\w]{3}\$"
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
             return matcher.matches()
         }
         String.metaClass.validarPathImg = {
-            // delegate.matches(/^\/.*\.webp$/)
             def pageExpression = '/^\\/.*\\.webp$/'
             def pattern = Pattern.compile(pageExpression)
             def matcher = pattern.matcher(delegate)
@@ -234,14 +204,6 @@ class BootStrap {
             delegate.format("yyyy-MM-dd HH:mm:ss")
         }
         
-        String.metaClass.validPort = {
-            def pageExpression = '^(\\b6553[0-5]|\\b655[0-2]\\d|\\b65[0-4]\\d{2}|\\b6[0-4]\\d{3}|\\b[1-5]\\d{4}|\\d{1,4})$'
-            def pattern = Pattern.compile(pageExpression)
-            def matcher = pattern.matcher(delegate)
-            return matcher.matches()
-        }
-        
-        
         Object.metaClass.toPrettyString = {
             try {
                 return new JsonBuilder(delegate).toPrettyString().replaceAll('\n', '').replaceAll('    ', '')
@@ -249,8 +211,9 @@ class BootStrap {
                 return '{ERROR-AL-GENERAL-JSON}'
             }
         }
+
+        SettingsService.refreshSetting(UUID.randomUUID().toString().replaceAll('\\-', ''))
     }
     def destroy = {
     }
 }
-
