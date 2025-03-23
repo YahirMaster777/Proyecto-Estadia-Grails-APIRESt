@@ -8,7 +8,7 @@ class AppsController {
 	static responseFormats = ['json', 'xml']
     def AppsService
     
-    @PermissionRequired("create_app")
+    // @PermissionRequired("create_app")
     def save(){
         def logId = new Logs("Registrar Aplicacion", "Inicio de solicitud", request).getId()
         Utils.logger(logId, "Registrar Aplicacion", "Inicio de solicitud")
@@ -61,7 +61,7 @@ class AppsController {
         def validDataExist = [
             ['Criticidad':data.criticality],
             ['Nombre':data.name],
-            ['Tipo' : data.type]
+            ['Tipo' : data.typeApp]
         ]
         def isArrayExist = Utils.dataRequired(validDataExist,process,logId)
         if(isArrayExist.status != 200) return isArrayExist
@@ -83,12 +83,19 @@ class AppsController {
         }
        
         
-        def listType = ['Frontend','Backend','Aplication','Data Base']
-        if ((listType.indexOf(data.type) < 0) || (!data.type.specialCharacters())){
-            new Logs( process, "El dato 'type' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.type ] )
-            Utils.logger(logId,process, "El dato 'type' ingresado no coincide con el formato esperado", data.type)
-            return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": 'Frontend','Backend','Aplication','Data Base'", logId )
-        }
+        // def listType = ["BACKEND", "FRONTEND", "DATABASE", "APPLICATION"]
+        // if ((listType.indexOf(data.typeApp) < 0) || (!data.typeApp.specialCharacters())){
+        //     new Logs( process, "El dato 'typeApp' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.typeApp ] )
+        //     Utils.logger(logId,process, "El dato 'typeApp' ingresado no coincide con el formato esperado", data.typeApp)
+        //     return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": ${listType}", logId )
+        // }
+        
+        // def listType = Constants.TYPE_APP
+        // if ((listType.indexOf(data.typeApp) < 0) || (!data.typeApp.specialCharacters())){
+        //     new Logs( process, "El dato 'typeApp' ingresado no coincide con el formato esperado", logId, "ERROR", false, [  data: data.typeApp ] )
+        //     Utils.logger(logId,process, "El dato 'typeApp' ingresado no coincide con el formato esperado", data.typeApp)
+        //     return TypeError.incorrectFormat( "'Tipo de Aplicacion'", ": ${Constants.TYPE_APP}", logId )
+        // }
                 
         
         def listCriticality = ['Indiferente','Baja','Media','Alta','Critica']

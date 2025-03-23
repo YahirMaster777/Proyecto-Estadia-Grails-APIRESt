@@ -5,15 +5,17 @@ class Apps {
     String name
     String urlRepository
     String status = "Pendiente"
-    String type
     String criticality
     Date dateCreated
     Date lastUpdated
     Date dateUndeploy
     String description
     
+    TypeApp typeApp
+
+    
     static mapping ={
-        type sqlType:"Enum('Frontend','Backend','Aplication','Data Base')"
+        typeApp index:"apps_type_idx"
         criticality sqlType: "Enum('Indiferente', 'Baja', 'Media', 'Alta', 'Critica')"
         status sqlType : "Enum('Activa','Deprecada','Pendiente','Desarollo')"
         version false
@@ -21,8 +23,8 @@ class Apps {
     }   
     static constraints = {
         urlRepository nullable:true, maxSize:150, blank:true
-        type inList:['Frontend','Backend','Aplication','Data Base']
         dateUndeploy nullable:true, blank:true
+        // typeApp inList: Constants.TYPE_APP
         status inList: ['Activa','Deprecada','Pendiente','Desarollo']
         criticality inList: ["Indiferente", "Baja", "Media", "Alta", "Critica"], blank: true, nullable:true
         uuid maxSize:32, unique:true
@@ -30,6 +32,7 @@ class Apps {
         name maxSize:50 
     }
 }
+
 
 class DeployDates{
     Date dateDeploy = new Date()

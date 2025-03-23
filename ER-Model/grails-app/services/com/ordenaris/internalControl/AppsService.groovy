@@ -9,11 +9,11 @@ class AppsService {
         Apps.withTransaction{ status-> 
             try{    
                 
-                
+                // println "Tipo de app ->>>>>" + Constants.TYPE_APP
                 new Logs("Registrar Aplicacion", "Procesando solicitud",logId, "INFO", true, [data:data.name])
                 Utils.logger(logId, "Registrar Aplicacion", "Procesando solicitud")
-                
-                def appExists = Apps.findByNameAndType(data.name, data.type)
+                println data.typeApp
+                def appExists = Apps.findByNameAndTypeApp(data.name, TypeApp(data.typeApp))
                 if(appExists){
                     new Logs("Registrar Aplicacion", "Ya existe un registro", logId, "INFO", false, [data:appExists.uuid])
                     Utils.logger(logId, "Registrar Aplicacion", "Ya existe un registro", "Regitro: ${appExists.uuid}" )
@@ -24,11 +24,12 @@ class AppsService {
                 aplication.criticality = data.criticality
                 aplication.dateUndeploy = data.dateUndeploy
                 aplication.name = data.name
-                aplication.type = data.type
+                aplication.typeApp = data.typeApp
                 aplication.urlRepository = data.urlRepository
                 aplication.description = data.description
                 data.status?aplication.status= data.status:aplication.status
                 aplication.save(failOnError:true, flush:true)
+                
                 new Logs("Registrar Aplicacion","Se registro la aplicacion", logId, "INFO", true,[data:data.name])
                 Utils.logger(logId, "Registrar Aplicacion","Se registro la aplicacion", "Nombre:${data.name}")
                 return [data:[success:true],status:200]
@@ -36,6 +37,7 @@ class AppsService {
                 new Logs("Registrar Aplicacion","Error en la solicitud", logId, e, [data:[success:false]])
                 Utils.logger(logId, "Registrar Aplicacion", "Error en la solicitud", "ERROR: ${e.getMessage()}")
                 status.setRollbackOnly()
+                // e.printStackTrace()
                 return TypeError.internalError(logId)
             }
         } 

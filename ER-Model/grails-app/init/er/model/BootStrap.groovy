@@ -31,24 +31,7 @@ class BootStrap {
             }
         }
         println "ya se inicializo, tratando de refrescar la varialbe global"
-        // servletContext.setAttribute(null)
 
-        // settingsService.refreshData()
-        // println dataMapGlobal.NUMBER_OF_RECOVERY_ATTEMPTS
-        // println dataMapGlobal.MINUTES_OF_VALIDITY_CODE
-        // println grailsApplication.servletContext.mainContext.getAttribute.("dataMapGlobal")
-
-
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // SettingsService.refreshData()
-        // servletContext.setAttribute("map", dataMapGlobal)
-        // println "Intentando acceder al setting"
-        // println servletContext
-
-        // def munutsOfValidCode = Settings.findByIdentifier('MINUTES_OF_VALIDITY_CODE')
-        // servletContext.setAttribute('MINUTES_OF_VALIDITY_CODE', munutsOfValidCode.data)
-        // def numberOfRecoveryAttempts = Settings.findByIdentifier('NUMBER_OF_RECOVERY_ATTEMPTS')
-        // servletContext.setAttribute('NUMBER_OF_RECOVERY_ATTEMPTS', numberOfRecoveryAttempts.data)
         if (PositionEmployees.count() == 0) {
             // new Settings(data: '30', identifier: 'MINUTES_OF_VALIDITY_CODE').save(flush:true)
             // new Settings(data: '3', identifier: 'NUMBER_OF_RECOVERY_ATTEMPTS').save(flush:true)
