@@ -19,7 +19,8 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware {
     void setEnvironment(Environment environment) {
         def configBase
         if( environment.activeProfiles[0] == 'development' ){
-            configBase =  new File( "C:/Users/ord-back7/Desktop/Archivo Externo/config.groovy" ) // ruta emilio
+            // configBase =  new File( "C:/Users/ord-back7/Desktop/Archivo Externo/config.groovy" ) // ruta emilio
+            configBase =  new File( "C:/Users/marvi/Desktop/Archivo externo/config.groovy" ) // ruta emilio
         }
         if( environment.activeProfiles[0] == 'stage_qa' ){
             configBase =  new File( "/mnt/config/.core-pospago.groovy" ) //TODO: Pendiente de cambio

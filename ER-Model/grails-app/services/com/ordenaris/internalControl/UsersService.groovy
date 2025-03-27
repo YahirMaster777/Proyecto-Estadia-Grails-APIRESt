@@ -196,6 +196,9 @@ class UsersService {
         
         return
     }
+
+
+
     
     def getUserAuthorities( Users username ){
         def userRoles = UsersRoles.findAllByUser(username)
@@ -231,6 +234,25 @@ class UsersService {
         println user?.permission.alias
         return [permission:user?.permission.alias ]
     }
+
+    def obtenerPermisosUsuario(Users user) {
+        if (!user) {
+            throw new IllegalArgumentException("El objeto 'user' no puede ser nulo")
+        }
+        def userSections = UserSectionPermission.findAllByUser(user)
+        def permisos = userSections.collect { it.permission.alias } 
+        println "Permisos de usuario: ${permisos}"
+        return permisos
+    }
+
+    def obtenerPermisosUsuario(String username) {
+        def user = Users.findByUsername(username)
+        if (!user) {
+            throw new IllegalArgumentException("Usuario no encontrado con el nombre: ${username}")
+        }
+        return obtenerPermisosUsuario(user)
+    }
+
     
     def sections(username) {
         def sectionPermissionList = [:]

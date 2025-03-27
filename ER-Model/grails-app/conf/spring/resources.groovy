@@ -19,7 +19,7 @@ beans = {
         EncodeHashAsBase64 = false
     }
     
-    // userPasswordEncoderListener(UserPasswordEncoderListener)
+    userPasswordEncoderListener(UserPasswordEncoderListener)
 
     restAuthenticationFailureHandler(CustomRestAuthenticationFailureHandler){
         statusCode = HttpServletResponse.SC_UNAUTHORIZED

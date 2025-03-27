@@ -10,5 +10,6 @@ out/
 .project
 .settings
 .classpath
-*.PruebasSuccesHandler
 bin/
+*.PruebasSuccesHandler
+

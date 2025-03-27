@@ -1,10 +1,12 @@
 package com.ordenaris.internalControl
 
 import grails.gorm.transactions.Transactional
+import com.ordenaris.internalControl.RequierePermiso
 
 @Transactional
 class AppsService {
 
+    
     def createApp(data, logId){
         Apps.withTransaction{ status-> 
             try{    
